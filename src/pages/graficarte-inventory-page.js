@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-card/sophos-card'
-export class GraficarteStoreHomePage extends LitElement {
+
+export class GraficarteInventoryPage extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
     * state, set up event listeners, create shadow dom.
@@ -24,7 +25,7 @@ export class GraficarteStoreHomePage extends LitElement {
 
   static get styles() {
     return css`
-    #home-page-container {
+      #inventory-main-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
@@ -34,21 +35,21 @@ export class GraficarteStoreHomePage extends LitElement {
       margin: 20px;
     }
     `;
-  };
+  }
+
   render() {
     return html`
-      <div id="home-page-container">
-        ${this.products.map(product => html`
+    <div id="inventory-main-container">
+      ${this.products.map(product => html`
           <sophos-card
           .pictureSRC = "${product.productImage}"
           .pictureAlt = "${this.altImage}"
           .title = "${product.productName}"
-          .subtitle = " $${product.price}.00"
-          .description = "${product.desctiption}"
+          .subtitle = "En stock: ${product.stock}"
           ></sophos-card>
-        `)}
-      </div>
+      `)}
+    </div>
     `;
   };
 };
-customElements.define('graficarte-store-home-page', GraficarteStoreHomePage);
+customElements.define('graficarte-inventory-page', GraficarteInventoryPage);

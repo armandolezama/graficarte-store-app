@@ -1,9 +1,11 @@
 import { LitElement, html } from 'lit-element';
 import styles from './graficarte-store-app-styles';
-import './pages/graficarte-store-home-page';
-import './pages/graficarte-login-page';
 import 'sophos-simple-template/sophos-simple-template';
 import productMocks from './products-mocks';
+import inventoryMocks from './inventory-mocks'
+import './pages/graficarte-inventory-page'
+import './pages/graficarte-store-home-page';
+import './pages/graficarte-login-page';
 export class GraficarteStoreApp extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -12,16 +14,17 @@ export class GraficarteStoreApp extends LitElement {
     */
   constructor() {
     super();
-    this.productMocks = productMocks;
-    this.page = 'login';
-  }
+    this.inventory = inventoryMocks;
+    this.storeProducts = productMocks;
+    this.page = 'inventory';
+  };
 
   /**
     * Object describing property-related metadata used by Polymer features
     */
   static get properties() {
     return {
-      productMocks : { type : Array },
+      storeProducts : { type : Array },
       page : { type : Array}
     };
   }
@@ -41,12 +44,30 @@ export class GraficarteStoreApp extends LitElement {
   render() {
     return html`
       <div id="main-app-container">
+        ${this.page === 'inventory' ? html`
+          <sophos-simple-template>
+            <graficarte-inventory-page 
+            .products="${this.inventory}" 
+            slot="main-view-content">
+            </graficarte-inventory-page>
+          </sophos-simple-template>
+        ` : html``}
         ${this.page === 'store' ? html`
-          <sophos-simple-template id="public-store-container">
-              <div id="search-bar" slot="header-content">
-                <input id="search-bar-input" type="text" name="search-bar" placeholder="buscar" @input="${this.searchProduct}">
+          <sophos-simple-template 
+            id="public-store-container">
+              <div 
+                id="search-bar" 
+                slot="header-content">
+                <input 
+                  id="search-bar-input" 
+                  type="text" name="search-bar" 
+                  placeholder="buscar" 
+                  @input="${this.searchProduct}">
               </div>
-              <graficarte-store-home-page .products="${this.productMocks}" slot="main-view-content"></graficarte-store-home-page>
+              <graficarte-store-home-page 
+              .products="${this.storeProducts}" 
+              slot="main-view-content">
+              </graficarte-store-home-page>
           </sophos-simple-template>
         ` : html``}
         ${this.page === 'login' ? html`

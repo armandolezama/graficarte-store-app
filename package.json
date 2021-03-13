@@ -4,7 +4,7 @@
   "description": "",
   "main": "graficarte-store.js",
   "scripts": {
-    "serve:develop": "es-dev-server --app-index index.html --node-resolve --watch --open",
+    "serve": "es-dev-server --app-index index.html --node-resolve --watch --open",
     "serve:build": "es-dev-server --app-index public/index.html --compatibility=none",
     "build": "rollup --config"
   },
