@@ -2,12 +2,12 @@ import resolve from '@rollup/plugin-node-resolve';
 import { terser } from 'rollup-plugin-terser';
 import minifyHTML from 'rollup-plugin-minify-html-literals';
 import copy from 'rollup-plugin-copy';
-
 // Static assets will vary depending on the application
 const copyConfig = {
   targets: [
-    { src: 'node-modules/@webcomponents', dest: 'public/bundled-modules' },
-    { src: 'src/build-index.html', dest: 'public', rename: 'index.html' }
+    { src: 'src/build-index.html', dest: 'public/', rename: 'index.html' },
+    { src: 'node-modules/@webcomponents', dest: 'public/bundle-modules' },
+    { src: 'assets', dest: 'public'}
   ],
 };
 

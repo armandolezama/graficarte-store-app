@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import styles from './graficarte-store-app-styles';
 import './pages/graficarte-store-home-page';
+import './pages/graficarte-login-page';
 import 'sophos-simple-template/sophos-simple-template';
 import productMocks from './products-mocks';
 export class GraficarteStoreApp extends LitElement {
@@ -12,6 +13,7 @@ export class GraficarteStoreApp extends LitElement {
   constructor() {
     super();
     this.productMocks = productMocks;
+    this.page = 'login';
   }
 
   /**
@@ -19,7 +21,8 @@ export class GraficarteStoreApp extends LitElement {
     */
   static get properties() {
     return {
-      productMocks : { type : Array }
+      productMocks : { type : Array },
+      page : { type : Array}
     };
   }
 
@@ -29,17 +32,27 @@ export class GraficarteStoreApp extends LitElement {
 
   searchProduct (e){
     console.log(e.target.value);
-  } 
+  };
+
+  loginSubmit (e){
+    console.log(e.detail);
+  };
 
   render() {
     return html`
       <div id="main-app-container">
-        <sophos-simple-template>
-            <div id="search-bar" slot="header-content">
-              <input id="search-bar-input" type="text" name="search-bar" placeholder="buscar" @input="${this.searchProduct}">
-            </div>
-            <graficarte-store-home-page .products="${this.productMocks}" slot="main-view-content"></graficarte-store-home-page>
-        </sophos-simple-template>
+        ${this.page === 'store' ? html`
+          <sophos-simple-template id="public-store-container">
+              <div id="search-bar" slot="header-content">
+                <input id="search-bar-input" type="text" name="search-bar" placeholder="buscar" @input="${this.searchProduct}">
+              </div>
+              <graficarte-store-home-page .products="${this.productMocks}" slot="main-view-content"></graficarte-store-home-page>
+          </sophos-simple-template>
+        ` : html``}
+        ${this.page === 'login' ? html`
+          <graficarte-login-page
+          @graficarte-login-submit="${this.loginSubmit}"></graficarte-login-page>
+        ` : html``}
       </div>
     `;
   }

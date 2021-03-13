@@ -42,7 +42,7 @@ export class GraficarteStoreHomePage extends LitElement {
           .pictureSRC = "${product.productImage}"
           .pictureAlt = "${this.altImage}"
           .title = "${product.productName}"
-          .subtitle = "${product.price}"
+          .subtitle = " $${product.price}.00"
           .description = "${product.desctiption}"
           ></sophos-card>
         `)}
