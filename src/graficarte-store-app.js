@@ -1,6 +1,8 @@
 import { LitElement, html } from 'lit-element';
 import styles from './graficarte-store-app-styles';
 import './pages/graficarte-store-home-page';
+import 'sophos-simple-template/sophos-simple-template';
+import productMocks from './products-mocks';
 export class GraficarteStoreApp extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -9,6 +11,7 @@ export class GraficarteStoreApp extends LitElement {
     */
   constructor() {
     super();
+    this.productMocks = productMocks;
   }
 
   /**
@@ -16,6 +19,7 @@ export class GraficarteStoreApp extends LitElement {
     */
   static get properties() {
     return {
+      productMocks : { type : Array }
     };
   }
 
@@ -26,7 +30,9 @@ export class GraficarteStoreApp extends LitElement {
   render() {
     return html`
       <div id="main-app-container">
-        <graficarte-store-home-page></graficarte-store-home-page>
+        <sophos-simple-template>
+            <graficarte-store-home-page .products="${this.productMocks}" slot="main-view-content"></graficarte-store-home-page>
+        </sophos-simple-template>
       </div>
     `;
   }

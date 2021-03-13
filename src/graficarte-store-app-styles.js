@@ -1,3 +1,4 @@
 import { css } from 'lit-element';
 
-export default css``;
+export default css`
+`;
