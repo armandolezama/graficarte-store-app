@@ -27,12 +27,16 @@ export class GraficarteStoreApp extends LitElement {
     return styles;
   };
 
+  searchProduct (e){
+    console.log(e.target.value);
+  } 
+
   render() {
     return html`
       <div id="main-app-container">
         <sophos-simple-template>
             <div id="search-bar" slot="header-content">
-              <input id="search-bar-input" type="text" name="search-bar" placeholder="buscar">
+              <input id="search-bar-input" type="text" name="search-bar" placeholder="buscar" @input="${this.searchProduct}">
             </div>
             <graficarte-store-home-page .products="${this.productMocks}" slot="main-view-content"></graficarte-store-home-page>
         </sophos-simple-template>
