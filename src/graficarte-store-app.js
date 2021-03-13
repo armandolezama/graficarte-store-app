@@ -45,16 +45,20 @@ export class GraficarteStoreApp extends LitElement {
     return html`
       <div id="main-app-container">
         ${this.page === 'inventory' ? html`
-          <sophos-simple-template>
+          <sophos-simple-template
+            id="admin-inventory-container"
+            styleTemplate="full-nav"
+            page-name="${this.page}">
             <graficarte-inventory-page 
-            .products="${this.inventory}" 
-            slot="main-view-content">
+              .products="${this.inventory}" 
+              slot="main-view-content">
             </graficarte-inventory-page>
           </sophos-simple-template>
         ` : html``}
         ${this.page === 'store' ? html`
           <sophos-simple-template 
-            id="public-store-container">
+            id="public-store-container"
+            page-name="${this.page}">
               <div 
                 id="search-bar" 
                 slot="header-content">

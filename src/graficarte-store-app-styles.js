@@ -14,6 +14,11 @@ export default css`
     --sophos-simple-template-nav-bar-display: none;
   }
 
+  #admin-inventory-container {
+    --sophos-simple-template-main-view-template-style-full-nav-height: 100%;
+    --sophos-simple-template-header-display: none;
+  }
+
   sophos-simple-template{
     max-width: 1700px;
     /* --sophos-simple-template-main-view-template-style-full-header-border-style: none;
