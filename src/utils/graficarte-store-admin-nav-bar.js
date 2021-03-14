@@ -48,7 +48,9 @@ export class GraficarteStoreAdminNavBar extends LitElement {
           <p>Inventario</p>
           <p>Repartidores</p>
           <p>Historial de ventas</p>
+          <p>Configuraciones</p>
         </div>
+        <button>Cerrar sesión</button>
       </div>
     
     `;

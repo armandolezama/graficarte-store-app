@@ -6,7 +6,9 @@ import inventoryMocks from './mocks/inventory-mocks'
 import './pages/graficarte-inventory-page'
 import './pages/graficarte-store-home-page';
 import './pages/graficarte-login-page';
-import './nav-bar/graficarte-store-admin-nav-bar'
+import './utils/graficarte-store-admin-nav-bar';
+import './utils/graficarte-store-client-nav-bar';
+import './utils/graficarte-store-header';
 export class GraficarteStoreApp extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -17,7 +19,7 @@ export class GraficarteStoreApp extends LitElement {
     super();
     this.inventory = inventoryMocks;
     this.storeProducts = productMocks;
-    this.page = 'inventory';
+    this.page = 'public-store';
   };
 
   /**
@@ -34,17 +36,51 @@ export class GraficarteStoreApp extends LitElement {
     return styles;
   };
 
-  searchProduct (e){
-    console.log(e.target.value);
+  loginSubmit(e) {
+    if(e){
+      this.page = 'client-store';
+    };
   };
 
-  loginSubmit (e){
-    console.log(e.detail);
+  showLoginPage () {
+    this.page = 'login';
+  };
+
+  showCreateAccountPage() {
+    this.page = 'create-account'
+  };
+
+  searchTerm(e){
+    console.log(e.detail.term);
   };
 
   render() {
     return html`
       <div id="main-app-container">
+      ${this.page === 'client-store' ? html`
+
+          <sophos-simple-template 
+            id="client-store-container"
+            styleTemplate="full-nav"
+            page-name="${this.page}">
+
+              <graficarte-store-header
+              slot="header-content"
+              ?iscreateaccountavailable="${false}"
+              @searching-for-term="${this.searchTerm}">
+              </graficarte-store-header>
+
+              <graficarte-store-home-page 
+              .products="${this.storeProducts}" 
+              slot="main-view-content">
+              </graficarte-store-home-page>
+
+              <graficarte-store-client-nav-bar
+              slot="nav-bar-content">
+              </graficarte-store-client-nav-bar>
+
+          </sophos-simple-template>
+        ` : html``}
         ${this.page === 'inventory' ? html`
           
           <sophos-simple-template
@@ -64,23 +100,19 @@ export class GraficarteStoreApp extends LitElement {
           </sophos-simple-template>
     
         ` : html``}
-        ${this.page === 'store' ? html`
+        ${this.page === 'public-store' ? html`
 
           <sophos-simple-template 
             id="public-store-container"
             page-name="${this.page}">
 
-              <div 
-                id="search-bar" 
-                slot="header-content">
-
-                <input 
-                  id="search-bar-input" 
-                  type="text" name="search-bar" 
-                  placeholder="buscar" 
-                  @input="${this.searchProduct}">
-
-              </div>
+            <graficarte-store-header
+              slot="header-content"
+              ?isCreateAccountAvailable = "${true}"
+              @searching-for-term="${this.searchTerm}"
+              @create-new-account="${this.showCreateAccountPage}"
+              @sign-in="${this.showLoginPage}">
+              </graficarte-store-header>
 
               <graficarte-store-home-page 
               .products="${this.storeProducts}" 
@@ -94,7 +126,7 @@ export class GraficarteStoreApp extends LitElement {
           <graficarte-login-page
            @graficarte-login-submit="${this.loginSubmit}">
            </graficarte-login-page>
-           
+
     ` : html``}
       </div>
   `;
