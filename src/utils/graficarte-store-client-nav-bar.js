@@ -9,6 +9,7 @@ export class GraficarteStoreClientNavBar extends LitElement {
     */
   constructor() {
     super();
+    this.options = [];
   };
 
   /**
@@ -16,6 +17,7 @@ export class GraficarteStoreClientNavBar extends LitElement {
     */
   static get properties() {
     return {
+      options : { type : Array}
     };
   };
 
@@ -31,6 +33,10 @@ export class GraficarteStoreClientNavBar extends LitElement {
         font-size: 20px;
       }
     `;
+  };
+
+  finishSesion() {
+    this.dispatchEvent(new CustomEvent('finish-sesion'))
   };
 
   render() {
@@ -49,7 +55,7 @@ export class GraficarteStoreClientNavBar extends LitElement {
           <p>Notificaciones</p>
           <p>Configuraciones</p>
         </div>
-        <button>Cerrar sesión</button>
+        <button @click="${this.finishSesion}">Cerrar sesión</button>
       </div>
     
     `;

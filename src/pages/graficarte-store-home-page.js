@@ -31,7 +31,11 @@ export class GraficarteStoreHomePage extends LitElement {
     }
 
     sophos-card{
+      --sophos-card-host-width: 100%;
+      --sophos-card-host-max-width: 200px;
+      --sophos-card-host-min-width: 100px;
       margin: 20px;
+      flex-grow: 2;
     }
     `;
   };

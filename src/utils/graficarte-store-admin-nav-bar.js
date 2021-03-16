@@ -9,6 +9,7 @@ export class GraficarteStoreAdminNavBar extends LitElement {
     */
   constructor() {
     super();
+    this.options = [];
   };
 
   /**
@@ -16,6 +17,7 @@ export class GraficarteStoreAdminNavBar extends LitElement {
     */
   static get properties() {
     return {
+      options : { type : Array}
     };
   };
 
@@ -31,6 +33,10 @@ export class GraficarteStoreAdminNavBar extends LitElement {
         font-size: 20px;
       }
     `;
+  };
+
+  finishSesion() {
+    this.dispatchEvent(new CustomEvent('finish-sesion'))
   };
 
   render() {
@@ -50,7 +56,7 @@ export class GraficarteStoreAdminNavBar extends LitElement {
           <p>Historial de ventas</p>
           <p>Configuraciones</p>
         </div>
-        <button>Cerrar sesión</button>
+        <button @click="${this.finishSesion}">Cerrar sesión</button>
       </div>
     
     `;

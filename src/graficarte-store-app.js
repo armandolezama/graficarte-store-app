@@ -3,9 +3,10 @@ import styles from './graficarte-store-app-styles';
 import 'sophos-simple-template/sophos-simple-template';
 import productMocks from './mocks/products-mocks';
 import inventoryMocks from './mocks/inventory-mocks'
-import './pages/graficarte-inventory-page'
+import './pages/graficarte-store-inventory-page'
 import './pages/graficarte-store-home-page';
-import './pages/graficarte-login-page';
+import './pages/graficarte-store-login-page';
+import './pages/graficarte-store-create-account';
 import './utils/graficarte-store-admin-nav-bar';
 import './utils/graficarte-store-client-nav-bar';
 import './utils/graficarte-store-header';
@@ -36,11 +37,15 @@ export class GraficarteStoreApp extends LitElement {
     return styles;
   };
 
-  loginSubmit(e) {
+  signIn(e) {
     if(e){
       this.page = 'client-store';
     };
   };
+
+  logOut(){
+    this.page = 'public-store'
+  }
 
   showLoginPage () {
     this.page = 'login';
@@ -57,6 +62,25 @@ export class GraficarteStoreApp extends LitElement {
   render() {
     return html`
       <div id="main-app-container">
+      ${this.page === 'create-account' ? html`
+
+        <sophos-simple-template 
+          id="create-account-container"
+          page-name="${this.page}">
+
+          <graficarte-store-header
+            slot="header-content"
+            ?isCreateAccountAvailable = "${false}"
+            @searching-for-term="${this.searchTerm}">
+            </graficarte-store-header>
+
+            <graficarte-store-create-account 
+            .products="${this.storeProducts}" 
+            slot="main-view-content">
+            </graficarte-store-create-account>
+
+        </sophos-simple-template>
+      ` : html``}
       ${this.page === 'client-store' ? html`
 
           <sophos-simple-template 
@@ -76,6 +100,7 @@ export class GraficarteStoreApp extends LitElement {
               </graficarte-store-home-page>
 
               <graficarte-store-client-nav-bar
+              @finish-sesion="${this.logOut}"
               slot="nav-bar-content">
               </graficarte-store-client-nav-bar>
 
@@ -94,6 +119,7 @@ export class GraficarteStoreApp extends LitElement {
             </graficarte-inventory-page>
 
             <graficarte-store-admin-nav-bar
+            @finish-sesion="${this.logOut}"
               slot="nav-bar-content">
             </graficarte-store-admin-nav-bar>
 
@@ -124,7 +150,7 @@ export class GraficarteStoreApp extends LitElement {
         ${this.page === 'login' ? html`
 
           <graficarte-login-page
-           @graficarte-login-submit="${this.loginSubmit}">
+           @graficarte-login-submit="${this.signIn}">
            </graficarte-login-page>
 
     ` : html``}

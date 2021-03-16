@@ -5,7 +5,7 @@
   "main": "graficarte-store.js",
   "scripts": {
     "serve": "es-dev-server --app-index index.html --node-resolve --watch --open",
-    "serve:build": "es-dev-server --app-index public/index.html --compatibility=none",
+    "serve:build": "es-dev-server --app-index public/index.html --node-resolve --watch --open",
     "build": "rollup --config"
   },
   "keywords": [],
@@ -13,14 +13,15 @@
   "license": "ISC",
   "dependencies": {
     "lit-element": "^2.4.0",
-    "sophos-card": "github:armandolezama/sophos-card#1.0.1",
+    "sophos-card": "github:armandolezama/sophos-card#1.1.0",
     "sophos-simple-template": "github:armandolezama/sophos-simple-template#1.0.1",
     "sophos-icon": "github:armandolezama/sophos-icon#1.0.1"
   },
   "devDependencies": {
-    "es-dev-server": "^2.1.0",
-    "@webcomponents/webcomponentsjs": "^2.5.0",
+    "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "@webcomponents/webcomponentsjs": "^2.5.0",
+    "es-dev-server": "^2.1.0",
     "rollup": "^2.41.2",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-minify-html-literals": "1.2.5",

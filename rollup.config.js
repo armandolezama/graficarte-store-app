@@ -1,31 +1,31 @@
+
 import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import minifyHTML from 'rollup-plugin-minify-html-literals';
 import copy from 'rollup-plugin-copy';
-// Static assets will vary depending on the application
+
+// `npm run build` -> `production` is true
+// `npm run dev` -> `production` is false
+
 const copyConfig = {
   targets: [
-    { src: 'src/build-index.html', dest: 'public/', rename: 'index.html' },
-    { src: 'node-modules/@webcomponents', dest: 'public/bundle-modules' },
-    { src: 'assets', dest: 'public'}
+    { src: 'assets', dest: 'public' },
   ],
 };
 
-// The main JavaScript bundle for modern browsers that support
-// JavaScript modules and other ES2015+ features.
-const config = {
-  input: 'src/graficarte-store-app.js',
-  output: {
-    dir: 'public/src/components',
-    format: 'es',
-  },
-  plugins: [
-    minifyHTML(),
-    copy(copyConfig),
-    resolve(),
-    terser()
-  ],
-  preserveEntrySignatures: false,
+export default {
+	input: 'src/graficarte-store-app.js',
+	output: {
+		file: 'public/src/graficarte-store-app-bundle.js',
+		format: 'iife', // immediately-invoked function expression — suitable for <script> tags
+		sourcemap: true,
+    name: 'graficarteStoreApp'
+	},
+	plugins: [
+		resolve(), // tells Rollup how to find date-fns in node_modules
+		commonjs(), // converts date-fns to ES modules
+		terser(), // minify, but only in production
+    copy(copyConfig)
+	]
 };
-
-export default config;
