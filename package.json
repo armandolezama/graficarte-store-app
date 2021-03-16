@@ -5,7 +5,7 @@
   "main": "graficarte-store.js",
   "scripts": {
     "serve": "es-dev-server --app-index index.html --node-resolve --watch --open",
-    "serve:build": "es-dev-server --app-index public/index.html --node-resolve --watch --open",
+    "serve:build": "es-dev-server --app-index public/index.html --watch --open",
     "build": "rollup --config"
   },
   "keywords": [],
