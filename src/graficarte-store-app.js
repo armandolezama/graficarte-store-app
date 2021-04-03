@@ -43,16 +43,25 @@ export class GraficarteStoreApp extends LitElement {
     };
   };
 
-  logOut(){
+  logOut() {
     this.page = 'public-store'
-  }
+  };
+
+  createAccount(e) {
+    console.log(e.detail.userData);
+    this.page = 'client-store';
+  };
+
+  cancelCreateAccount() {
+    this.page = 'public-store';
+  };
 
   showLoginPage () {
     this.page = 'login';
   };
 
   showCreateAccountPage() {
-    this.page = 'create-account'
+    this.page = 'create-account';
   };
 
   searchTerm(e){
@@ -66,18 +75,15 @@ export class GraficarteStoreApp extends LitElement {
 
         <sophos-simple-template 
           id="create-account-container"
-          page-name="${this.page}">
+          page-name="${this.page}"
+          styleTemplate="full-header">
 
-          <graficarte-store-header
-            slot="header-content"
-            ?isCreateAccountAvailable = "${false}"
-            @searching-for-term="${this.searchTerm}">
-            </graficarte-store-header>
-
-            <graficarte-store-create-account 
-            .products="${this.storeProducts}" 
-            slot="main-view-content">
-            </graficarte-store-create-account>
+          <graficarte-store-create-account
+          @create-account="${this.createAccount}"
+          @cancel-create-account="${this.cancelCreateAccount}"
+          .products="${this.storeProducts}"
+          slot="main-view-content">
+          </graficarte-store-create-account>
 
         </sophos-simple-template>
       ` : html``}
@@ -130,7 +136,8 @@ export class GraficarteStoreApp extends LitElement {
 
           <sophos-simple-template 
             id="public-store-container"
-            page-name="${this.page}">
+            page-name="${this.page}"
+            styleTemplate = "full-header">
 
             <graficarte-store-header
               slot="header-content"

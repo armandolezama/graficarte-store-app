@@ -10,6 +10,7 @@ yarn.lock
 *.tgz
 components
 .DS_Store
+.vscode/
 
 # validator
 coverage*

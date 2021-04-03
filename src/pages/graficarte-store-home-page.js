@@ -30,6 +30,24 @@ export class GraficarteStoreHomePage extends LitElement {
       justify-content: space-around;
     }
 
+    .product-container {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .buttons-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .product-button {
+      border-radius: 30px;
+    }
+
     sophos-card{
       --sophos-card-host-width: 100%;
       --sophos-card-host-max-width: 200px;
@@ -43,13 +61,19 @@ export class GraficarteStoreHomePage extends LitElement {
     return html`
       <div id="home-page-container">
         ${this.products.map(product => html`
-          <sophos-card
-          .pictureSRC = "${product.productImage}"
-          .pictureAlt = "${this.altImage}"
-          .title = "${product.productName}"
-          .subtitle = " $${product.price}.00"
-          .description = "${product.desctiption}"
-          ></sophos-card>
+          <div class="product-container">  
+            <sophos-card
+            .pictureSRC = "${product.productImage}"
+            .pictureAlt = "${this.altImage}"
+            .title = "${product.productName}"
+            .subtitle = " $${product.price}.00"
+            .description = "${product.desctiption}"
+            ></sophos-card>
+            <div class="buttons-container">
+              <button class="product-button buy" >Comprar</button>
+              <button class="product-button add-to-car" >Agregar al carrito</button>
+            </div>
+          </div>
         `)}
       </div>
     `;

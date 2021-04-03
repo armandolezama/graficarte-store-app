@@ -23,21 +23,31 @@ export class GraficarteStoreHeader extends LitElement {
   static get styles() {
     return css`
       #search-bar {
+        background: rgb(147,199,237);
+        background: linear-gradient(69deg, rgba(147,199,237,1) 0%, rgba(35,132,240,1) 30%, rgba(30,97,238,1) 65%, rgba(30,204,236,0.9304096638655462) 100%);
         height: 100px;
         display: flex;
         margin: 20px;
+        padding: 0 20px;
+        border-radius: 30px;
       }
 
       #input-container[show-create-account-button] {
+        align-items: center;
         width: 80%;
+        display: flex;
       }
 
       #input-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-around;
         width: 100%;
       }
 
       #search-bar-input {
       padding: 20px;
+      margin: 20px;
       width: 100%;
       box-sizing: border-box;
       border: 2px solid #ccc;
@@ -54,19 +64,11 @@ export class GraficarteStoreHeader extends LitElement {
       }
 
       #create-account-container {
-        justify-content: flex-end;
         display: inline-flex;
-        width: 20%
-      }
-
-      #create-account-button,
-      #sign-in-button {
-        display: inline-flex;
-        height: 35px;
-        width: 100px;
-        text-align: center;
-        justify-content: center;
-        align-items: center;
+        justify-content: space-around;
+        width: 20%;
+        flex-direction: column;
+        align-items: baseline;
       }
     `;
   };
