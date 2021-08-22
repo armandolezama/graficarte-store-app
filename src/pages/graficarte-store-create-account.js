@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
-import 'sophos-chimera-input/sophos-chimera-input'
+import 'sophos-chimera-input/sophos-chimera-input';
+import 'sophos-chimera-button/sophos-chimera-button';
 
 export class GraficarteStoreCreateAccount extends LitElement {
   /**
@@ -33,22 +34,27 @@ export class GraficarteStoreCreateAccount extends LitElement {
       }
     `;
   };
+  _manageCreateAccountActions(e){
+    const payload = e.detail;
+    payload.option === 0 ? this._createAccount() : payload.option === 1 ? this._cancel() : payload;
+  }
 
-  createAccount() {
+  _createAccount() {
     this.dispatchEvent(new CustomEvent('create-account', {
       detail : { userData: this.userData }
     }));
   };
 
-  cancel() {
+  _cancel() {
     this.dispatchEvent(new CustomEvent('cancel-create-account'));
   };
 
-  setUserDataField(e) {
+
+  _setUserDataField(e) {
     this.userData[e.target.getAttribute('field-name')] = e.detail.value;
   };
 
-  confirmPassword(e) {
+  _confirmPassword(e) {
     if(this.userData.password && e.detail.value === this.userData.password) {
       this.showSuccessMessage();
     } else {
@@ -76,7 +82,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       .type="${'text'}"
       .isRequired="${true}"
       field-name="name"
-      @sophos-input-changed="${this.setUserDataField}">
+      @sophos-input-changed="${this._setUserDataField}">
       </sophos-chimera-input>
       <sophos-chimera-input
       .styleOfInput="${'simple-bar-input'}"
@@ -85,7 +91,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       .type="${'text'}"
       .isRequired="${true}"
       field-name="last-name"
-      @sophos-input-changed="${this.setUserDataField}">
+      @sophos-input-changed="${this._setUserDataField}">
       </sophos-chimera-input>
       <sophos-chimera-input
       .styleOfInput="${'simple-bar-input'}"
@@ -94,7 +100,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       .type="${'email'}"
       .isRequired="${true}"
       field-name="email"
-      @sophos-input-changed="${this.setUserDataField}">
+      @sophos-input-changed="${this._setUserDataField}">
       </sophos-chimera-input>
       <sophos-chimera-input
       .styleOfInput="${'simple-bar-input'}"
@@ -103,7 +109,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       .type="${'text'}"
       .isRequired="${true}"
       field-name="address"
-      @sophos-input-changed="${this.setUserDataField}">
+      @sophos-input-changed="${this._setUserDataField}">
       </sophos-chimera-input>
       <sophos-chimera-input
       .styleOfInput="${'simple-bar-input'}"
@@ -112,7 +118,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       .type="${'password'}"
       .isRequired="${true}"
       field-name="password"
-      @sophos-input-changed="${this.setUserDataField}">
+      @sophos-input-changed="${this._setUserDataField}">
       </sophos-chimera-input>
       <sophos-chimera-input
       .styleOfInput="${'simple-bar-input'}"
@@ -120,17 +126,17 @@ export class GraficarteStoreCreateAccount extends LitElement {
       .label="${'Repita la contraseña'}"
       .type="${'password'}"
       .isRequired="${true}"
-      @sophos-input-changed="${this.confirmPassword}">
+      @sophos-input-changed="${this._confirmPassword}">
       </sophos-chimera-input>
       <div messageStyle="${this.passwordMessageStyle}">
         <p>
           ${this.passwordMessageText}
         </p>
       </div>
-      <button
-      @click="${this.createAccount}">Crear cuenta</button>
-      <button
-      @click="${this.cancel}">Cancelar</button>
+      <sophos-chimera-button
+      type="neon-multi-button"
+      .buttonsLabels="${['Crear cuenta', 'Cancelar']}"
+      @sophos-chimera-button-click="${this._manageCreateAccountActions}"></sophos-chimera-button>
     </div>
     `;
   }

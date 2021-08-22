@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import 'sophos-card/sophos-card'
+import 'sophos-card/sophos-card';
 export class GraficarteStoreHomePage extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -52,7 +52,8 @@ export class GraficarteStoreHomePage extends LitElement {
       --sophos-card-host-width: 100%;
       --sophos-card-host-max-width: 200px;
       --sophos-card-host-min-width: 100px;
-      margin: 20px;
+      --sophos-card-main-container-cursor: pointer;
+      margin: clamp(20px, 40px, 90px);
       flex-grow: 2;
     }
     `;
@@ -69,10 +70,6 @@ export class GraficarteStoreHomePage extends LitElement {
             .subtitle = " $${product.price}.00"
             .description = "${product.desctiption}"
             ></sophos-card>
-            <div class="buttons-container">
-              <button class="product-button buy" >Comprar</button>
-              <button class="product-button add-to-car" >Agregar al carrito</button>
-            </div>
           </div>
         `)}
       </div>

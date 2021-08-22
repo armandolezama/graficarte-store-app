@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import 'sophos-chimera-button/sophos-chimera-button';
 
 export class GraficarteStoreHeader extends LitElement {
   /**
@@ -63,22 +64,33 @@ export class GraficarteStoreHeader extends LitElement {
       transition: width 0.4s ease-in-out;
       }
 
-      #create-account-container {
+      #session-manager-container {
         display: inline-flex;
         justify-content: space-around;
         width: 20%;
         flex-direction: column;
         align-items: baseline;
       }
+
+      sophos-chimera-button {
+        --sophos-chimera-button-font-size: .8rem;
+        --sophos-chimera-button-height: 30px;
+        --sophos-chimera-button-simple-single-buttons-simple-multi-button-margin-bottom: 12px;
+      }
     `;
   };
 
-  createAccountEvent() {
+  _createAccountEvent() {
     this.dispatchEvent(new CustomEvent('create-new-account'))
   };
 
-  login() {
+  _loginEvent() {
     this.dispatchEvent(new CustomEvent('sign-in'))
+  }
+
+  _manageSessionOptions(e){
+    const payload = e.detail;
+    payload.option === 0 ? this._createAccountEvent() : payload.option === 1 ? this._loginEvent() : payload;
   }
 
   searchProduct (e) {
@@ -100,13 +112,12 @@ export class GraficarteStoreHeader extends LitElement {
         </div>
 
         ${this.isCreateAccountAvailable ? html`
-          <div id="create-account-container">
-            <button
-            id="create-account-button"
-            @click="${this.createAccountEvent}">Crear cuenta</button>
-            <button
-            id="sign-in-button"
-            @click="${this.login}">Iniciar sesión</button>
+          <div id="session-manager-container">
+            <sophos-chimera-button
+            id="session-multi-button"
+            type="simple-multi-button"
+            .buttonsLabels="${['Crear cuenta', 'Iniciar sesión']}"
+            @sophos-chimera-button-click="${this._manageSessionOptions}"></sophos-chimera-button>
           </div>
         ` : html``}
 

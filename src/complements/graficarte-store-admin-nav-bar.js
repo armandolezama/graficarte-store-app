@@ -1,7 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-icon/sophos-icon';
+import 'sophos-chimera-button/sophos-chimera-button';
 
-export class GraficarteStoreClientNavBar extends LitElement {
+export class GraficarteStoreAdminNavBar extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
     * state, set up event listeners, create shadow dom.
@@ -41,24 +42,27 @@ export class GraficarteStoreClientNavBar extends LitElement {
 
   render() {
     return html`
-      <div id="client-nav-bar-container">
+      <div id="admin-nav-bar-container">
         <sophos-icon
-        imageSource="./assets/client-user.png"
-        imageAlt="client-pickture"
-        iconText="Client-user"
+        imageSource="./assets/admin-user.png"
+        imageAlt="admin-pickture"
+        iconText="Admin-user"
         iconDirection="top">
         </sophos-icon>
         <div>
-          <p>Mis compras</p>
-          <p>Métodos de pago</p>
-          <p>Perfil</p>
-          <p>Notificaciones</p>
+          <p>Contabilidad</p>
+          <p>Envíos</p>
+          <p>Inventario</p>
+          <p>Repartidores</p>
+          <p>Historial de ventas</p>
           <p>Configuraciones</p>
         </div>
-        <button @click="${this.finishSesion}">Cerrar sesión</button>
+        <sophos-chimera-button 
+        type="simple-multi-button"
+        @sophos-chimera-button-click="${this.finishSesion}">Cerrar sesión</sophos-chimera-button>
       </div>
     
     `;
   };
 };
-customElements.define('graficarte-store-client-nav-bar', GraficarteStoreClientNavBar);
+customElements.define('graficarte-store-admin-nav-bar', GraficarteStoreAdminNavBar);

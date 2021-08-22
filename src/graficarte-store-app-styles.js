@@ -6,7 +6,7 @@ export default css`
     width: 100%;
     justify-content: space-around;
     align-items: center;
-    background: linear-gradient(180deg, rgba(114,212,80,1) 0%, rgba(16,161,19,1) 38%, rgba(20,152,63,1) 74%, rgba(59,251,152,1) 100%);
+    background: linear-gradient(90deg, rgba(145,255,59,1) 0%, rgba(0,80,249,1) 100%);
   }
 
   #create-account-container {

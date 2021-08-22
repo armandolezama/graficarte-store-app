@@ -7,9 +7,10 @@ import './pages/graficarte-store-inventory-page'
 import './pages/graficarte-store-home-page';
 import './pages/graficarte-store-login-page';
 import './pages/graficarte-store-create-account';
-import './utils/graficarte-store-admin-nav-bar';
-import './utils/graficarte-store-client-nav-bar';
-import './utils/graficarte-store-header';
+import './complements/graficarte-store-admin-nav-bar';
+import './complements/graficarte-store-client-nav-bar';
+import './complements/graficarte-store-header';
+import './controllers/graficarte-store-srp-controller';
 export class GraficarteStoreApp extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -29,7 +30,7 @@ export class GraficarteStoreApp extends LitElement {
   static get properties() {
     return {
       storeProducts : { type : Array },
-      page : { type : Array}
+      page : { type : String}
     };
   }
 
@@ -48,7 +49,6 @@ export class GraficarteStoreApp extends LitElement {
   };
 
   createAccount(e) {
-    console.log(e.detail.userData);
     this.page = 'client-store';
   };
 
@@ -71,6 +71,7 @@ export class GraficarteStoreApp extends LitElement {
   render() {
     return html`
       <div id="main-app-container">
+      <graficarte-store-srp-controller></graficarte-store-srp-controller>
       ${this.page === 'create-account' ? html`
 
         <sophos-simple-template 
@@ -156,9 +157,9 @@ export class GraficarteStoreApp extends LitElement {
         ` : html``}
         ${this.page === 'login' ? html`
 
-          <graficarte-login-page
+          <graficarte-store-login-page
            @graficarte-login-submit="${this.signIn}">
-           </graficarte-login-page>
+           </graficarte-store-login-page>
 
     ` : html``}
       </div>

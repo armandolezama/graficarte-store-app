@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
-export class GraficarteLoginPage extends LitElement {
+export class GraficarteStoreLoginPage extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
     * state, set up event listeners, create shadow dom.
@@ -22,7 +22,9 @@ export class GraficarteLoginPage extends LitElement {
   static get properties() {
     return {
       userNameLabel : { type : String},
-      userNameInputPlaceholder : { type : String}
+      userNameInputPlaceholder : { type : String},
+      userPasswordLabel : { type : String},
+      userPasswordPlaceholder : { type : String}
     };
   };
 
@@ -79,7 +81,7 @@ export class GraficarteLoginPage extends LitElement {
       password: this._password
     };
     this.dispatchEvent(new CustomEvent('graficarte-login-submit', { detail }))
-  }
+  };
 
   render() {
     return html`
@@ -111,4 +113,4 @@ export class GraficarteLoginPage extends LitElement {
     `;
   };
 };
-customElements.define('graficarte-login-page', GraficarteLoginPage);
+customElements.define('graficarte-store-login-page', GraficarteStoreLoginPage);
