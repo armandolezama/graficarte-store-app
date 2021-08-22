@@ -76,6 +76,8 @@ export class GraficarteStoreHeader extends LitElement {
         --sophos-chimera-button-font-size: .8rem;
         --sophos-chimera-button-height: 30px;
         --sophos-chimera-button-simple-single-buttons-simple-multi-button-margin-bottom: 12px;
+        --sophos-chimera-button-flex-direction: column;
+        --sophos-chimera-button-flex-flow: column;
       }
     `;
   };
@@ -91,7 +93,7 @@ export class GraficarteStoreHeader extends LitElement {
   _manageSessionOptions(e){
     const payload = e.detail;
     payload.option === 0 ? this._createAccountEvent() : payload.option === 1 ? this._loginEvent() : payload;
-  }
+  };
 
   searchProduct (e) {
     this.dispatchEvent(new CustomEvent('searching-for-term', {detail : {

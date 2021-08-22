@@ -35,7 +35,9 @@ export class GraficarteStoreClientNavBar extends LitElement {
       }
 
       #client-options-multi-button{
-        
+        --sophos-chimera-button-flex-direction: column;
+        --sophos-chimera-button-flex-flow: column;
+        --sophos-chimera-button-width: 140px;
       }
     `;
   };

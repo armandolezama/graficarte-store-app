@@ -10,7 +10,6 @@ import './pages/graficarte-store-create-account';
 import './complements/graficarte-store-admin-nav-bar';
 import './complements/graficarte-store-client-nav-bar';
 import './complements/graficarte-store-header';
-import './controllers/graficarte-store-srp-controller';
 export class GraficarteStoreApp extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -43,6 +42,10 @@ export class GraficarteStoreApp extends LitElement {
       this.page = 'client-store';
     };
   };
+
+  cancelLogin(){
+    this.page = 'public-store'
+  }
 
   logOut() {
     this.page = 'public-store'
@@ -158,7 +161,8 @@ export class GraficarteStoreApp extends LitElement {
         ${this.page === 'login' ? html`
 
           <graficarte-store-login-page
-           @graficarte-login-submit="${this.signIn}">
+           @graficarte-login-submit="${this.signIn}"
+           @graficarte-cancel-login="${this.cancelLogin}">
            </graficarte-store-login-page>
 
     ` : html``}

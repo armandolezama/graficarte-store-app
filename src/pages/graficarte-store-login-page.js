@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-
+import 'sophos-chimera-button/sophos-chimera-button';
 export class GraficarteStoreLoginPage extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -73,14 +73,23 @@ export class GraficarteStoreLoginPage extends LitElement {
 
   setPassword(e) {
     this._password = e.target.value;
-  }
+  };
 
-  submit(){
+  _manageLoginActions(e){
+    const payload = e.detail;
+    payload.option === 0 ? this._submit() : payload.option === 1 ? this._cancel() : payload;
+  };
+
+  _submit(){
     const detail = {
       userName: this._userName,
       password: this._password
     };
     this.dispatchEvent(new CustomEvent('graficarte-login-submit', { detail }))
+  };
+
+  _cancel() {
+    this.dispatchEvent(new CustomEvent('graficarte-cancel-login'));
   };
 
   render() {
@@ -107,7 +116,10 @@ export class GraficarteStoreLoginPage extends LitElement {
             placeholder="${this.userPasswordPlaceholder}" 
             @input="${this.setPassword}">
           </form>
-          <button @click="${this.submit}" id="login-submit">Entrar</button>
+          <sophos-chimera-button 
+          type="simple-multi-button"
+          .buttonsLabels="${['Entrar', 'Cancelar']}"
+          @sophos-chimera-button-click="${this._manageLoginActions}" id="login-submit">Entrar</sophos-chimera-button>
         </div>
       </div>
     `;
