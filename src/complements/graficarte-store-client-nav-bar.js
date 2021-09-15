@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-icon/sophos-icon';
 import 'sophos-chimera-button/sophos-chimera-button';
+import getLocal from '../locales/';
 
 export class GraficarteStoreClientNavBar extends LitElement {
   /**
@@ -10,7 +11,14 @@ export class GraficarteStoreClientNavBar extends LitElement {
     */
   constructor() {
     super();
-    this.options = [];
+    this.clientOptions = [
+      getLocal('graficarte-store-client-nav-bar-options-my-shopping'),
+      getLocal('graficarte-store-client-nav-bar-options-payment-methods'),
+      getLocal('graficarte-store-client-nav-bar-options-profile'),
+      getLocal('graficarte-store-client-nav-bar-options-notifications'),
+      getLocal('graficarte-store-client-nav-bar-options-configuration')
+    ];
+    this.finishSesionLabel = [getLocal('graficarte-store-client-nav-bar-options-end-session')];
   };
 
   /**
@@ -18,7 +26,8 @@ export class GraficarteStoreClientNavBar extends LitElement {
     */
   static get properties() {
     return {
-      options : { type : Array}
+      clientOptions : { type : Array},
+      finishSesionLabel : { type : Array}
     };
   };
 
@@ -28,10 +37,6 @@ export class GraficarteStoreClientNavBar extends LitElement {
         --sophos-icon-icon-image-width: 100px;
         --sophos-icon-icon-image-height: 100px;
         --sophos-icon-icon-text-font-size: 20px;
-      }
-
-      p {
-        font-size: 20px;
       }
 
       #client-options-multi-button{
@@ -59,18 +64,12 @@ export class GraficarteStoreClientNavBar extends LitElement {
           <sophos-chimera-button
           id="client-options-multi-button"
           type="simple-multi-button"
-          .buttonsLabels="${[
-            'Mis compras',
-            'Métodos de pago',
-            'Perfil',
-            'Notificaciones',
-            'Configuraciones'
-          ]}">
+          .buttonsLabels="${this.clientOptions}">
           </sophos-chimera-button>
         </div>
         <sophos-chimera-button
         type="simple-multi-button"
-        .buttonsLabels="${['Cerrar sesión']}"
+        .buttonsLabels="${this.finishSesionLabel}"
         @sophos-chimera-button-click="${this.finishSesion}">Cerrar sesión</sophos-chimera-button>
       </div>
     

@@ -10,7 +10,15 @@ export class GraficarteStoreAdminNavBar extends LitElement {
     */
   constructor() {
     super();
-    this.options = [];
+    this.adminOptions = [
+      'Contabilidad',
+      'Envíos',
+      'Inventario',
+      'Repartidores',
+      'Historial de ventas',
+      'Configuraciones'
+    ];
+    this.finishSesionLabel = ['Cerrar sesión'];
   };
 
   /**
@@ -18,7 +26,8 @@ export class GraficarteStoreAdminNavBar extends LitElement {
     */
   static get properties() {
     return {
-      options : { type : Array}
+      adminOptions : { type : Array},
+      finishSesionLabel : { type : Array}
     };
   };
 
@@ -30,8 +39,10 @@ export class GraficarteStoreAdminNavBar extends LitElement {
         --sophos-icon-icon-text-font-size: 20px;
       }
 
-      p {
-        font-size: 20px;
+      #admin-options-multi-button{
+        --sophos-chimera-button-flex-direction: column;
+        --sophos-chimera-button-flex-flow: column;
+        --sophos-chimera-button-width: 140px;
       }
     `;
   };
@@ -50,16 +61,16 @@ export class GraficarteStoreAdminNavBar extends LitElement {
         iconDirection="top">
         </sophos-icon>
         <div>
-          <p>Contabilidad</p>
-          <p>Envíos</p>
-          <p>Inventario</p>
-          <p>Repartidores</p>
-          <p>Historial de ventas</p>
-          <p>Configuraciones</p>
+        <sophos-chimera-button
+          id="admin-options-multi-button"
+          type="simple-multi-button"
+          .buttonsLabels="${this.adminOptions}">
+          </sophos-chimera-button>
         </div>
         <sophos-chimera-button 
         type="simple-multi-button"
-        @sophos-chimera-button-click="${this.finishSesion}">Cerrar sesión</sophos-chimera-button>
+        .buttonsLabels="${this.finishSesionLabel}"
+        @sophos-chimera-button-click="${this.finishSesion}"></sophos-chimera-button>
       </div>
     
     `;

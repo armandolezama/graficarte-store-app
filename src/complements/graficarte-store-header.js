@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-chimera-button/sophos-chimera-button';
+import getLocal from '../locales/';
 
 export class GraficarteStoreHeader extends LitElement {
   /**
@@ -109,7 +110,7 @@ export class GraficarteStoreHeader extends LitElement {
           <input 
             id="search-bar-input" 
             type="text" name="search-bar" 
-            placeholder="buscar" 
+            .placeholder="${getLocal('graficarte-store-search-bar-place-holder')}"
             @input="${this.searchProduct}">
         </div>
 

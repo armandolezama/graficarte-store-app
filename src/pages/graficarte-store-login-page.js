@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-chimera-button/sophos-chimera-button';
+
 export class GraficarteStoreLoginPage extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -67,11 +68,11 @@ export class GraficarteStoreLoginPage extends LitElement {
     `;
   };
 
-  setUserName(e) {
+  _setUserName(e) {
     this._userName = e.target.value;
   };
 
-  setPassword(e) {
+  _setPassword(e) {
     this._password = e.target.value;
   };
 
@@ -105,7 +106,7 @@ export class GraficarteStoreLoginPage extends LitElement {
             type="text" 
             name="user-name" 
             placeholder="${this.userNameInputPlaceholder}" 
-            @input="${this.setUserName}">
+            @input="${this._setUserName}">
             <label 
             id="user-password-label" 
             for="password">${this.userPasswordLabel}</label>
@@ -114,7 +115,7 @@ export class GraficarteStoreLoginPage extends LitElement {
             type="password" 
             name="password" 
             placeholder="${this.userPasswordPlaceholder}" 
-            @input="${this.setPassword}">
+            @input="${this._setPassword}">
           </form>
           <sophos-chimera-button 
           type="simple-multi-button"

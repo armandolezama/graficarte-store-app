@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
+import getLocal from '../locales/'
 
 export class GraficarteStoreCreateAccount extends LitElement {
   /**
@@ -10,9 +11,66 @@ export class GraficarteStoreCreateAccount extends LitElement {
     */
   constructor() {
     super();
-    this.inputs = [];
+    this.inputsList = [
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-name-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'name',
+        handler: 'set data'
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-last-name-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'last-name',
+        handler: 'set data'
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-email-placeholder'),
+        type: 'email',
+        isRequired: true,
+        fieldName: 'email',
+        handler: 'set data'
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-address-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'address',
+        handler: 'set data'
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-password-placeholder'),
+        type: 'password',
+        isRequired: true,
+        fieldName: 'password',
+        handler: 'set data'
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-repeat-password-placeholder'),
+        type: 'password',
+        isRequired: true,
+        fieldName: '',
+        handler: 'confirm pass'
+      },
+    ];
+    this.buttonLabels = ['Crear cuenta', 'Cancelar'];
     this.userData = {};
     this.passwordMessageStyle = '';
+    this._handlers = {};
   };
 
   /**
@@ -20,10 +78,11 @@ export class GraficarteStoreCreateAccount extends LitElement {
     */
   static get properties() {
     return {
-      inputs : { type : Array },
+      inputsList : { type : Array },
       userData : { type : Object },
       passwordMessageStyle : { type : String },
-      passwordMessageText : { type : String }
+      passwordMessageText : { type : String },
+      _handlers : { type : Object}
     };
   };
 
@@ -34,6 +93,14 @@ export class GraficarteStoreCreateAccount extends LitElement {
       }
     `;
   };
+
+  firstUpdated(){
+    this._handlers = {
+      'set data' : this._setUserDataField,
+      'confirm pass' : this._confirmPassword
+    };
+  };
+
   _manageCreateAccountActions(e){
     const payload = e.detail;
     payload.option === 0 ? this._createAccount() : payload.option === 1 ? this._cancel() : payload;
@@ -56,18 +123,18 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   _confirmPassword(e) {
     if(this.userData.password && e.detail.value === this.userData.password) {
-      this.showSuccessMessage();
+      this._showSuccessMessage();
     } else {
-      this.showErrorMessage();
+      this._showErrorMessage();
     };
   };
 
-  showErrorMessage() {
+  _showErrorMessage() {
     this.passwordMessageStyle = 'error';
     this.passwordMessageText = 'Las contraseñas no coinciden'
   }
 
-  showSuccessMessage() {
+  _showSuccessMessage() {
     this.passwordMessageStyle = 'success';
     this.passwordMessageText = 'Las contraseñas coinciden';
   }
@@ -75,67 +142,26 @@ export class GraficarteStoreCreateAccount extends LitElement {
   render() {
     return html`
     <div>
-      <sophos-chimera-input
-      .styleOfInput="${'simple-bar-input'}"
-      .maxLength="${30}"
-      .label="${'Nombre(s)'}"
-      .type="${'text'}"
-      .isRequired="${true}"
-      field-name="name"
-      @sophos-input-changed="${this._setUserDataField}">
-      </sophos-chimera-input>
-      <sophos-chimera-input
-      .styleOfInput="${'simple-bar-input'}"
-      .maxLength="${30}"
-      .label="${'Apellidos'}"
-      .type="${'text'}"
-      .isRequired="${true}"
-      field-name="last-name"
-      @sophos-input-changed="${this._setUserDataField}">
-      </sophos-chimera-input>
-      <sophos-chimera-input
-      .styleOfInput="${'simple-bar-input'}"
-      .maxLength="${30}"
-      .label="${'Correo electrónico'}"
-      .type="${'email'}"
-      .isRequired="${true}"
-      field-name="email"
-      @sophos-input-changed="${this._setUserDataField}">
-      </sophos-chimera-input>
-      <sophos-chimera-input
-      .styleOfInput="${'simple-bar-input'}"
-      .maxLength="${30}"
-      .label="${'Dirección'}"
-      .type="${'text'}"
-      .isRequired="${true}"
-      field-name="address"
-      @sophos-input-changed="${this._setUserDataField}">
-      </sophos-chimera-input>
-      <sophos-chimera-input
-      .styleOfInput="${'simple-bar-input'}"
-      .maxLength="${30}"
-      .label="${'Contraseña'}"
-      .type="${'password'}"
-      .isRequired="${true}"
-      field-name="password"
-      @sophos-input-changed="${this._setUserDataField}">
-      </sophos-chimera-input>
-      <sophos-chimera-input
-      .styleOfInput="${'simple-bar-input'}"
-      .maxLength="${30}"
-      .label="${'Repita la contraseña'}"
-      .type="${'password'}"
-      .isRequired="${true}"
-      @sophos-input-changed="${this._confirmPassword}">
-      </sophos-chimera-input>
-      <div messageStyle="${this.passwordMessageStyle}">
+      ${this.inputsList.map(inputData => {
+        return html`
+        <sophos-chimera-input
+          .styleOfInput="${inputData.styleOfInput}"
+          .maxLength="${inputData.maxLength}"
+          .label="${inputData.label}"
+          .type="${inputData.type}"
+          field-name="${inputData.fieldName}"
+          .isRequired="${inputData.isRequired}"
+          @sophos-input-changed="${this._handlers[inputData.handler]}">
+        </sophos-chimera-input>`;
+      })}
+      <div messageStyle="password-message-${this.passwordMessageStyle}">
         <p>
           ${this.passwordMessageText}
         </p>
       </div>
       <sophos-chimera-button
       type="neon-multi-button"
-      .buttonsLabels="${['Crear cuenta', 'Cancelar']}"
+      .buttonsLabels="${this.buttonLabels}"
       @sophos-chimera-button-click="${this._manageCreateAccountActions}"></sophos-chimera-button>
     </div>
     `;

@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-card/sophos-card'
 
-export class GraficarteInventoryPage extends LitElement {
+export class GraficarteStoreInventoryPage extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
     * state, set up event listeners, create shadow dom.
@@ -52,4 +52,4 @@ export class GraficarteInventoryPage extends LitElement {
     `;
   };
 };
-customElements.define('graficarte-inventory-page', GraficarteInventoryPage);
+customElements.define('graficarte-store-inventory-page', GraficarteStoreInventoryPage);

@@ -1,8 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import styles from './graficarte-store-app-styles';
 import 'sophos-simple-template/sophos-simple-template';
-import productMocks from './mocks/products-mocks';
-import inventoryMocks from './mocks/inventory-mocks'
 import './pages/graficarte-store-inventory-page'
 import './pages/graficarte-store-home-page';
 import './pages/graficarte-store-login-page';
@@ -10,6 +8,8 @@ import './pages/graficarte-store-create-account';
 import './complements/graficarte-store-admin-nav-bar';
 import './complements/graficarte-store-client-nav-bar';
 import './complements/graficarte-store-header';
+import productMocks from './mocks/products-mocks';
+import inventoryMocks from './mocks/inventory-mocks';
 export class GraficarteStoreApp extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -123,10 +123,10 @@ export class GraficarteStoreApp extends LitElement {
             styleTemplate="full-nav"
             page-name="${this.page}">
 
-            <graficarte-inventory-page 
+            <graficarte-store-inventory-page 
               .products="${this.inventory}" 
               slot="main-view-content">
-            </graficarte-inventory-page>
+            </graficarte-store-inventory-page>
 
             <graficarte-store-admin-nav-bar
             @finish-sesion="${this.logOut}"
