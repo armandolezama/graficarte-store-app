@@ -67,7 +67,9 @@ export class GraficarteStoreCreateAccount extends LitElement {
         handler: 'confirm pass'
       },
     ];
-    this.buttonLabels = ['Crear cuenta', 'Cancelar'];
+    this.buttonLabels = [
+      getLocal('graficarte-store-create-account-form-create-account'), 
+      getLocal('graficarte-store-create-account-form-cancel')];
     this.userData = {};
     this.passwordMessageStyle = '';
     this._handlers = {};
