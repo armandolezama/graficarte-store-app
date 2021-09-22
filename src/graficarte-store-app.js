@@ -8,6 +8,8 @@ import './pages/graficarte-store-create-account';
 import './complements/graficarte-store-admin-nav-bar';
 import './complements/graficarte-store-client-nav-bar';
 import './complements/graficarte-store-header';
+import './controllers/graficarte-store-login-controller';
+import './controllers/graficarte-store-sign-in-controller';
 import productMocks from './mocks/products-mocks';
 import inventoryMocks from './mocks/inventory-mocks';
 export class GraficarteStoreApp extends LitElement {
@@ -74,7 +76,8 @@ export class GraficarteStoreApp extends LitElement {
   render() {
     return html`
       <div id="main-app-container">
-      <graficarte-store-srp-controller></graficarte-store-srp-controller>
+        <graficarte-store-login-controller>
+        </graficarte-store-login-controller>
       ${this.page === 'create-account' ? html`
 
         <sophos-simple-template 

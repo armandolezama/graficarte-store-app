@@ -97,6 +97,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
   };
 
   firstUpdated(){
+    super.firstUpdated();
     this._handlers = {
       'set data' : this._setUserDataField,
       'confirm pass' : this._confirmPassword
