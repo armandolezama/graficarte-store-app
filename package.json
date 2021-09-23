@@ -5,8 +5,8 @@
   "main": "graficarte-store.js",
   "module": "graficarte-store.js",
   "scripts": {
-    "serve": "es-dev-server --app-index index.html --node-resolve --watch --open",
-    "serve:build": "es-dev-server --app-index public/index.html --watch --open",
+    "serve": "es-dev-server --app-index index.html --node-resolve --cors --watch --open",
+    "serve:build": "es-dev-server --app-index public/index.html --cors --watch --open",
     "build": "rollup --config"
   },
   "keywords": [],
@@ -16,7 +16,7 @@
     "lit-element": "^2.5.1",
     "sophos-card": "github:armandolezama/sophos-card#1.1.0",
     "sophos-chimera-button": "github:armandolezama/sophos-chimera-button#1.1.0",
-    "sophos-chimera-input": "github:armandolezama/sophos-chimera-input#1.0.0",
+    "sophos-chimera-input": "github:armandolezama/sophos-chimera-input#1.0.2",
     "sophos-icon": "github:armandolezama/sophos-icon#1.0.1",
     "sophos-simple-template": "github:armandolezama/sophos-simple-template#1.0.1"
   },

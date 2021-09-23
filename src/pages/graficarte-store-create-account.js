@@ -27,7 +27,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         label: getLocal('graficarte-store-create-account-form-last-name-placeholder'),
         type: 'text',
         isRequired: true,
-        fieldName: 'last-name',
+        fieldName: 'lastName',
         handler: 'set data'
       },
       {

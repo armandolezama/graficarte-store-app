@@ -1,5 +1,5 @@
 import { LitElement } from 'lit-element';
-import { GraficarteStoreLoginService } from '../services/graficarte-store-login-service'
+import { GraficarteStoreAPI } from '../service/graficarte-store-api';
 
 export class GraficarteStoreLoginController extends LitElement {
   //component to manage error or success response from login service
@@ -13,7 +13,7 @@ export class GraficarteStoreLoginController extends LitElement {
     super();
     this._userName = '';
     this._userPassword = '';
-    this._service = new GraficarteStoreLoginService();
+    this._service = new GraficarteStoreAPI('POST', 'public/login');
   };
 
   /**

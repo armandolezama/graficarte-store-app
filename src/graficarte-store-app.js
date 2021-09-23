@@ -23,6 +23,8 @@ export class GraficarteStoreApp extends LitElement {
     this.inventory = inventoryMocks;
     this.storeProducts = productMocks;
     this.page = 'public-store';
+    this._loginData = {};
+    this._signinData = {};
   };
 
   /**
@@ -30,8 +32,11 @@ export class GraficarteStoreApp extends LitElement {
     */
   static get properties() {
     return {
+      inventory : { type : Array },
       storeProducts : { type : Array },
-      page : { type : String}
+      page : { type : String},
+      _loginData : { type : Object},
+      _signinData : { type : Object}
     };
   }
 
@@ -39,7 +44,7 @@ export class GraficarteStoreApp extends LitElement {
     return styles;
   };
 
-  signIn(e) {
+  login(e) {
     if(e){
       this.page = 'client-store';
     };
@@ -54,12 +59,20 @@ export class GraficarteStoreApp extends LitElement {
   };
 
   createAccount(e) {
-    this.page = 'client-store';
+    this._signinData = {...e.detail.userData};
   };
 
   cancelCreateAccount() {
     this.page = 'public-store';
   };
+
+  successSignIn(){
+    this.page = 'client-store';
+  };
+
+  errorSignIn(){
+    alert('error at signin')
+  }
 
   showLoginPage () {
     this.page = 'login';
@@ -76,8 +89,20 @@ export class GraficarteStoreApp extends LitElement {
   render() {
     return html`
       <div id="main-app-container">
+        
         <graficarte-store-login-controller>
         </graficarte-store-login-controller>
+
+        <graficarte-store-sign-in-controller
+          .name = "${this._signinData.name}"
+          .lastName = "${this._signinData.lastName}"
+          .email = "${this._signinData.email}"
+          .address = "${this._signinData.address}"
+          .password = "${this._signinData.password}"
+          @graficarte-store-sign-in-success="${this.successSignIn}"
+          @graficarte-store-sign-in-error="${this.errorSignIn}">
+        </graficarte-store-sign-in-controller>
+
       ${this.page === 'create-account' ? html`
 
         <sophos-simple-template 
@@ -164,7 +189,7 @@ export class GraficarteStoreApp extends LitElement {
         ${this.page === 'login' ? html`
 
           <graficarte-store-login-page
-           @graficarte-login-submit="${this.signIn}"
+           @graficarte-login-submit="${this.login}"
            @graficarte-cancel-login="${this.cancelLogin}">
            </graficarte-store-login-page>
 

@@ -1,3 +1,3 @@
 export default {
-  GRAFICARTE_API : 'http://localhost:8000/'
+  GRAFICARTE_API : 'http://localhost:8010/proxy'
 }
