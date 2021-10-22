@@ -14,7 +14,7 @@ export class GraficarteStoreSignInController extends LitElement {
     this.email = '';
     this.address = '';
     this.password = '';
-    this._service = new GraficarteStoreAPI('POST', 'public/signin');
+    this.service = new GraficarteStoreAPI('POST', 'public/signin');
   };
 
   /**
@@ -32,43 +32,55 @@ export class GraficarteStoreSignInController extends LitElement {
 
   updated(changedProps) {
     super.updated( changedProps );
-    if(this._checkFieldsAreFull()){
+    const emptyFields = this.getEmptyFields();
+
+    if(emptyFields.length === 0){
       this._signIn();
+    } else {
+      this.missingFieldsMessage(emptyFields);
     };
   };
 
-  _checkFieldsAreFull(){
-    return this.name === '' || this.name === 'undefined' || this.name === undefined ?  
-    false : this.lastName === '' || this.lastName === 'undefined' || this.lastName === undefined? 
-    false : this.email === '' || this.email === 'undefined' || this.email === undefined ? 
-    false : this.address === '' || this.address === 'undefined' || this.address === undefined ?
-    false : this.password === '' || this.password === 'undefined' || this.password === undefined ?
-    false : this.password !== '' && this.password !== 'undefined' && this.password !== undefined
-  }
+  getEmptyFields(){
+    return [
+      !this.name && 'name',
+      !this.lastName && 'lastName',
+      !this.email && 'email',
+      !this.address && 'address',
+      !this.password && 'password'
+    ].filter(field => field);
+  };
 
    _signIn(){
-    this._service.setRequestBody({
+    this.service.setRequestBody({
       name : this.name,
       lastName : this.lastName,
       email : this.email,
       address : this.address,
       password : this.password
     })
-    this._service.request.addEventListener('readystatechange', this._checkRequestState.bind(this))
-    this._service.doRequest();
+    this.service.request.addEventListener('readystatechange', this._checkRequestState.bind(this))
+    this.service.doRequest();
+  };
+
+  missingFieldsMessage(emptyFields){
+    this.dispatchEvent(new CustomEvent('graficarte-store-create-account-missing-fields', {
+      detail: {
+        emptyFields
+      }
+    }));
   };
 
   _checkRequestState(){
-    console.log('checkout request state')
-    console.log(this);
-    if(this._service.request.readyState === 4 && this._service.request.status === 200){
+    if(this.service.request.readyState === 4 && this.service.request.status >= 200 && this.service.request.status < 300){
       this._successSignIn();
-      console.log(this._service.request.response)
-      this._service.openRequest();
-    } else {
+      console.log(this.service.request.response)
+      this.service.openRequest();
+    } else if(this.service.request.readyState === 4 && this.service.request.status >= 400) {
+      this._errorSignIn();
       console.log('error at sign in controller request')
-    }
-  }
+    };
+  };
 
   _successSignIn(){
     this.dispatchEvent(new CustomEvent('graficarte-store-sign-in-success'))
