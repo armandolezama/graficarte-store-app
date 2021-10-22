@@ -11,7 +11,6 @@ export class GraficarteStoreAPI {
   };
 
   doRequest(){
-    console.log(this.requestBody)
     this.request.send(JSON.stringify(this.requestBody));
   };
 
