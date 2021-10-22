@@ -11,67 +11,13 @@ export class GraficarteStoreCreateAccount extends LitElement {
     */
   constructor() {
     super();
-    this.inputsList = [
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-name-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'name',
-        handler: 'set data'
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-last-name-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'lastName',
-        handler: 'set data'
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-email-placeholder'),
-        type: 'email',
-        isRequired: true,
-        fieldName: 'email',
-        handler: 'set data'
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-address-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'address',
-        handler: 'set data'
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-password-placeholder'),
-        type: 'password',
-        isRequired: true,
-        fieldName: 'password',
-        handler: 'set data'
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-repeat-password-placeholder'),
-        type: 'password',
-        isRequired: true,
-        fieldName: '',
-        handler: 'confirm pass'
-      },
-    ];
+    this.inputsList = [];
     this.buttonLabels = [
       getLocal('graficarte-store-create-account-form-create-account'), 
       getLocal('graficarte-store-create-account-form-cancel')];
     this.userData = {};
     this.passwordMessageStyle = '';
+    this.emptyMessage = 'Este campo es requerido';
     this._handlers = {};
   };
 
@@ -99,32 +45,32 @@ export class GraficarteStoreCreateAccount extends LitElement {
   firstUpdated(){
     super.firstUpdated();
     this._handlers = {
-      'set data' : this._setUserDataField,
-      'confirm pass' : this._confirmPassword
+      'set data' : this.setUserDataField,
+      'confirm pass' : this.confirmPassword
     };
   };
 
-  _manageCreateAccountActions(e){
+  manageCreateAccountActions(e){
     const payload = e.detail;
-    payload.option === 0 ? this._createAccount() : payload.option === 1 ? this._cancel() : payload;
-  }
+    payload.option === 0 ? this.createAccount() : payload.option === 1 ? this.cancel() : payload;
+  };
 
-  _createAccount() {
+  createAccount() {
     this.dispatchEvent(new CustomEvent('create-account', {
       detail : { userData: this.userData }
     }));
   };
 
-  _cancel() {
+  cancel() {
     this.dispatchEvent(new CustomEvent('cancel-create-account'));
   };
 
 
-  _setUserDataField(e) {
+  setUserDataField(e) {
     this.userData[e.target.getAttribute('field-name')] = e.detail.value;
   };
 
-  _confirmPassword(e) {
+  confirmPassword(e) {
     if(this.userData.password && e.detail.value === this.userData.password) {
       this._showSuccessMessage();
     } else {
@@ -148,14 +94,17 @@ export class GraficarteStoreCreateAccount extends LitElement {
       ${this.inputsList.map(inputData => {
         return html`
         <sophos-chimera-input
+          field-name="${inputData.fieldName}"
           .styleOfInput="${inputData.styleOfInput}"
           .maxLength="${inputData.maxLength}"
           .label="${inputData.label}"
           .type="${inputData.type}"
-          field-name="${inputData.fieldName}"
           .isRequired="${inputData.isRequired}"
+          .showMessage="${inputData.missingField}"
+          .emptyMessage="${this.emptyMessage}"
           @sophos-input-changed="${this._handlers[inputData.handler]}">
-        </sophos-chimera-input>`;
+        </sophos-chimera-input>
+        `;
       })}
       <div messageStyle="password-message-${this.passwordMessageStyle}">
         <p>
@@ -163,9 +112,9 @@ export class GraficarteStoreCreateAccount extends LitElement {
         </p>
       </div>
       <sophos-chimera-button
-      type="neon-multi-button"
+      type="simple-multi-button"
       .buttonsLabels="${this.buttonLabels}"
-      @sophos-chimera-button-click="${this._manageCreateAccountActions}"></sophos-chimera-button>
+      @sophos-chimera-button-click="${this.manageCreateAccountActions}"></sophos-chimera-button>
     </div>
     `;
   }
