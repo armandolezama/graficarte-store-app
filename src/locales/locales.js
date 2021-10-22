@@ -9,6 +9,8 @@ export default {
   'graficarte-store-create-account-form-repeat-password-placeholder' : 'Repita la contraseña',
   'graficarte-store-create-account-form-create-account' : 'Crear cuenta',
   'graficarte-store-create-account-form-cancel' : 'Cancelar',
+  'graficarte-store-login-form-user-placeholder' : 'Usuario',
+  'graficarte-store-login-form-password-placeholder' : 'Contraseña',
   'graficarte-store-client-nav-bar-options-my-shopping' : 'Mis compras',
   'graficarte-store-client-nav-bar-options-payment-methods' : 'Métodos de pago',
   'graficarte-store-client-nav-bar-options-profile' : 'Perfil',
