@@ -11,9 +11,9 @@ export class GraficarteStoreLoginController extends LitElement {
     */
   constructor() {
     super();
-    this._userName = '';
-    this._userPassword = '';
-    this._service = new GraficarteStoreAPI('POST', 'public/login');
+    this.user = '';
+    this.password = '';
+    this.service = new GraficarteStoreAPI('POST', 'public/login');
   };
 
   /**
@@ -21,12 +21,56 @@ export class GraficarteStoreLoginController extends LitElement {
     */
   static get properties() {
     return {
-      _username : { type : String},
-      _userPassword : { type : String}
+      user : { type : String},
+      password : { type : String}
     };
   };
 
-  _login(){};
+  updated(changedProps) {
+    super.updated( changedProps );
+    const emptyFields = this.getEmptyFields();
+
+    if(emptyFields.length === 0){
+      this._login();
+    } else {
+      this.missingFieldsMessage(emptyFields);
+    };
+  };
+
+  getEmptyFields(){
+    return [
+      !this.user && 'user',
+      !this.password && 'password'
+    ].filter(field => field);
+  };
+
+  _login(){
+    this.service.setRequestBody({
+      user: this.user,
+      password: this.password
+    });
+    this.service.request.addEventListener('readystatechange', this._checkRequestState.bind(this));
+    this.service.doRequest();
+  };
+
+  missingFieldsMessage(emptyFields){
+    this.dispatchEvent(new CustomEvent('graficarte-store-login-missing-fields', {
+      detail: {
+        emptyFields
+      }
+    }));
+  };
+
+  _checkRequestState(){
+    if(this.service.request.readyState === 4 && this.service.request.status >= 200 && this.service.request.status < 300){
+      this._successLogin();
+      console.log(this.service.request.response)
+      this.service.openRequest();
+    } else if(this.service.request.readyState === 4 && this.service.request.status >= 400) {
+      this._errorLogin();
+      console.log('error at sign in controller request')
+    };
+  };
 
   _successLogin(){
     this.dispatchEvent( new CustomEvent('graficarte-store-login-succes'))
