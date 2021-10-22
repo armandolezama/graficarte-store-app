@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-chimera-button/sophos-chimera-button';
+import getLocal from '../locales/'
 
 export class GraficarteStoreLoginPage extends LitElement {
   /**
@@ -9,11 +10,26 @@ export class GraficarteStoreLoginPage extends LitElement {
     */
   constructor() {
     super();
-    this.userNameLabel = 'Nombre de usuario';
-    this.userNameInputPlaceholder = 'Usuario';
-    this.userPasswordLabel = 'Contraseña'
-    this.userPasswordPlaceholder = 'Password';
-    this._userName = '';
+    this.inputList = [
+      {
+        styleOfInput: 'rounded-mobile-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-login-form-user-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'user',
+        missingField: false
+      },
+      {
+        styleOfInput: 'rounded-mobile-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-login-form-password-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'password',
+        missingField: false
+      }];
+    this._user = '';
     this._password = '';
   };
 
@@ -22,10 +38,7 @@ export class GraficarteStoreLoginPage extends LitElement {
     */
   static get properties() {
     return {
-      userNameLabel : { type : String},
-      userNameInputPlaceholder : { type : String},
-      userPasswordLabel : { type : String},
-      userPasswordPlaceholder : { type : String}
+      inputList: { type : Array }
     };
   };
 
@@ -45,48 +58,40 @@ export class GraficarteStoreLoginPage extends LitElement {
         align-items: center;
         flex-direction: column;
         width: 400px;
-        height: 300px;
+        height: 400px;
         border-radius: 30px;
       }
-
-      #login-form-container input{
-        display: flex;
-        height: 40px;
-        width: 200px;
-        font-size: 20px;
-        margin: 10px;
-      }
-
-      #login-form-container label {
-        font-size: 20px;
-        margin: 10px;
-      }
-
-      #login-form-container button {
-        font-size: 20px;
+      
+      sophos-chimera-input {
+        --sophos-chimera-input-main-container-height: auto;
       }
     `;
   };
 
-  _setUserName(e) {
-    this._userName = e.target.value;
+  setUserCredentialField(e){
+    const field = e.target.getAttribute('field-name');
+    field === 'user' ? this.setUserName(e.detail.value) : this.setPassword(e.detail.value);
   };
 
-  _setPassword(e) {
-    this._password = e.target.value;
+  setUserName(userName) {
+    this._user = userName;
   };
 
-  _manageLoginActions(e){
+  setPassword(password) {
+    this._password = password;
+  };
+
+  manageLoginActions(e){
     const payload = e.detail;
     payload.option === 0 ? this._submit() : payload.option === 1 ? this._cancel() : payload;
   };
 
   _submit(){
-    const detail = {
-      userName: this._userName,
+    const userCredentials = {
+      user: this._user,
       password: this._password
     };
-    this.dispatchEvent(new CustomEvent('graficarte-login-submit', { detail }))
+    this.dispatchEvent(new CustomEvent('graficarte-login-submit', { detail: {userCredentials}}));
   };
 
   _cancel() {
@@ -97,30 +102,25 @@ export class GraficarteStoreLoginPage extends LitElement {
     return html`
       <div id="login-container">
         <div id="login-form-container">
-          <form id="login-form">
-            <label 
-            id="user-name-label" 
-            for="user-name">${this.userNameLabel}</label>
-            <input 
-            id="user-name-input" 
-            type="text" 
-            name="user-name" 
-            placeholder="${this.userNameInputPlaceholder}" 
-            @input="${this._setUserName}">
-            <label 
-            id="user-password-label" 
-            for="password">${this.userPasswordLabel}</label>
-            <input 
-            id="password-input" 
-            type="password" 
-            name="password" 
-            placeholder="${this.userPasswordPlaceholder}" 
-            @input="${this._setPassword}">
-          </form>
+        ${this.inputList.map(inputData => {
+        return html`
+        <sophos-chimera-input
+          field-name="${inputData.fieldName}"
+          .styleOfInput="${inputData.styleOfInput}"
+          .maxLength="${inputData.maxLength}"
+          .label="${inputData.label}"
+          .type="${inputData.type}"
+          .isRequired="${inputData.isRequired}"
+          .showMessage="${inputData.missingField}"
+          .emptyMessage="${this.emptyMessage}"
+          @sophos-input-changed="${this.setUserCredentialField}">
+        </sophos-chimera-input>
+        `;
+      })}
           <sophos-chimera-button 
           type="simple-multi-button"
           .buttonsLabels="${['Entrar', 'Cancelar']}"
-          @sophos-chimera-button-click="${this._manageLoginActions}" id="login-submit">Entrar</sophos-chimera-button>
+          @sophos-chimera-button-click="${this.manageLoginActions}" id="login-submit">Entrar</sophos-chimera-button>
         </div>
       </div>
     `;
