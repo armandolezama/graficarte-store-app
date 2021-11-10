@@ -11,7 +11,7 @@ export class GraficarteStoreLoginController extends LitElement {
     */
   constructor() {
     super();
-    this.user = '';
+    this.email = '';
     this.password = '';
     this.service = new GraficarteStoreAPI('POST', 'public/login');
   };
@@ -39,14 +39,14 @@ export class GraficarteStoreLoginController extends LitElement {
 
   getEmptyFields(){
     return [
-      !this.user && 'user',
+      !this.email && 'email',
       !this.password && 'password'
     ].filter(field => field);
   };
 
   _login(){
     this.service.setRequestBody({
-      user: this.user,
+      email: this.email,
       password: this.password
     });
     this.service.request.addEventListener('readystatechange', this._checkRequestState.bind(this));

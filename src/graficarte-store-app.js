@@ -156,12 +156,12 @@ export class GraficarteStoreApp extends LitElement {
   };
 
   errorSignIn(){
-    alert('error at signin')
+    alert('error at signin');
   };
 
   errorLogin(){
-    alert('error at login')
-  }
+    alert('error at login');
+  };
 
   showLoginPage(){
     this.page = 'login';
@@ -180,7 +180,7 @@ export class GraficarteStoreApp extends LitElement {
       <div id="main-app-container">
         
         <graficarte-store-login-controller
-        .user="${this._loginData.user}"
+        .email="${this._loginData.email}"
         .password="${this._loginData.password}"
         @graficarte-store-login-missing-fields="${this.loginMissingFields}"
         @graficarte-store-login-succes="${this.successLogin}"

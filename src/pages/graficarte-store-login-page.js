@@ -17,7 +17,7 @@ export class GraficarteStoreLoginPage extends LitElement {
         label: getLocal('graficarte-store-login-form-user-placeholder'),
         type: 'text',
         isRequired: true,
-        fieldName: 'user',
+        fieldName: 'email',
         missingField: false
       },
       {
@@ -29,7 +29,7 @@ export class GraficarteStoreLoginPage extends LitElement {
         fieldName: 'password',
         missingField: false
       }];
-    this._user = '';
+    this._email = '';
     this._password = '';
   };
 
@@ -70,11 +70,11 @@ export class GraficarteStoreLoginPage extends LitElement {
 
   setUserCredentialField(e){
     const field = e.target.getAttribute('field-name');
-    field === 'user' ? this.setUserName(e.detail.value) : this.setPassword(e.detail.value);
+    field === 'email' ? this.setEmail(e.detail.value) : this.setPassword(e.detail.value);
   };
 
-  setUserName(userName) {
-    this._user = userName;
+  setEmail(email) {
+    this._email = email;
   };
 
   setPassword(password) {
@@ -88,7 +88,7 @@ export class GraficarteStoreLoginPage extends LitElement {
 
   _submit(){
     const userCredentials = {
-      user: this._user,
+      email: this._email,
       password: this._password
     };
     this.dispatchEvent(new CustomEvent('graficarte-login-submit', { detail: {userCredentials}}));
