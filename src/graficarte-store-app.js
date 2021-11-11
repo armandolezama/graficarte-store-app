@@ -138,12 +138,10 @@ export class GraficarteStoreApp extends LitElement {
     this.page = 'public-store';
   };
   setValidCreateAccountPassword(){
-    console.log('im setting valid password')
     this.isValidCreateAccountPassword = true;
   };
 
   setInvalidCreateAccountPassword(){
-    console.log('im setting invalid password')
     this.isValidCreateAccountPassword = false;
   };
 
