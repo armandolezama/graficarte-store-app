@@ -86,6 +86,8 @@ export class GraficarteStoreApp extends LitElement {
       },
     ];
     this.page = 'public-store';
+    this.showCreateAccountMissingFieldsMessages = false;
+    this.isValidCreateAccountPassword = false;
     this._loginData = {};
     this._signinData = {};
   };
@@ -98,6 +100,7 @@ export class GraficarteStoreApp extends LitElement {
       inventory : { type : Array },
       storeProducts : { type : Array },
       page : { type : String},
+      showCreateAccountMissingFieldsMessages: { type : Boolean},
       _loginData : { type : Object},
       _signinData : { type : Object}
     };
@@ -105,6 +108,11 @@ export class GraficarteStoreApp extends LitElement {
 
   static get styles() {
     return styles;
+  };
+
+  firstUpdated(){
+    super.firstUpdated();
+    this.setCreateAccountFieldsNames();
   };
 
   login(e) {
@@ -120,31 +128,62 @@ export class GraficarteStoreApp extends LitElement {
   };
 
   createAccount(e) {
+    this.showCreateAccountMissingFieldsMessages = true;
     this._signinData = {...e.detail.userData};
   };
 
   cancelCreateAccount() {
+    this.showCreateAccountMissingFieldsMessages = false;
+    this.restartCreateAccountMissingFields();
     this.page = 'public-store';
   };
+  setValidCreateAccountPassword(){
+    console.log('im setting valid password')
+    this.isValidCreateAccountPassword = true;
+  };
 
-  createAccountMissingFields(e){
-    const { emptyFields } = e.detail;
+  setInvalidCreateAccountPassword(){
+    console.log('im setting invalid password')
+    this.isValidCreateAccountPassword = false;
+  };
+
+  setCreateAccountFieldsNames(){
+    for (const input of this.createAccountForm) {
+      this._signinData[input.fieldName] = '';
+    };
+  };
+
+  setCreateAccountMissingFields(e){
+    if (this.showCreateAccountMissingFieldsMessages) {
+      const { emptyFields } = e.detail;
+      this.createAccountForm = this.createAccountForm.map(input => {
+        if (emptyFields.includes(input.fieldName)){
+          input.missingField = true;
+        } else {
+          input.missingField = false;
+        };
+        return input;
+      });
+    };
+    this.requestUpdate();
+  };
+
+  restartCreateAccountMissingFields(){
     this.createAccountForm = this.createAccountForm.map(input => {
-      if (emptyFields.includes(input.fieldName)){
-        input.missingField = true;
-      };
+      input.missingField = false;
+      return input;
+    });
+  };
+
+  setAllCreateAccountMissingFields(){
+    this.createAccountForm = this.createAccountForm.map(input => {
+      input.missingField = true;
       return input;
     });
   };
 
   loginMissingFields(e){
-    const { emptyFields } = e.detail;
-    this.createAccountForm = this.createAccountForm.map(input => {
-      if (emptyFields.includes(input.fieldName)){
-        input.missingField = true;
-      };
-      return input;
-    });
+
   };
 
   successSignIn(){
@@ -194,9 +233,10 @@ export class GraficarteStoreApp extends LitElement {
           .email = "${this._signinData.email}"
           .address = "${this._signinData.address}"
           .password = "${this._signinData.password}"
-          @graficarte-store-sign-in-success="${this.successSignIn}"
-          @graficarte-store-sign-in-error="${this.errorSignIn}"
-          @graficarte-store-create-account-missing-fields="${this.createAccountMissingFields}">
+          .isPasswordValid = "${this.isValidCreateAccountPassword}"
+          @graficarte-store-sign-in-success = "${this.successSignIn}"
+          @graficarte-store-sign-in-error = "${this.errorSignIn}"
+          @graficarte-store-create-account-missing-fields = "${this.setCreateAccountMissingFields}">
         </graficarte-store-sign-in-controller>
 
       ${this.page === 'create-account' ? html`
@@ -210,6 +250,8 @@ export class GraficarteStoreApp extends LitElement {
           .inputsList="${this.createAccountForm}"
           @create-account="${this.createAccount}"
           @cancel-create-account="${this.cancelCreateAccount}"
+          @graficarte-store-create-account-valid-password="${this.setValidCreateAccountPassword}"
+          @graficarte-store-create-account-invalid-password="${this.setInvalidCreateAccountPassword}"
           slot="main-view-content">
           </graficarte-store-create-account>
 

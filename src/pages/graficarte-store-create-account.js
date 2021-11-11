@@ -72,21 +72,23 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   confirmPassword(e) {
     if(this.userData.password && e.detail.value === this.userData.password) {
-      this._showSuccessMessage();
+      this._showPasswordSuccessMessage();
     } else {
-      this._showErrorMessage();
+      this._showPasswordErrorMessage();
     };
   };
 
-  _showErrorMessage() {
+  _showPasswordErrorMessage() {
     this.passwordMessageStyle = 'error';
     this.passwordMessageText = 'Las contraseñas no coinciden'
-  }
+    this.dispatchEvent(new CustomEvent('graficarte-store-create-account-invalid-password'));
+  };
 
-  _showSuccessMessage() {
+  _showPasswordSuccessMessage() {
     this.passwordMessageStyle = 'success';
     this.passwordMessageText = 'Las contraseñas coinciden';
-  }
+    this.dispatchEvent(new CustomEvent('graficarte-store-create-account-valid-password'));
+  };
 
   render() {
     return html`

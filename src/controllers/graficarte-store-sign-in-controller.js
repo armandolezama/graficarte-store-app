@@ -14,6 +14,7 @@ export class GraficarteStoreSignInController extends LitElement {
     this.email = '';
     this.address = '';
     this.password = '';
+    this.isPasswordValid = false;
     this.service = new GraficarteStoreAPI('POST', 'public/signin');
   };
 
@@ -34,7 +35,7 @@ export class GraficarteStoreSignInController extends LitElement {
     super.updated( changedProps );
     const emptyFields = this.getEmptyFields();
 
-    if(emptyFields.length === 0){
+    if(emptyFields.length === 0 && this.isPasswordValid){
       this._signIn();
     } else {
       this.missingFieldsMessage(emptyFields);
