@@ -50,6 +50,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
     };
   };
 
+
   manageCreateAccountActions(e){
     const payload = e.detail;
     payload.option === 0 ? this.createAccount() : payload.option === 1 ? this.cancel() : payload;
@@ -57,7 +58,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   createAccount() {
     this.dispatchEvent(new CustomEvent('create-account', {
-      detail : { userData: this.userData }
+      detail : { userData: {...this.userData} }
     }));
   };
 

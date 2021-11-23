@@ -12,6 +12,7 @@ export class GraficarteStoreClientNavBar extends LitElement {
   constructor() {
     super();
     this.clientOptions = [
+      getLocal('graficarte-store-client-nav-bar-options-client-store'),
       getLocal('graficarte-store-client-nav-bar-options-my-shopping'),
       getLocal('graficarte-store-client-nav-bar-options-payment-methods'),
       getLocal('graficarte-store-client-nav-bar-options-profile'),
@@ -47,6 +48,11 @@ export class GraficarteStoreClientNavBar extends LitElement {
     `;
   };
 
+  navigate(e){
+    const option = e.detail.option;
+    this.dispatchEvent(new CustomEvent('graficarte-navigate-to-page', { detail: { option} }));
+  };
+
   finishSesion() {
     this.dispatchEvent(new CustomEvent('finish-sesion'))
   };
@@ -64,7 +70,8 @@ export class GraficarteStoreClientNavBar extends LitElement {
           <sophos-chimera-button
           id="client-options-multi-button"
           type="simple-multi-button"
-          .buttonsLabels="${this.clientOptions}">
+          .buttonsLabels="${this.clientOptions}"
+          @sophos-chimera-button-click="${this.navigate}">
           </sophos-chimera-button>
         </div>
         <sophos-chimera-button

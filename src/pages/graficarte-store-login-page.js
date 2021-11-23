@@ -10,25 +10,7 @@ export class GraficarteStoreLoginPage extends LitElement {
     */
   constructor() {
     super();
-    this.inputList = [
-      {
-        styleOfInput: 'rounded-mobile-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-login-form-user-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'email',
-        missingField: false
-      },
-      {
-        styleOfInput: 'rounded-mobile-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-login-form-password-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'password',
-        missingField: false
-      }];
+    this.inputList = [];
     this._email = '';
     this._password = '';
   };

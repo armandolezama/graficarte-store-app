@@ -11,6 +11,7 @@ export default {
   'graficarte-store-create-account-form-cancel' : 'Cancelar',
   'graficarte-store-login-form-user-placeholder' : 'Correo electrónico',
   'graficarte-store-login-form-password-placeholder' : 'Contraseña',
+  'graficarte-store-client-nav-bar-options-client-store' : 'Tienda',
   'graficarte-store-client-nav-bar-options-my-shopping' : 'Mis compras',
   'graficarte-store-client-nav-bar-options-payment-methods' : 'Métodos de pago',
   'graficarte-store-client-nav-bar-options-profile' : 'Perfil',
