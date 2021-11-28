@@ -11,12 +11,12 @@ export class GraficarteStoreAdminNavBar extends LitElement {
   constructor() {
     super();
     this.adminOptions = [
-      'Contabilidad',
-      'Envíos',
-      'Inventario',
-      'Repartidores',
-      'Historial de ventas',
-      'Configuraciones'
+      {label: 'Contabilidad'},
+      {label: 'Envíos'},
+      {label: 'Inventario'},
+      {label: 'Repartidores'},
+      {label: 'Historial de ventas'},
+      {label: 'Configuraciones'},
     ];
     this.finishSesionLabel = ['Cerrar sesión'];
   };

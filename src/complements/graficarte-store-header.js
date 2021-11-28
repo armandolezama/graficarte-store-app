@@ -11,6 +11,16 @@ export class GraficarteStoreHeader extends LitElement {
   constructor() {
     super();
     this.isCreateAccountAvailable = false;
+    this.headerOptions = [
+      {
+        label: 'Crear cuenta',
+        key: 'create-account',
+      },
+      {
+        label: 'Iniciar sesión',
+        key: 'login',
+      },
+    ];
   };
 
   /**
@@ -84,16 +94,18 @@ export class GraficarteStoreHeader extends LitElement {
   };
 
   _createAccountEvent() {
-    this.dispatchEvent(new CustomEvent('create-new-account'))
+    this.dispatchEvent(new CustomEvent('create-new-account'));
   };
 
   _loginEvent() {
-    this.dispatchEvent(new CustomEvent('sign-in'))
-  }
+    this.dispatchEvent(new CustomEvent('sign-in'));
+  };
 
-  _manageSessionOptions(e){
-    const payload = e.detail;
-    payload.option === 0 ? this._createAccountEvent() : payload.option === 1 ? this._loginEvent() : payload;
+  _navigate(e){
+    const page = e.detail.buttonDescription.key;
+    this.dispatchEvent(new CustomEvent('navigate', {
+      detail: { page }
+    }));
   };
 
   searchProduct (e) {
@@ -119,8 +131,8 @@ export class GraficarteStoreHeader extends LitElement {
             <sophos-chimera-button
             id="session-multi-button"
             type="simple-multi-button"
-            .buttonsLabels="${['Crear cuenta', 'Iniciar sesión']}"
-            @sophos-chimera-button-click="${this._manageSessionOptions}"></sophos-chimera-button>
+            .buttonsLabels="${this.headerOptions}"
+            @sophos-chimera-button-click="${this._navigate}"></sophos-chimera-button>
           </div>
         ` : html``}
 

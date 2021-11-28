@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import 'sophos-chimera-button/sophos-chimera-button';
+import 'sophos-simple-modal/sophos-simple-modal';
 import getLocal from '../locales/'
 
 export class GraficarteStoreLoginPage extends LitElement {
@@ -13,6 +14,18 @@ export class GraficarteStoreLoginPage extends LitElement {
     this.inputList = [];
     this._email = '';
     this._password = '';
+    this.isModalOpened = false;
+    this.modalTitle = '';
+    this.modalMessage = '';
+    this.modalFooterMessage = '';
+    this.modalLabelsButtons = [
+      {
+      label: ''
+      }, 
+      {
+        label: 'Cancelar'
+      }
+    ];
   };
 
   /**
@@ -20,7 +33,11 @@ export class GraficarteStoreLoginPage extends LitElement {
     */
   static get properties() {
     return {
-      inputList: { type : Array }
+      inputList : { type : Array },
+      isModalOpened : { type : Boolean },
+      modalTitle : { type : String },
+      modalMessage : { type : String },
+      modalFooterMessage : { type : String },
     };
   };
 
@@ -64,8 +81,53 @@ export class GraficarteStoreLoginPage extends LitElement {
   };
 
   manageLoginActions(e){
-    const payload = e.detail;
-    payload.option === 0 ? this._submit() : payload.option === 1 ? this._cancel() : payload;
+    const payload = e.detail.buttonDescription;
+    payload.option === 0 ? this._openSubmitModal() : payload.option === 1 ? this._openCancelModal() : payload;
+  };
+
+  _manageModalButtons(e){
+    const payload = e.detail.buttonDescription;
+    payload.option === 0 ? payload.key === 'store' ? this._cancel() :  this._submit() : this._closeModal();
+  };
+
+  _openSubmitModal(){
+    this.modalTitle = 'Ingresar';
+    this.modalMessage = '¿Desea continuar?';
+    this.modalFooterMessage = "Graficarte";
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Entrar',
+        key: 'login'
+      }, 
+      {
+        label: 'Volver',
+        key: 'edit-login'
+      }];
+  };
+
+  _openCancelModal(){
+    this.modalTitle = 'Salir';
+    this.modalMessage = '¿Desea regresar a la tienda?';
+    this.modalFooterMessage = "Graficarte";
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Salir',
+        key: 'store',
+      }, 
+      {
+        label: 'Quedarse',
+        key: 'edit-login',
+      }];
+  };
+
+  _closeModal(){
+    this.modalTitle = '';
+    this.modalMessage = '';
+    this.modalFooterMessage = '';
+    this.modalLabelsButtons = ['', ''];
+    this.isModalOpened = false;
   };
 
   _submit(){
@@ -86,6 +148,23 @@ export class GraficarteStoreLoginPage extends LitElement {
         <div id="login-form-container">
         ${this.inputList.map(inputData => {
         return html`
+        
+        <sophos-simple-modal
+        modalStyle="full-screen"
+        ?isModalOpened="${this.isModalOpened}"
+        .modalTitle="${this.modalTitle}"
+        .modalMessage="${this.modalMessage}"
+        .modalFooterMessage="${this.modalFooterMessage}">
+
+          <sophos-chimera-button
+          slot="modal-body"
+          type="simple-multi-button"
+          .buttonsLabels="${this.modalLabelsButtons}"
+          @sophos-chimera-button-click="${this._manageModalButtons}">
+          </sophos-chimera-button>
+
+        </sophos-simple-modal>
+
         <sophos-chimera-input
           field-name="${inputData.fieldName}"
           .styleOfInput="${inputData.styleOfInput}"
@@ -101,7 +180,14 @@ export class GraficarteStoreLoginPage extends LitElement {
       })}
           <sophos-chimera-button 
           type="simple-multi-button"
-          .buttonsLabels="${['Entrar', 'Cancelar']}"
+          .buttonsLabels="${[
+            {
+              label: 'Entrar'
+            }, 
+            {
+              label: 'Cancelar'
+            }
+            ]}"
           @sophos-chimera-button-click="${this.manageLoginActions}" id="login-submit">Entrar</sophos-chimera-button>
         </div>
       </div>

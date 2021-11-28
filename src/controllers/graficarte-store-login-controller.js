@@ -1,5 +1,5 @@
 import { LitElement } from 'lit-element';
-import { GraficarteStoreAPI } from '../service/graficarte-store-api';
+import GraficarteStoreAPI from '../service/graficarte-store-api';
 
 export class GraficarteStoreLoginController extends LitElement {
   //component to manage error or success response from login service
@@ -45,39 +45,37 @@ export class GraficarteStoreLoginController extends LitElement {
   };
 
   _login(){
+    
     this.service.setRequestBody({
       email: this.email,
       password: this.password
     });
-    this.service.request.addEventListener('readystatechange', this._checkRequestState.bind(this));
+    
+    this.service.addEventListener('request-is-in-progress', () => {
+      this.dispatchEvent(new CustomEvent('request-in-progress'));
+    });
+    
+    this.service.addEventListener('request-is-done', e => {
+      const payload =e.detail.response;
+      this.dispatchEvent(new CustomEvent('request-is-done', {
+        detail: { payload }
+      }));
+    });
+
+    this.service.addEventListener('request-failed', () => {
+      this.dispatchEvent(new CustomEvent('request-failed'));
+    });
+    
     this.service.doRequest();
+  
   };
 
   missingFieldsMessage(emptyFields){
-    this.dispatchEvent(new CustomEvent('graficarte-store-login-missing-fields', {
+    this.dispatchEvent(new CustomEvent('missing-fields', {
       detail: {
         emptyFields
       }
     }));
-  };
-
-  _checkRequestState(){
-    if(this.service.request.readyState === 4 && this.service.request.status >= 200 && this.service.request.status < 300){
-      this._successLogin();
-      console.log(this.service.request.response)
-      this.service.openRequest();
-    } else if(this.service.request.readyState === 4 && this.service.request.status >= 400) {
-      this._errorLogin();
-      console.log('error at sign in controller request')
-    };
-  };
-
-  _successLogin(){
-    this.dispatchEvent( new CustomEvent('graficarte-store-login-succes'))
-  };
-
-  _errorLogin(){
-    this.dispatchEvent( new CustomEvent('graficarte-store-login-error'))
   };
 };
 

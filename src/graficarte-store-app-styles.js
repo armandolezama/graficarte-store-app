@@ -13,6 +13,8 @@ export default css`
     --sophos-simple-template-main-container-template-style-full-header-width: 100%;
     --sophos-simple-template-main-view-template-style-full-header-width: 100%;
     --sophos-simple-template-nav-bar-display: none;
+    --sophos-simple-template-main-view-container-overflow: visible;
+    --sophos-simple-template-main-view-container-overflow-y: none;
   }
 
   #public-store-container {

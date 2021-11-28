@@ -1,7 +1,6 @@
 import { LitElement, html } from 'lit-element';
 import styles from './graficarte-store-app-styles';
 import 'sophos-simple-template/sophos-simple-template';
-import 'sophos-simple-modal/sophos-simple-modal';
 import './pages/graficarte-store-inventory-page';
 import './pages/graficarte-store-home-page';
 import './pages/graficarte-store-login-page';
@@ -48,6 +47,16 @@ export class GraficarteStoreApp extends LitElement {
         type: 'text',
         isRequired: true,
         fieldName: 'lastName',
+        handler: 'set data',
+        missingField: false
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-phone-number-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'phoneNumber',
         handler: 'set data',
         missingField: false
       },
@@ -119,10 +128,6 @@ export class GraficarteStoreApp extends LitElement {
     this._loginData = {};
     this._signinData = {};
     this._clientData = {};
-    this._modal = () => {};
-    this.modalTitle = '';
-    this.modalMessage = '';
-    this.modalFooterMessage = '';
   };
 
   /**
@@ -134,7 +139,7 @@ export class GraficarteStoreApp extends LitElement {
       storeProducts : { type : Array },
       page : { type : String},
       clientContent : { type : String},
-      showCreateAccountMissingFieldsMessages: { type : Boolean},
+      showCreateAccountMissingFieldsMessages : { type : Boolean},
       _loginData : { type : Object},
       _signinData : { type : Object},
       _clientData : { type : Object},
@@ -148,11 +153,6 @@ export class GraficarteStoreApp extends LitElement {
   firstUpdated(){
     super.firstUpdated();
     this.setCreateAccountFieldsNames();
-    this._modal = this.shadowRoot.querySelector('sophos-simple-modal');
-  };
-
-  openModal(){
-    this.isModalOpened = true;
   };
 
   login(e) {
@@ -222,9 +222,14 @@ export class GraficarteStoreApp extends LitElement {
     this.clientContent = 'home';
   };
 
-  successLogin(){
+  successLogin(e){
+    console.log(e.detail.payload)
     this.page = 'client-store';
     this.clientContent = 'home';
+  };
+
+  setProgressState(){
+    console.log('this shit is in progress');
   };
 
   errorSignIn(e){
@@ -239,12 +244,9 @@ export class GraficarteStoreApp extends LitElement {
     alert('error at login');
   };
 
-  showLoginPage(){
-    this.page = 'login';
-  };
-
-  showCreateAccountPage(){
-    this.page = 'create-account';
+  headerNavigate(e){
+    const { page } = e.detail;
+    this.page = page;
   };
 
   searchTerm(e){
@@ -252,30 +254,8 @@ export class GraficarteStoreApp extends LitElement {
   };
 
   clientNavigation(e){
-    console.log(e.detail.option)
-    switch (e.detail.option) {
-      case 0:
-        this.clientContent = 'home';
-        break;
-      case 1:
-        this.clientContent = 'shopping-history';
-        break;
-      case 2:
-        this.clientContent = 'payment-methods';
-        break;
-      case 3:
-        this.clientContent = 'profile';
-        break;
-      case 4:
-        this.clientContent = 'notifications';
-        break;
-      case 5:
-        this.clientContent = 'profile-config';
-        break;
-      default:
-        this.clientContent = 'error';
-        break;
-    }
+    const clientPage = e.detail.page;
+    this.clientContent = clientPage;
   };
 
   render() {
@@ -285,31 +265,25 @@ export class GraficarteStoreApp extends LitElement {
         <graficarte-store-login-controller
         .email="${this._loginData.email}"
         .password="${this._loginData.password}"
-        @graficarte-store-login-missing-fields="${this.loginMissingFields}"
-        @graficarte-store-login-succes="${this.successLogin}"
-        @graficarte-store-login-error="${this.errorLogin}"
-        >
+        @missing-fields="${this.loginMissingFields}"
+        @request-is-done="${this.successLogin}"
+        @request-failed="${this.errorLogin}"
+        @request-in-progress="${this.setProgressState}">
         </graficarte-store-login-controller>
 
         <graficarte-store-sign-in-controller
           .name = "${this._signinData.name}"
           .lastName = "${this._signinData.lastName}"
           .email = "${this._signinData.email}"
+          .phoneNumber = "${this._signinData.phoneNumber}"
           .address = "${this._signinData.address}"
           .password = "${this._signinData.password}"
           .isPasswordValid = "${this.isValidCreateAccountPassword}"
-          @graficarte-store-sign-in-success = "${this.successSignIn}"
-          @graficarte-store-sign-in-error = "${this.errorSignIn}"
-          @graficarte-store-create-account-missing-fields = "${this.setCreateAccountMissingFields}">
+          @missing-fields = "${this.setCreateAccountMissingFields}"
+          @request-is-done = "${this.successSignIn}"
+          @request-failed = "${this.errorSignIn}"
+          @request-in-progress="${this.setProgressState}">
         </graficarte-store-sign-in-controller>
-
-        <sophos-simple-modal
-          modalStyle="full-screen"
-          ?isModalOpened="${this.isModalOpened}"
-          .modalTitle="${this.modalTitle}"
-          .modalMessage="${this.modalMessage}"
-          .modalFooterMessage="${this.modalFooterMessage}">
-        </sophos-simple-modal>
 
       ${[
         this.page === 'create-account' && html`
@@ -425,9 +399,8 @@ export class GraficarteStoreApp extends LitElement {
           <graficarte-store-header
             slot="header-content"
             ?isCreateAccountAvailable = "${true}"
-            @searching-for-term="${this.searchTerm}"
-            @create-new-account="${this.showCreateAccountPage}"
-            @sign-in="${this.showLoginPage}">
+            @navigate="${this.headerNavigate}"
+            @searching-for-term="${this.searchTerm}">
           </graficarte-store-header>
 
           <graficarte-store-home-page 

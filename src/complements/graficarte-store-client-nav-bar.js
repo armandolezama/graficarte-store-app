@@ -12,14 +12,36 @@ export class GraficarteStoreClientNavBar extends LitElement {
   constructor() {
     super();
     this.clientOptions = [
-      getLocal('graficarte-store-client-nav-bar-options-client-store'),
-      getLocal('graficarte-store-client-nav-bar-options-my-shopping'),
-      getLocal('graficarte-store-client-nav-bar-options-payment-methods'),
-      getLocal('graficarte-store-client-nav-bar-options-profile'),
-      getLocal('graficarte-store-client-nav-bar-options-notifications'),
-      getLocal('graficarte-store-client-nav-bar-options-configuration')
+      {
+        label: getLocal('graficarte-store-client-nav-bar-options-client-store'),
+        key: 'home'
+      },
+      {
+        label: getLocal('graficarte-store-client-nav-bar-options-my-shopping'),
+        key: 'shopping-history'
+      },
+      {
+        label: getLocal('graficarte-store-client-nav-bar-options-payment-methods'),
+        key: 'payment-methods'
+      },
+      {
+        label: getLocal('graficarte-store-client-nav-bar-options-profile'),
+        key: 'profile'
+      },
+      {
+        label: getLocal('graficarte-store-client-nav-bar-options-notifications'),
+        key: 'notifications'
+      },
+      {
+        label: getLocal('graficarte-store-client-nav-bar-options-configuration'),
+        key: 'profile-config'
+      }
     ];
-    this.finishSesionLabel = [getLocal('graficarte-store-client-nav-bar-options-end-session')];
+    this.finishSesionLabel = [
+      {
+        label: getLocal('graficarte-store-client-nav-bar-options-end-session')
+      }
+    ];
   };
 
   /**
@@ -49,8 +71,10 @@ export class GraficarteStoreClientNavBar extends LitElement {
   };
 
   navigate(e){
-    const option = e.detail.option;
-    this.dispatchEvent(new CustomEvent('graficarte-navigate-to-page', { detail: { option} }));
+    const page = e.detail.buttonDescription.key;
+    this.dispatchEvent(new CustomEvent('graficarte-navigate-to-page', { detail: {
+      page
+    }}));
   };
 
   finishSesion() {
@@ -77,7 +101,8 @@ export class GraficarteStoreClientNavBar extends LitElement {
         <sophos-chimera-button
         type="simple-multi-button"
         .buttonsLabels="${this.finishSesionLabel}"
-        @sophos-chimera-button-click="${this.finishSesion}">Cerrar sesión</sophos-chimera-button>
+        @sophos-chimera-button-click="${this.finishSesion}">
+      </sophos-chimera-button>
       </div>
     
     `;

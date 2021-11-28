@@ -13,8 +13,15 @@ export class GraficarteStoreCreateAccount extends LitElement {
     super();
     this.inputsList = [];
     this.buttonLabels = [
-      getLocal('graficarte-store-create-account-form-create-account'), 
-      getLocal('graficarte-store-create-account-form-cancel')];
+      {
+        label: getLocal('graficarte-store-create-account-form-create-account'),
+        key: 'create-account',
+      },
+      {
+        label: getLocal('graficarte-store-create-account-form-cancel'),
+        key: 'cancel',
+      },
+    ];
     this.userData = {};
     this.passwordMessageStyle = '';
     this.emptyMessage = 'Este campo es requerido';
@@ -52,8 +59,12 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
 
   manageCreateAccountActions(e){
-    const payload = e.detail;
-    payload.option === 0 ? this.createAccount() : payload.option === 1 ? this.cancel() : payload;
+    const { key } = e.detail.buttonDescription;
+    if(key === 'create-account') {
+      this.createAccount();
+    } else {
+      this.cancel();
+    };
   };
 
   createAccount() {

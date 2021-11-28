@@ -1,5 +1,5 @@
 import { LitElement } from 'lit-element';
-import { GraficarteStoreAPI } from '../service/graficarte-store-api';
+import GraficarteStoreAPI from '../service/graficarte-store-api';
 
 export class GraficarteStoreSignInController extends LitElement {
   /**
@@ -11,6 +11,7 @@ export class GraficarteStoreSignInController extends LitElement {
     super();
     this.name = '';
     this.lastName = '';
+    this.phoneNumber = '';
     this.email = '';
     this.address = '';
     this.password = '';
@@ -25,6 +26,7 @@ export class GraficarteStoreSignInController extends LitElement {
     return {
       name : { type : String },
       lastName: { type : String },
+      phoneNumber: { type : String},
       email : { type : String },
       address : { type : String },
       password : { type : String }
@@ -46,6 +48,7 @@ export class GraficarteStoreSignInController extends LitElement {
     return [
       !this.name && 'name',
       !this.lastName && 'lastName',
+      !this.phoneNumber && 'phoneNumber',
       !this.email && 'email',
       !this.address && 'address',
       !this.password && 'password'
@@ -56,39 +59,36 @@ export class GraficarteStoreSignInController extends LitElement {
     this.service.setRequestBody({
       name : this.name,
       lastName : this.lastName,
+      phoneNumber : this.phoneNumber,
       email : this.email,
       address : this.address,
       password : this.password
     })
-    this.service.request.addEventListener('readystatechange', this._checkRequestState.bind(this))
+
+    this.service.addEventListener('request-is-in-progress', () => {
+      this.dispatchEvent(new CustomEvent('request-in-progress'));
+    });
+    
+    this.service.addEventListener('request-is-done', e => {
+      const payload =e.detail.response;
+      this.dispatchEvent(new CustomEvent('request-is-done', {
+        detail: { payload }
+      }));
+    });
+
+    this.service.addEventListener('request-failed', () => {
+      this.dispatchEvent(new CustomEvent('request-failed'));
+    });
     this.service.doRequest();
   };
 
   missingFieldsMessage(emptyFields){
-    this.dispatchEvent(new CustomEvent('graficarte-store-create-account-missing-fields', {
+    this.dispatchEvent(new CustomEvent('missing-fields', {
       detail: {
         emptyFields
       }
     }));
   };
+};
 
-  _checkRequestState(){
-    if(this.service.request.readyState === 4 && this.service.request.status >= 200 && this.service.request.status < 300){
-      this._successSignIn();
-      console.log(this.service.request.response)
-      this.service.openRequest();
-    } else if(this.service.request.readyState === 4 && this.service.request.status >= 400) {
-      this._errorSignIn();
-      console.log('error at sign in controller request')
-    };
-  };
-
-  _successSignIn(){
-    this.dispatchEvent(new CustomEvent('graficarte-store-sign-in-success'))
-  };
-
-  _errorSignIn(){
-    this.dispatchEvent(new CustomEvent('graficarte-store-sign-in-error'))
-  };
-}
 customElements.define('graficarte-store-sign-in-controller', GraficarteStoreSignInController);
