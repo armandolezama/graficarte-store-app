@@ -1,7 +1,5 @@
 /**
- * TO-DO: Add state manager and asynchronous/event based method for managing
- * states and comunicate payload to outside controller.
- * https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+ * TO-DO: add fetch module and validation
  */
 
 import envCongif from '../../env-config';

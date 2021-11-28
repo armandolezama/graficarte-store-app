@@ -121,7 +121,7 @@ export class GraficarteStoreApp extends LitElement {
         missingField: false
       }
     ];
-    this.page = 'client-store';
+    this.page = 'public-store';
     this.clientContent = 'home';
     this.showCreateAccountMissingFieldsMessages = false;
     this.isValidCreateAccountPassword = false;

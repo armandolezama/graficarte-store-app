@@ -1,3 +1,6 @@
+/**
+ * TO-DO: turn this controller modal into gneneral controllers model (Super class maybe);
+ */
 import { LitElement } from 'lit-element';
 import GraficarteStoreAPI from '../service/graficarte-store-api';
 
