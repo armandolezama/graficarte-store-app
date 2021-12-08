@@ -53,6 +53,7 @@ export class GraficarteStoreHomePage extends LitElement {
         --sophos-card-host-max-width: 200px;
         --sophos-card-host-min-width: 100px;
         --sophos-card-main-container-cursor: pointer;
+        --sophos-card-main-container-background-color: transparent;
         margin: clamp(20px, 40px, 90px);
         flex-grow: 2;
       }
@@ -64,10 +65,11 @@ export class GraficarteStoreHomePage extends LitElement {
         ${this.products.map(product => html`
           <div class="product-container">  
             <sophos-card
+            .configContent="${['pickture', 'title', 'subtitle', 'description']}"
             .pictureSRC = "${product.productImage}"
             .pictureAlt = "${this.altImage}"
             .title = "${product.productName}"
-            .subtitle = " $${product.price}.00"
+            .subtitle = " $${product.price}"
             .description = "${product.desctiption}"
             ></sophos-card>
           </div>

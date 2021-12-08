@@ -121,8 +121,8 @@ export class GraficarteStoreApp extends LitElement {
         missingField: false
       }
     ];
-    this.page = 'public-store';
-    this.clientContent = 'home';
+    this.page = 'client-store';
+    this.clientContent = 'shopping-history';
     this.showCreateAccountMissingFieldsMessages = false;
     this.isValidCreateAccountPassword = false;
     this._loginData = {};
@@ -195,11 +195,7 @@ export class GraficarteStoreApp extends LitElement {
     if (this.showCreateAccountMissingFieldsMessages) {
       const { emptyFields } = e.detail;
       this.createAccountForm = this.createAccountForm.map(input => {
-        if (emptyFields.includes(input.fieldName)){
-          input.missingField = true;
-        } else {
-          input.missingField = false;
-        };
+        input.missingField = emptyFields.includes(input.fieldName)
         return input;
       });
     };
@@ -297,8 +293,8 @@ export class GraficarteStoreApp extends LitElement {
             .inputsList="${this.createAccountForm}"
             @create-account="${this.createAccount}"
             @cancel-create-account="${this.cancelCreateAccount}"
-            @graficarte-store-create-account-valid-password="${this.setValidCreateAccountPassword}"
-            @graficarte-store-create-account-invalid-password="${this.setInvalidCreateAccountPassword}"
+            @valid-password="${this.setValidCreateAccountPassword}"
+            @invalid-password="${this.setInvalidCreateAccountPassword}"
             slot="main-view-content">
           </graficarte-store-create-account>
 

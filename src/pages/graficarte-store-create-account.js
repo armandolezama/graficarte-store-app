@@ -45,6 +45,39 @@ export class GraficarteStoreCreateAccount extends LitElement {
     return css`
       sophos-chimera-input {
         --sophos-chimera-input-main-container-height: auto;
+        --sophos-chimera-input-input-container-input-style-simple-bar-input-margin-bottom: 40px;
+      }
+
+      #password-message-container[message-style="password-message-success"] {
+        background-color: #73db46;
+      }
+
+      #password-message-container[message-style="password-message-error"] {
+        background-color: #ff1e00;
+      }
+
+      #password-message-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60px;
+        margin: 0 0 30px 0;
+        border-radius: 20px;
+        opacity: 0.8;
+      }
+
+      #password-message {
+        font-size: 1rem;
+        font-family: monospace;
+        font-weight: bold;
+      }
+      
+      #password-message[message="success"] {
+        color: #000;
+      }
+
+      #password-message[message="error"] {
+        color: #fff;
       }
     `;
   };
@@ -93,13 +126,13 @@ export class GraficarteStoreCreateAccount extends LitElement {
   _showPasswordErrorMessage() {
     this.passwordMessageStyle = 'error';
     this.passwordMessageText = 'Las contraseñas no coinciden'
-    this.dispatchEvent(new CustomEvent('graficarte-store-create-account-invalid-password'));
+    this.dispatchEvent(new CustomEvent('invalid-password'));
   };
 
   _showPasswordSuccessMessage() {
     this.passwordMessageStyle = 'success';
     this.passwordMessageText = 'Las contraseñas coinciden';
-    this.dispatchEvent(new CustomEvent('graficarte-store-create-account-valid-password'));
+    this.dispatchEvent(new CustomEvent('valid-password'));
   };
 
   render() {
@@ -120,8 +153,8 @@ export class GraficarteStoreCreateAccount extends LitElement {
         </sophos-chimera-input>
         `;
       })}
-      <div messageStyle="password-message-${this.passwordMessageStyle}">
-        <p>
+      <div id="password-message-container" message-style="password-message-${this.passwordMessageStyle}">
+        <p id="password-message" message="${this.passwordMessageStyle}">
           ${this.passwordMessageText}
         </p>
       </div>
