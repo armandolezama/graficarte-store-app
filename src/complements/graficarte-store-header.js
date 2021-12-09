@@ -8,7 +8,7 @@ export class GraficarteStoreHeader extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.isCreateAccountAvailable = false;
     this.headerOptions = [
@@ -21,18 +21,18 @@ export class GraficarteStoreHeader extends LitElement {
         key: 'login',
       },
     ];
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       isCreateAccountAvailable : { type : Boolean}
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css`
       #search-bar {
         background: rgb(147,199,237);
@@ -91,39 +91,39 @@ export class GraficarteStoreHeader extends LitElement {
         --sophos-chimera-button-flex-flow: column;
       }
     `;
-  };
+  }
 
-  _createAccountEvent() {
+  _createAccountEvent () {
     this.dispatchEvent(new CustomEvent('create-new-account'));
-  };
+  }
 
-  _loginEvent() {
+  _loginEvent () {
     this.dispatchEvent(new CustomEvent('sign-in'));
-  };
+  }
 
-  _navigate(e){
+  _navigate (e){
     const page = e.detail.buttonDescription.key;
     this.dispatchEvent(new CustomEvent('navigate', {
       detail: { page }
     }));
-  };
+  }
 
   searchProduct (e) {
     this.dispatchEvent(new CustomEvent('searching-for-term', {detail : {
       term : e.target.value}}));
-  };
+  }
 
-  render() {
+  render () {
     return html`
       <div 
         id="search-bar">
         <div id="input-container"
-        ?show-create-account-button="${this.isCreateAccountAvailable}">
+        ?show-create-account-button=${this.isCreateAccountAvailable}>
           <input 
             id="search-bar-input" 
             type="text" name="search-bar" 
-            .placeholder="${getLocal('graficarte-store-search-bar-place-holder')}"
-            @input="${this.searchProduct}">
+            .placeholder=${getLocal('graficarte-store-search-bar-place-holder')}
+            @input=${this.searchProduct}>
         </div>
 
         ${this.isCreateAccountAvailable ? html`
@@ -131,13 +131,13 @@ export class GraficarteStoreHeader extends LitElement {
             <sophos-chimera-button
             id="session-multi-button"
             type="simple-multi-button"
-            .buttonsLabels="${this.headerOptions}"
-            @sophos-chimera-button-click="${this._navigate}"></sophos-chimera-button>
+            .buttonsLabels=${this.headerOptions}
+            @sophos-chimera-button-click=${this._navigate}></sophos-chimera-button>
           </div>
         ` : html``}
 
       </div>
     `;
-  };
-};
+  }
+}
 customElements.define('graficarte-store-header', GraficarteStoreHeader);

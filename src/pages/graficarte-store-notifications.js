@@ -6,23 +6,23 @@ export class GraficarteStoreNotifications extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {};
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css``;
-  };
+  }
 
-  render() {
+  render () {
     return html``;
-  };
-};
+  }
+}
 customElements.define('graficarte-store-notifications', GraficarteStoreNotifications);

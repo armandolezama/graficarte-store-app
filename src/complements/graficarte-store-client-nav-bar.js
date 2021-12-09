@@ -9,7 +9,7 @@ export class GraficarteStoreClientNavBar extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.clientOptions = [
       {
@@ -42,19 +42,19 @@ export class GraficarteStoreClientNavBar extends LitElement {
         label: getLocal('graficarte-store-client-nav-bar-options-end-session')
       }
     ];
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       clientOptions : { type : Array},
       finishSesionLabel : { type : Array}
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css`
       sophos-icon{
         --sophos-icon-icon-image-width: 100px;
@@ -68,20 +68,20 @@ export class GraficarteStoreClientNavBar extends LitElement {
         --sophos-chimera-button-width: 140px;
       }
     `;
-  };
+  }
 
-  navigate(e){
+  navigate (e){
     const page = e.detail.buttonDescription.key;
     this.dispatchEvent(new CustomEvent('graficarte-navigate-to-page', { detail: {
       page
     }}));
-  };
+  }
 
-  finishSesion() {
+  finishSesion () {
     this.dispatchEvent(new CustomEvent('finish-sesion'))
-  };
+  }
 
-  render() {
+  render () {
     return html`
       <div id="client-nav-bar-container">
         <sophos-icon
@@ -94,18 +94,19 @@ export class GraficarteStoreClientNavBar extends LitElement {
           <sophos-chimera-button
           id="client-options-multi-button"
           type="simple-multi-button"
-          .buttonsLabels="${this.clientOptions}"
-          @sophos-chimera-button-click="${this.navigate}">
+          .buttonsLabels=${this.clientOptions}
+          @sophos-chimera-button-click=${this.navigate}>
           </sophos-chimera-button>
         </div>
         <sophos-chimera-button
         type="simple-multi-button"
-        .buttonsLabels="${this.finishSesionLabel}"
-        @sophos-chimera-button-click="${this.finishSesion}">
+        .buttonsLabels=${this.finishSesionLabel}
+        @sophos-chimera-button-click=${this.finishSesion}>
       </sophos-chimera-button>
       </div>
     
     `;
-  };
-};
+  }
+}
+
 customElements.define('graficarte-store-client-nav-bar', GraficarteStoreClientNavBar);

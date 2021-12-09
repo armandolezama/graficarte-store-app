@@ -9,7 +9,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.inputsList = [];
     this.buttonLabels = [
@@ -26,12 +26,12 @@ export class GraficarteStoreCreateAccount extends LitElement {
     this.passwordMessageStyle = '';
     this.emptyMessage = 'Este campo es requerido';
     this._handlers = {};
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       inputsList : { type : Array },
       userData : { type : Object },
@@ -39,9 +39,9 @@ export class GraficarteStoreCreateAccount extends LitElement {
       passwordMessageText : { type : String },
       _handlers : { type : Object}
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css`
       sophos-chimera-input {
         --sophos-chimera-input-main-container-height: auto;
@@ -80,88 +80,91 @@ export class GraficarteStoreCreateAccount extends LitElement {
         color: #fff;
       }
     `;
-  };
+  }
 
-  firstUpdated(){
+  firstUpdated (){
     super.firstUpdated();
     this._handlers = {
       'set data' : this.setUserDataField,
       'confirm pass' : this.confirmPassword
     };
-  };
+  }
 
+  showForm (){
+    return this.inputsList.map(inputData => {
+      return html`
+      <sophos-chimera-input
+        field-name=${inputData.fieldName}
+        .styleOfInput=${inputData.styleOfInput}
+        .maxLength=${inputData.maxLength}
+        .label=${inputData.label}
+        .type=${inputData.type}
+        .isRequired=${inputData.isRequired}
+        .showMessage=${inputData.missingField}
+        .emptyMessage=${this.emptyMessage}
+        @sophos-input-changed=${this._handlers[inputData.handler]}>
+      </sophos-chimera-input>
+      `;
+    });
+  }
 
-  manageCreateAccountActions(e){
+  manageCreateAccountActions (e){
     const { key } = e.detail.buttonDescription;
     if(key === 'create-account') {
       this.createAccount();
     } else {
       this.cancel();
-    };
-  };
+    }
+  }
 
-  createAccount() {
+  createAccount () {
     this.dispatchEvent(new CustomEvent('create-account', {
       detail : { userData: {...this.userData} }
     }));
-  };
+  }
 
-  cancel() {
+  cancel () {
     this.dispatchEvent(new CustomEvent('cancel-create-account'));
-  };
+  }
 
 
-  setUserDataField(e) {
+  setUserDataField (e) {
     this.userData[e.target.getAttribute('field-name')] = e.detail.value;
-  };
+  }
 
-  confirmPassword(e) {
+  confirmPassword (e) {
     if(this.userData.password && e.detail.value === this.userData.password) {
       this._showPasswordSuccessMessage();
     } else {
       this._showPasswordErrorMessage();
-    };
-  };
+    }
+  }
 
-  _showPasswordErrorMessage() {
+  _showPasswordErrorMessage () {
     this.passwordMessageStyle = 'error';
     this.passwordMessageText = 'Las contraseñas no coinciden'
     this.dispatchEvent(new CustomEvent('invalid-password'));
-  };
+  }
 
-  _showPasswordSuccessMessage() {
+  _showPasswordSuccessMessage () {
     this.passwordMessageStyle = 'success';
     this.passwordMessageText = 'Las contraseñas coinciden';
     this.dispatchEvent(new CustomEvent('valid-password'));
-  };
+  }
 
-  render() {
+  render () {
     return html`
     <div>
-      ${this.inputsList.map(inputData => {
-        return html`
-        <sophos-chimera-input
-          field-name="${inputData.fieldName}"
-          .styleOfInput="${inputData.styleOfInput}"
-          .maxLength="${inputData.maxLength}"
-          .label="${inputData.label}"
-          .type="${inputData.type}"
-          .isRequired="${inputData.isRequired}"
-          .showMessage="${inputData.missingField}"
-          .emptyMessage="${this.emptyMessage}"
-          @sophos-input-changed="${this._handlers[inputData.handler]}">
-        </sophos-chimera-input>
-        `;
-      })}
-      <div id="password-message-container" message-style="password-message-${this.passwordMessageStyle}">
-        <p id="password-message" message="${this.passwordMessageStyle}">
+      ${this.showForm()}
+      <div id=password-message-container message-style=password-message-${this.passwordMessageStyle}>
+        <p id=password-message message=${this.passwordMessageStyle}>
           ${this.passwordMessageText}
         </p>
       </div>
       <sophos-chimera-button
-      type="simple-multi-button"
-      .buttonsLabels="${this.buttonLabels}"
-      @sophos-chimera-button-click="${this.manageCreateAccountActions}"></sophos-chimera-button>
+      type=simple-multi-button
+      .buttonsLabels=${this.buttonLabels}
+      @sophos-chimera-button-click=${this.manageCreateAccountActions}></sophos-chimera-button>
     </div>
     `;
   }

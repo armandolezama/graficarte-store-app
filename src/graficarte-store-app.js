@@ -25,7 +25,7 @@ export class GraficarteStoreApp extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.inventory = inventoryMocks;
     this.storeProducts = productMocks;
@@ -121,164 +121,173 @@ export class GraficarteStoreApp extends LitElement {
         missingField: false
       }
     ];
-    this.page = 'client-store';
-    this.clientContent = 'shopping-history';
+    this.page = '';
+    this.clientContent = '';
     this.showCreateAccountMissingFieldsMessages = false;
     this.isValidCreateAccountPassword = false;
+    this.isCreateAccountOptionDisplayed = false;
     this._loginData = {};
     this._signinData = {};
     this._clientData = {};
-  };
+  }
 
   /**
     * Object describing property-related metadata used by Polymer features
     */
-  static get properties() {
+  static get properties () {
     return {
       inventory : { type : Array },
       storeProducts : { type : Array },
       page : { type : String},
       clientContent : { type : String},
       showCreateAccountMissingFieldsMessages : { type : Boolean},
+      isCreateAccountOptionDisplayed : { type : Boolean},
       _loginData : { type : Object},
       _signinData : { type : Object},
       _clientData : { type : Object},
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return styles;
-  };
+  }
 
-  firstUpdated(){
+  firstUpdated (){
     super.firstUpdated();
     this.setCreateAccountFieldsNames();
-  };
+    this.showPublicStore();
+  }
 
-  login(e) {
+  showPublicStore (){
+    this.page = 'public-store';
+    this.isCreateAccountOptionDisplayed = true;
+  }
+
+  login (e) {
     this._loginData = {...e.detail.userCredentials};
-  };
+  }
 
-  cancelLogin(){
-    this.page = 'public-store';
-  };
+  cancelLogin (){
+    this.showPublicStore();
+  }
 
-  logOut() {
-    this.page = 'public-store';
-  };
+  logOut () {
+    this.showPublicStore();
+  }
 
-  createAccount(e) {
+  createAccount (e) {
     this.showCreateAccountMissingFieldsMessages = true;
     this._signinData = e.detail.userData;
-  };
+  }
 
-  cancelCreateAccount() {
+  cancelCreateAccount () {
     this.showCreateAccountMissingFieldsMessages = false;
     this.restartCreateAccountMissingFields();
-    this.page = 'public-store';
-  };
-  setValidCreateAccountPassword(){
+    this.showPublicStore();
+  }
+
+  setValidCreateAccountPassword (){
     this.isValidCreateAccountPassword = true;
-  };
+  }
 
-  setInvalidCreateAccountPassword(){
+  setInvalidCreateAccountPassword (){
     this.isValidCreateAccountPassword = false;
-  };
+  }
 
-  setCreateAccountFieldsNames(){
+  setCreateAccountFieldsNames (){
     for (const input of this.createAccountForm) {
       this._signinData[input.fieldName] = '';
-    };
-  };
+    }
+  }
 
-  setCreateAccountMissingFields(e){
+  setCreateAccountMissingFields (e){
     if (this.showCreateAccountMissingFieldsMessages) {
       const { emptyFields } = e.detail;
       this.createAccountForm = this.createAccountForm.map(input => {
         input.missingField = emptyFields.includes(input.fieldName)
         return input;
       });
-    };
+    }
     this.requestUpdate();
-  };
+  }
 
-  restartCreateAccountMissingFields(){
+  restartCreateAccountMissingFields (){
     this.createAccountForm = this.createAccountForm.map(input => {
       input.missingField = false;
       return input;
     });
-  };
+  }
 
-  loginMissingFields(e){
+  loginMissingFields (e){
 
-  };
+  }
 
-  successSignIn(){
+  successSignIn (){
     this.page = 'client-store';
     this.clientContent = 'home';
-  };
+  }
 
-  successLogin(e){
+  successLogin (e){
     console.log(e.detail.payload)
     this.page = 'client-store';
     this.clientContent = 'home';
-  };
+  }
 
-  setProgressState(){
+  setProgressState (){
     console.log('this shit is in progress');
-  };
+  }
 
-  errorSignIn(e){
+  errorSignIn (e){
     const {title, message, notes} = e.detail;
     this.modalTitle = title;
     this.modalMessage = message;
     this.modalFooterMessage = notes;
     this.openModal();
-  };
+  }
 
-  errorLogin(){
+  errorLogin (){
     alert('error at login');
-  };
+  }
 
-  headerNavigate(e){
+  headerNavigate (e){
     const { page } = e.detail;
     this.page = page;
-  };
+  }
 
-  searchTerm(e){
+  searchTerm (e){
     console.log(e.detail.term);
-  };
+  }
 
-  clientNavigation(e){
+  clientNavigation (e){
     const clientPage = e.detail.page;
     this.clientContent = clientPage;
-  };
+  }
 
-  render() {
+  render () {
     return html`
       <div id="main-app-container">
         
         <graficarte-store-login-controller
-        .email="${this._loginData.email}"
-        .password="${this._loginData.password}"
-        @missing-fields="${this.loginMissingFields}"
-        @request-is-done="${this.successLogin}"
-        @request-failed="${this.errorLogin}"
-        @request-in-progress="${this.setProgressState}">
+        .email=${this._loginData.email}
+        .password=${this._loginData.password}
+        @missing-fields=${this.loginMissingFields}
+        @request-is-done=${this.successLogin}
+        @request-failed=${this.errorLogin}
+        @request-in-progress=${this.setProgressState}>
         </graficarte-store-login-controller>
 
         <graficarte-store-sign-in-controller
-          .name = "${this._signinData.name}"
-          .lastName = "${this._signinData.lastName}"
-          .email = "${this._signinData.email}"
-          .phoneNumber = "${this._signinData.phoneNumber}"
-          .address = "${this._signinData.address}"
-          .password = "${this._signinData.password}"
-          .isPasswordValid = "${this.isValidCreateAccountPassword}"
-          @missing-fields = "${this.setCreateAccountMissingFields}"
-          @request-is-done = "${this.successSignIn}"
-          @request-failed = "${this.errorSignIn}"
-          @request-in-progress="${this.setProgressState}">
+          .name = ${this._signinData.name}
+          .lastName = ${this._signinData.lastName}
+          .email = ${this._signinData.email}
+          .phoneNumber = ${this._signinData.phoneNumber}
+          .address = ${this._signinData.address}
+          .password = ${this._signinData.password}
+          ?isPasswordValid = ${this.isValidCreateAccountPassword}
+          @missing-fields = ${this.setCreateAccountMissingFields}
+          @request-is-done = ${this.successSignIn}
+          @request-failed = ${this.errorSignIn}
+          @request-in-progress=${this.setProgressState}>
         </graficarte-store-sign-in-controller>
 
       ${[
@@ -286,15 +295,15 @@ export class GraficarteStoreApp extends LitElement {
 
         <sophos-simple-template 
           id="create-account-container"
-          page-name="${this.page}"
+          page-name=${this.page}
           styleTemplate="full-header">
 
           <graficarte-store-create-account
-            .inputsList="${this.createAccountForm}"
-            @create-account="${this.createAccount}"
-            @cancel-create-account="${this.cancelCreateAccount}"
-            @valid-password="${this.setValidCreateAccountPassword}"
-            @invalid-password="${this.setInvalidCreateAccountPassword}"
+            .inputsList=${this.createAccountForm}
+            @create-account=${this.createAccount}
+            @cancel-create-account=${this.cancelCreateAccount}
+            @valid-password=${this.setValidCreateAccountPassword}
+            @invalid-password=${this.setInvalidCreateAccountPassword}
             slot="main-view-content">
           </graficarte-store-create-account>
 
@@ -305,19 +314,19 @@ export class GraficarteStoreApp extends LitElement {
         <sophos-simple-template
           id="client-store-container"
           styleTemplate="full-nav"
-          page-name="${this.page}">
+          page-name=${this.page}>
 
           <graficarte-store-header
             slot="header-content"
-            ?isCreateAccountAvailable="${false}"
-            @searching-for-term="${this.searchTerm}">
+            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            @searching-for-term=${this.searchTerm}>
           </graficarte-store-header>
 
           ${[
 
               this.clientContent === 'home' && html`
                 <graficarte-store-home-page 
-                  .products="${this.storeProducts}" 
+                  .products=${this.storeProducts}
                   slot="main-view-content">
                 </graficarte-store-home-page>
               `,
@@ -359,8 +368,8 @@ export class GraficarteStoreApp extends LitElement {
           ].filter(template => template)}
 
           <graficarte-store-client-nav-bar
-            @graficarte-navigate-to-page="${this.clientNavigation}"
-            @finish-sesion="${this.logOut}"
+            @graficarte-navigate-to-page=${this.clientNavigation}
+            @finish-sesion=${this.logOut}
             slot="nav-bar-content">
           </graficarte-store-client-nav-bar>
 
@@ -371,15 +380,15 @@ export class GraficarteStoreApp extends LitElement {
         <sophos-simple-template
           id="admin-inventory-container"
           styleTemplate="full-nav"
-          page-name="${this.page}">
+          page-name=${this.page}>
 
           <graficarte-store-inventory-page 
-            .products="${this.inventory}" 
+            .products=${this.inventory}
             slot="main-view-content">
           </graficarte-store-inventory-page>
 
           <graficarte-store-admin-nav-bar
-            @finish-sesion="${this.logOut}"
+            @finish-sesion=${this.logOut}
             slot="nav-bar-content">
           </graficarte-store-admin-nav-bar>
 
@@ -389,18 +398,18 @@ export class GraficarteStoreApp extends LitElement {
 
         <sophos-simple-template 
           id="public-store-container"
-          page-name="${this.page}"
-          styleTemplate = "full-header">
+          page-name=${this.page}
+          styleTemplate="full-header">
 
           <graficarte-store-header
             slot="header-content"
-            ?isCreateAccountAvailable = "${true}"
-            @navigate="${this.headerNavigate}"
-            @searching-for-term="${this.searchTerm}">
+            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            @navigate=${this.headerNavigate}
+            @searching-for-term=${this.searchTerm}>
           </graficarte-store-header>
 
           <graficarte-store-home-page 
-            .products="${this.storeProducts}" 
+            .products=${this.storeProducts}
             slot="main-view-content">
           </graficarte-store-home-page>
 
@@ -409,16 +418,17 @@ export class GraficarteStoreApp extends LitElement {
       this.page === 'login' && html`
 
         <graficarte-store-login-page
-          .inputList="${this.signInForm}"
-          @graficarte-login-submit="${this.login}"
-          @graficarte-cancel-login="${this.cancelLogin}">
+          .inputList=${this.signInForm}
+          @graficarte-login-submit=${this.login}
+          @graficarte-cancel-login=${this.cancelLogin}>
         </graficarte-store-login-page>
 
       `,].filter(template => template)}
       </div>
     `;
-  };
-};
+  }
+}
+
 customElements.define('graficarte-store-app', GraficarteStoreApp);
 
 /**

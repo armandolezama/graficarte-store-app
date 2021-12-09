@@ -6,23 +6,23 @@ export class GraficarteStoreHomePage extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.products = [];
     this.altImage = 'non available'
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       products : { type : Array },
       altImage : { type : String }
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css`
       #home-page-container {
         display: flex;
@@ -58,24 +58,29 @@ export class GraficarteStoreHomePage extends LitElement {
         flex-grow: 2;
       }
     `;
-  };
-  render() {
+  }
+
+  showProducts (){
+    return this.products.map(product => html`
+    <div class="product-container">  
+      <sophos-card
+      .configContent=${['pickture', 'title', 'subtitle', 'description']}
+      .pictureSRC=${product.productImage}
+      .pictureAlt=${this.altImage}
+      .title=${product.productName}
+      .subtitle= $${product.price}
+      .description=${product.desctiption}
+      ></sophos-card>
+    </div>
+  `)
+  }
+
+  render () {
     return html`
       <div id="home-page-container">
-        ${this.products.map(product => html`
-          <div class="product-container">  
-            <sophos-card
-            .configContent="${['pickture', 'title', 'subtitle', 'description']}"
-            .pictureSRC = "${product.productImage}"
-            .pictureAlt = "${this.altImage}"
-            .title = "${product.productName}"
-            .subtitle = " $${product.price}"
-            .description = "${product.desctiption}"
-            ></sophos-card>
-          </div>
-        `)}
+        ${this.showProducts()}
       </div>
     `;
-  };
-};
+  }
+}
 customElements.define('graficarte-store-home-page', GraficarteStoreHomePage);

@@ -9,7 +9,7 @@ export class GraficarteStoreLoginPage extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.inputList = [];
     this._email = '';
@@ -26,12 +26,12 @@ export class GraficarteStoreLoginPage extends LitElement {
         label: 'Cancelar'
       }
     ];
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       inputList : { type : Array },
       isModalOpened : { type : Boolean },
@@ -39,9 +39,9 @@ export class GraficarteStoreLoginPage extends LitElement {
       modalMessage : { type : String },
       modalFooterMessage : { type : String },
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css`
       #login-container {
         display: flex;
@@ -65,32 +65,67 @@ export class GraficarteStoreLoginPage extends LitElement {
         --sophos-chimera-input-main-container-height: auto;
       }
     `;
-  };
+  }
 
-  setUserCredentialField(e){
+  createForm (){
+    return this.inputList.map(inputData => {
+      return html`
+      
+      <sophos-simple-modal
+      modalStyle="full-screen"
+      ?isModalOpened=${this.isModalOpened}
+      .modalTitle=${this.modalTitle}
+      .modalMessage=${this.modalMessage}
+      .modalFooterMessage=${this.modalFooterMessage}>
+
+        <sophos-chimera-button
+        slot="modal-body"
+        type="simple-multi-button"
+        .buttonsLabels=${this.modalLabelsButtons}
+        @sophos-chimera-button-click=${this._manageModalButtons}>
+        </sophos-chimera-button>
+
+      </sophos-simple-modal>
+
+      <sophos-chimera-input
+        field-name=${inputData.fieldName}
+        .styleOfInput=${inputData.styleOfInput}
+        .maxLength=${inputData.maxLength}
+        .label=${inputData.label}
+        .type=${inputData.type}
+        .isRequired=${inputData.isRequired}
+        .showMessage=${inputData.missingField}
+        .emptyMessage=${this.emptyMessage}
+        @sophos-input-changed=${this.setUserCredentialField}>
+      </sophos-chimera-input>
+      `;
+    });
+  }
+
+  setUserCredentialField (e){
     const field = e.target.getAttribute('field-name');
     field === 'email' ? this.setEmail(e.detail.value) : this.setPassword(e.detail.value);
-  };
+  }
 
-  setEmail(email) {
+  setEmail (email) {
     this._email = email;
-  };
+  }
 
-  setPassword(password) {
+  setPassword (password) {
     this._password = password;
-  };
+  }
 
-  manageLoginActions(e){
+  manageLoginActions (e){
     const payload = e.detail.buttonDescription;
     payload.option === 0 ? this._openSubmitModal() : payload.option === 1 ? this._openCancelModal() : payload;
-  };
+  }
 
-  _manageModalButtons(e){
+  _manageModalButtons (e){
     const payload = e.detail.buttonDescription;
-    payload.option === 0 ? payload.key === 'store' ? this._cancel() :  this._submit() : this._closeModal();
-  };
+    payload.option === 0 ? payload.key === 'store' ? this._cancel() : this._submit() : this._closeModal();
+  }
 
-  _openSubmitModal(){
+  _openSubmitModal (){
     this.modalTitle = 'Ingresar';
     this.modalMessage = '¿Desea continuar?';
     this.modalFooterMessage = "Graficarte";
@@ -104,12 +139,12 @@ export class GraficarteStoreLoginPage extends LitElement {
         label: 'Volver',
         key: 'edit-login'
       }];
-  };
+  }
 
-  _openCancelModal(){
+  _openCancelModal (){
     this.modalTitle = 'Salir';
     this.modalMessage = '¿Desea regresar a la tienda?';
-    this.modalFooterMessage = "Graficarte";
+    this.modalFooterMessage = 'Graficarte';
     this.isModalOpened = true;
     this.modalLabelsButtons = [
       {
@@ -120,78 +155,48 @@ export class GraficarteStoreLoginPage extends LitElement {
         label: 'Quedarse',
         key: 'edit-login',
       }];
-  };
+  }
 
-  _closeModal(){
+  _closeModal (){
     this.modalTitle = '';
     this.modalMessage = '';
     this.modalFooterMessage = '';
     this.modalLabelsButtons = ['', ''];
     this.isModalOpened = false;
-  };
+  }
 
-  _submit(){
+  _submit (){
     const userCredentials = {
       email: this._email,
       password: this._password
     };
     this.dispatchEvent(new CustomEvent('graficarte-login-submit', { detail: {userCredentials}}));
-  };
+  }
 
-  _cancel() {
+  _cancel () {
     this.dispatchEvent(new CustomEvent('graficarte-cancel-login'));
-  };
+  }
 
-  render() {
+  render () {
     return html`
       <div id="login-container">
         <div id="login-form-container">
-        ${this.inputList.map(inputData => {
-        return html`
-        
-        <sophos-simple-modal
-        modalStyle="full-screen"
-        ?isModalOpened="${this.isModalOpened}"
-        .modalTitle="${this.modalTitle}"
-        .modalMessage="${this.modalMessage}"
-        .modalFooterMessage="${this.modalFooterMessage}">
-
-          <sophos-chimera-button
-          slot="modal-body"
-          type="simple-multi-button"
-          .buttonsLabels="${this.modalLabelsButtons}"
-          @sophos-chimera-button-click="${this._manageModalButtons}">
-          </sophos-chimera-button>
-
-        </sophos-simple-modal>
-
-        <sophos-chimera-input
-          field-name="${inputData.fieldName}"
-          .styleOfInput="${inputData.styleOfInput}"
-          .maxLength="${inputData.maxLength}"
-          .label="${inputData.label}"
-          .type="${inputData.type}"
-          .isRequired="${inputData.isRequired}"
-          .showMessage="${inputData.missingField}"
-          .emptyMessage="${this.emptyMessage}"
-          @sophos-input-changed="${this.setUserCredentialField}">
-        </sophos-chimera-input>
-        `;
-      })}
+        ${this.createForm()}
           <sophos-chimera-button 
           type="simple-multi-button"
-          .buttonsLabels="${[
+          .buttonsLabels=${[
             {
               label: 'Entrar'
             }, 
             {
               label: 'Cancelar'
             }
-            ]}"
-          @sophos-chimera-button-click="${this.manageLoginActions}" id="login-submit">Entrar</sophos-chimera-button>
+            ]}
+          @sophos-chimera-button-click=${this.manageLoginActions} id="login-submit">Entrar</sophos-chimera-button>
         </div>
       </div>
     `;
-  };
-};
+  }
+}
+
 customElements.define('graficarte-store-login-page', GraficarteStoreLoginPage);

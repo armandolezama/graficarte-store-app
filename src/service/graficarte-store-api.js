@@ -5,7 +5,7 @@
 import envCongif from '../../env-config';
 export default class GraficarteStoreAPI extends HTMLElement {
   //Class to manage login service
-  constructor(method, url){
+  constructor (method = '', url = ''){
     super();
     this.requestBody = () => {};
     this.method = method;
@@ -13,17 +13,17 @@ export default class GraficarteStoreAPI extends HTMLElement {
     this.request = () => {};
     this.response = () => {};
     this.buildRequest();
-  };
+  }
 
-  async doRequest(){
+  async doRequest (){
     try {
       await this.request.send(JSON.stringify(this.requestBody));
     } catch (error) {
       this.serviceFailEvent();
-    };
-  };
+    }
+  }
 
-  buildRequest(){
+  buildRequest (){
     this.request = new XMLHttpRequest();
     this.request.open(this.method, this.url);
     this.request.setRequestHeader("Accept", "application/json");
@@ -42,27 +42,27 @@ export default class GraficarteStoreAPI extends HTMLElement {
     this.setOnErrorMethod(this.request, () => {
       this.serviceFailEvent();
     });
-  };
+  }
 
-  serviceFailEvent(){
+  serviceFailEvent (){
     this.dispatchEvent(new CustomEvent('request-failed'))
-  };
+  }
 
-  setOnProgressMethod(requestObject, method){
+  setOnProgressMethod (requestObject, method){
     requestObject.onprogress = method;
-  };
+  }
 
-  setOnLoadMethod(requestObject, method){
+  setOnLoadMethod (requestObject, method){
     requestObject.onload = method;
-  };
+  }
 
-  setOnErrorMethod(requestObject, method){
+  setOnErrorMethod (requestObject, method){
     requestObject.onerror = method;
-  };
+  }
 
-  setRequestBody(requestBody){
+  setRequestBody (requestBody){
     this.requestBody = requestBody;
-  };
-};
+  }
+}
 
 customElements.define('graficarte-store-api', GraficarteStoreAPI);

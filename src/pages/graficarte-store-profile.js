@@ -10,7 +10,7 @@ export class GraficarteStoreProfile extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-     constructor() {
+     constructor () {
       super();
       this.profilePicture = './assets/client-user.png';
       this.profilePictureAlt = 'profile image';
@@ -61,12 +61,12 @@ export class GraficarteStoreProfile extends LitElement {
           key: 'save',
         }
       ];
-    };
+    }
   
     /**
       * Declared properties and their corresponding attributes
       */
-    static get properties() {
+    static get properties () {
       return {
         profilePicture : { type : String },
         profilePictureAlt : { type: String },
@@ -75,9 +75,9 @@ export class GraficarteStoreProfile extends LitElement {
         clienDescription : { type : String},
         clientForm : { type : Array}
       };
-    };
+    }
   
-    static get styles() {
+    static get styles () {
       return css`
 
         .input-form-container {
@@ -126,69 +126,74 @@ export class GraficarteStoreProfile extends LitElement {
           margin-top: 45px;
         }
       `;
-    };
+    }
 
-    editField(e){
+    editField (e){
       const field = e.target.getAttribute('field-name');
       const editableField = this.clientForm.filter(input => input.fieldName === field);
       editableField[0].isDisabled = false;
       this.requestUpdate();
-    };
+    }
 
-    _manageSaveCancelOptions(e){
+    _manageSaveCancelOptions (e){
       const { option } = e.detail;
       if (option === 0) {
         
       } 
-    };
+    }
 
-    saveData(){
+    saveData (){
       this.dispatchEvent(new CustomEvent('graficarte-store-profile-has-changed'));
-    };
+    }
+
+    createClientForm (){
+      return this.clientForm.map(inputForm => html`
+      <div class="input-form-container">
+        <sophos-chimera-input
+          class="form-input"
+          field-name=${inputForm.fieldName}
+          .styleOfInput=${this.clientInputStyle}
+          .label=${inputForm.label}
+          .type=${inputForm.type}
+          ?isDisabled=${inputForm.isDisabled}>
+        </sophos-chimera-input>
+        <div class="input-form-button">
+          <sophos-chimera-button
+            class="form-button"
+            field-name=${inputForm.fieldName}
+            .type=${this.clientButtonStyle}
+            .buttonsLabels=${[this.clientEditButtonMessage]}
+            @sophos-chimera-button-click=${this.editField}>
+          </sophos-chimera-button>
+        </div>
+      </div>
+    `)
+    }
   
-    render() {
+    render () {
       return html`
         <div id="main-container">
           <div id="card-container">
             <sophos-card
-            .pictureSRC="${this.profilePicture}"
-            .pictureAlt="${this.profilePictureAlt}"
-            .title="${this.clientName}"
-            .subtitle="${this.clienSurname}"
-            .description="${this.clientDescription}">
+            .pictureSRC=${this.profilePicture}
+            .pictureAlt=${this.profilePictureAlt}
+            .title=${this.clientName}
+            .subtitle=${this.clienSurname}
+            .description=${this.clientDescription}>
             </sophos-card>
           </div>
           <div id="client-form-container">
-            ${this.clientForm.map(inputForm => html`
-              <div class="input-form-container">
-                <sophos-chimera-input
-                  class="form-input"
-                  field-name="${inputForm.fieldName}"
-                  .styleOfInput="${this.clientInputStyle}"
-                  .label="${inputForm.label}"
-                  .type="${inputForm.type}"
-                  ?isDisabled="${inputForm.isDisabled}">
-                </sophos-chimera-input>
-                <div class="input-form-button">
-                  <sophos-chimera-button
-                    class="form-button"
-                    field-name="${inputForm.fieldName}"
-                    .type="${this.clientButtonStyle}"
-                    .buttonsLabels="${[this.clientEditButtonMessage]}"
-                    @sophos-chimera-button-click="${this.editField}">
-                  </sophos-chimera-button>
-                </div>
-              </div>
-            `)}
+            ${this.createClientForm()}
             <div id="client-form-buttons-container">
               <sophos-chimera-button
               id="save-cancel-button"
-              .type="${this.clientButtonStyle}"
-              .buttonsLabels="${this.formButtonLabels}"></sophos-chimera-button>
+              .type=${this.clientButtonStyle}
+              .buttonsLabels=${this.formButtonLabels}></sophos-chimera-button>
             </div>
           </div>
         </div>
       `;
-    };
-};
+    }
+}
+
 customElements.define('graficarte-store-profile', GraficarteStoreProfile);

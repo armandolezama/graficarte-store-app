@@ -7,7 +7,7 @@ export class GraficarteStoreShoppingHistory extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.notificationsTable = [
       [0, 1, 2, 3, 4, 5],
@@ -18,33 +18,34 @@ export class GraficarteStoreShoppingHistory extends LitElement {
     ];
     this.colnames = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth']
     this.rownames = ['first', 'second', 'third', 'fourth', 'fifth']
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       notificationsTable : { type : Array }
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css`
       sophos-plastic-table {
         --sophos-plastic-table-table-cell-padding: 15px;
       }
     `;
-  };
+  }
 
-  render() {
+  render () {
     return html`
       <sophos-plastic-table
-      .tableData="${this.notificationsTable}"
-      .columnNames="${this.colnames}"
-      .rowNames="${this.rownames}">
+      .tableData=${this.notificationsTable}
+      .columnNames=${this.colnames}
+      .rowNames=${this.rownames}>
       </sophos-plastic-table>
     `;
-  };
-};
+  }
+}
+
 customElements.define('graficarte-store-shopping-history', GraficarteStoreShoppingHistory);

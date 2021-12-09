@@ -10,7 +10,7 @@ export class GraficarteStoreSignInController extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.name = '';
     this.lastName = '';
@@ -20,12 +20,12 @@ export class GraficarteStoreSignInController extends LitElement {
     this.password = '';
     this.isPasswordValid = false;
     this.service = new GraficarteStoreAPI('POST', 'public/signin');
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       name : { type : String },
       lastName: { type : String },
@@ -34,9 +34,9 @@ export class GraficarteStoreSignInController extends LitElement {
       address : { type : String },
       password : { type : String }
     };
-  };
+  }
 
-  updated(changedProps) {
+  updated (changedProps) {
     super.updated( changedProps );
     const emptyFields = this.getEmptyFields();
 
@@ -44,10 +44,10 @@ export class GraficarteStoreSignInController extends LitElement {
       this._signIn();
     } else {
       this.missingFieldsMessage(emptyFields);
-    };
-  };
+    }
+  }
 
-  getEmptyFields(){
+  getEmptyFields (){
     return [
       !this.name && 'name',
       !this.lastName && 'lastName',
@@ -56,9 +56,9 @@ export class GraficarteStoreSignInController extends LitElement {
       !this.address && 'address',
       !this.password && 'password'
     ].filter(field => field);
-  };
+  }
 
-   _signIn(){
+   _signIn (){
     this.service.setRequestBody({
       name : this.name,
       lastName : this.lastName,
@@ -83,15 +83,15 @@ export class GraficarteStoreSignInController extends LitElement {
       this.dispatchEvent(new CustomEvent('request-failed'));
     });
     this.service.doRequest();
-  };
+  }
 
-  missingFieldsMessage(emptyFields){
+  missingFieldsMessage (emptyFields){
     this.dispatchEvent(new CustomEvent('missing-fields', {
       detail: {
         emptyFields
       }
     }));
-  };
-};
+  }
+}
 
 customElements.define('graficarte-store-sign-in-controller', GraficarteStoreSignInController);

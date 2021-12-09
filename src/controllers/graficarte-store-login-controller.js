@@ -9,24 +9,24 @@ export class GraficarteStoreLoginController extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.email = '';
     this.password = '';
     this.service = new GraficarteStoreAPI('POST', 'public/login');
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       user : { type : String},
       password : { type : String}
     };
-  };
+  }
 
-  updated(changedProps) {
+  updated (changedProps) {
     super.updated( changedProps );
     const emptyFields = this.getEmptyFields();
 
@@ -34,17 +34,17 @@ export class GraficarteStoreLoginController extends LitElement {
       this._login();
     } else {
       this.missingFieldsMessage(emptyFields);
-    };
-  };
+    }
+  }
 
-  getEmptyFields(){
+  getEmptyFields (){
     return [
       !this.email && 'email',
       !this.password && 'password'
     ].filter(field => field);
-  };
+  }
 
-  _login(){
+  _login (){
     
     this.service.setRequestBody({
       email: this.email,
@@ -68,15 +68,15 @@ export class GraficarteStoreLoginController extends LitElement {
     
     this.service.doRequest();
   
-  };
+  }
 
-  missingFieldsMessage(emptyFields){
+  missingFieldsMessage (emptyFields){
     this.dispatchEvent(new CustomEvent('missing-fields', {
       detail: {
         emptyFields
       }
     }));
-  };
-};
+  }
+}
 
 customElements.define('graficarte-store-login-controller', GraficarteStoreLoginController);

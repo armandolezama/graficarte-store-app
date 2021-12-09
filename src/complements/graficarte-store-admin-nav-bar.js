@@ -8,7 +8,7 @@ export class GraficarteStoreAdminNavBar extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.adminOptions = [
       {label: 'Contabilidad'},
@@ -19,19 +19,19 @@ export class GraficarteStoreAdminNavBar extends LitElement {
       {label: 'Configuraciones'},
     ];
     this.finishSesionLabel = ['Cerrar sesión'];
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       adminOptions : { type : Array},
       finishSesionLabel : { type : Array}
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css`
       sophos-icon{
         --sophos-icon-icon-image-width: 100px;
@@ -45,13 +45,13 @@ export class GraficarteStoreAdminNavBar extends LitElement {
         --sophos-chimera-button-width: 140px;
       }
     `;
-  };
+  }
 
-  finishSesion() {
+  finishSesion () {
     this.dispatchEvent(new CustomEvent('finish-sesion'))
-  };
+  }
 
-  render() {
+  render () {
     return html`
       <div id="admin-nav-bar-container">
         <sophos-icon
@@ -64,16 +64,17 @@ export class GraficarteStoreAdminNavBar extends LitElement {
         <sophos-chimera-button
           id="admin-options-multi-button"
           type="simple-multi-button"
-          .buttonsLabels="${this.adminOptions}">
+          .buttonsLabels=${this.adminOptions}>
           </sophos-chimera-button>
         </div>
         <sophos-chimera-button 
         type="simple-multi-button"
-        .buttonsLabels="${this.finishSesionLabel}"
-        @sophos-chimera-button-click="${this.finishSesion}"></sophos-chimera-button>
+        .buttonsLabels=${this.finishSesionLabel}
+        @sophos-chimera-button-click=${this.finishSesion}></sophos-chimera-button>
       </div>
     
     `;
-  };
-};
+  }
+}
+
 customElements.define('graficarte-store-admin-nav-bar', GraficarteStoreAdminNavBar);

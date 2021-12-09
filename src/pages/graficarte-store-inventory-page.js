@@ -8,23 +8,23 @@ export class GraficarteStoreInventoryPage extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.products = [];
     this.altImage = 'non available'
-  };
+  }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       products : { type : Array },
       altImage : { type : String }
     };
-  };
+  }
 
-  static get styles() {
+  static get styles () {
     return css`
       #inventory-main-container {
       display: flex;
@@ -38,19 +38,24 @@ export class GraficarteStoreInventoryPage extends LitElement {
     `;
   }
 
-  render() {
+  showProducts () {
+    return this.products.map(product => html`
+      <sophos-card
+      .pictureSRC = ${product.productImage}
+      .pictureAlt = ${this.altImage}
+      .title = ${product.productName}
+      .subtitle = 'En stock: ${product.stock}'
+      ></sophos-card>
+    `)
+  }
+
+  render () {
     return html`
     <div id="inventory-main-container">
-      ${this.products.map(product => html`
-          <sophos-card
-          .pictureSRC = "${product.productImage}"
-          .pictureAlt = "${this.altImage}"
-          .title = "${product.productName}"
-          .subtitle = "En stock: ${product.stock}"
-          ></sophos-card>
-      `)}
+      ${this.showProducts()}
     </div>
     `;
-  };
-};
+  }
+}
+
 customElements.define('graficarte-store-inventory-page', GraficarteStoreInventoryPage);
