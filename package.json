@@ -9,20 +9,21 @@
     "start:build": "es-dev-server --app-index public/index.html --cors --watch --open",
     "build": "rollup --config",
     "proxy": "lcp --proxyUrl http://localhost:8020/",
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "npx eslint .",
+    "lint:fix": "npx eslint --fix ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit-element": "^3.0.2",
-    "sophos-card": "github:armandolezama/sophos-card#1.2.2",
-    "sophos-chimera-button": "github:armandolezama/sophos-chimera-button#2.0.1",
-    "sophos-chimera-input": "github:armandolezama/sophos-chimera-input#1.1.1",
-    "sophos-icon": "github:armandolezama/sophos-icon#1.0.1",
-    "sophos-simple-modal": "github:armandolezama/sophos-simple-modal#3.0.1",
-    "sophos-simple-template": "github:armandolezama/sophos-simple-template#1.0.1",
-    "sophos-plastic-table": "github:armandolezama/sophos-plastic-table#1.1.1"
+    "lit": "^2.0.2",
+    "sophos-card": "github:armandolezama/sophos-card#2.0.0",
+    "sophos-chimera-button": "github:armandolezama/sophos-chimera-button#3.0.0",
+    "sophos-chimera-input": "github:armandolezama/sophos-chimera-input#2.0.0",
+    "sophos-icon": "github:armandolezama/sophos-icon#2.0.0",
+    "sophos-simple-modal": "github:armandolezama/sophos-simple-modal#4.0.0",
+    "sophos-simple-template": "github:armandolezama/sophos-simple-template#2.0.0",
+    "sophos-plastic-table": "github:armandolezama/sophos-plastic-table#2.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
