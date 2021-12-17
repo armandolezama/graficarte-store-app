@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
 import getLocal from '../locales/'
@@ -11,7 +11,78 @@ export class GraficarteStoreCreateAccount extends LitElement {
     */
   constructor () {
     super();
-    this.inputsList = [];
+    this.inputsList = [
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-name-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'name',
+        handler: 'set data',
+        missingField: false
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-last-name-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'lastName',
+        handler: 'set data',
+        missingField: false
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-phone-number-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'phoneNumber',
+        handler: 'set data',
+        missingField: false
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-email-placeholder'),
+        type: 'email',
+        isRequired: true,
+        fieldName: 'email',
+        handler: 'set data',
+        missingField: false
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-address-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'address',
+        handler: 'set data',
+        missingField: false
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-password-placeholder'),
+        type: 'password',
+        isRequired: true,
+        fieldName: 'password',
+        handler: 'set data',
+        missingField: false
+      },
+      {
+        styleOfInput: 'simple-bar-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-create-account-form-repeat-password-placeholder'),
+        type: 'password',
+        isRequired: true,
+        fieldName: 'confirm-password',
+        handler: 'confirm pass',
+        missingField: false
+      },
+    ];
     this.buttonLabels = [
       {
         label: getLocal('graficarte-store-create-account-form-create-account'),
@@ -23,6 +94,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       },
     ];
     this.userData = {};
+    this.missingFields = [];
     this.passwordMessageStyle = '';
     this.emptyMessage = 'Este campo es requerido';
     this._handlers = {};
@@ -35,6 +107,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
     return {
       inputsList : { type : Array },
       userData : { type : Object },
+      missingFields : { type : Array },
       passwordMessageStyle : { type : String },
       passwordMessageText : { type : String },
       _handlers : { type : Object}
@@ -82,12 +155,26 @@ export class GraficarteStoreCreateAccount extends LitElement {
     `;
   }
 
+  set missingFields (value) {
+    const currValue = value;
+    const oldValue = this._missingFields;
+    if(currValue.length > 0){
+      this.inputsList = this.inputsList.map(input => {
+        input.missingField = currValue.includes(input.fieldName);
+        return input;
+      });
+      this._missingFields = currValue;
+      this.requestUpdate('missingFields', oldValue);
+    }
+  }
+
   firstUpdated (){
     super.firstUpdated();
     this._handlers = {
       'set data' : this.setUserDataField,
       'confirm pass' : this.confirmPassword
     };
+    this.initData();
   }
 
   showForm (){
@@ -124,6 +211,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
   }
 
   cancel () {
+    this.restartMissingFields();
     this.dispatchEvent(new CustomEvent('cancel-create-account'));
   }
 
@@ -138,6 +226,19 @@ export class GraficarteStoreCreateAccount extends LitElement {
     } else {
       this._showPasswordErrorMessage();
     }
+  }
+
+  initData () {
+    this.inputsList.map(input => {
+      this.userData[input.fieldName] = ''
+    });
+  }
+
+  restartMissingFields (){
+    this.inputsList = this.inputsList.map(input => {
+      input.missingField = false;
+      return input;
+    });
   }
 
   _showPasswordErrorMessage () {

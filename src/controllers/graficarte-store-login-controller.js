@@ -1,4 +1,4 @@
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import GraficarteStoreAPI from '../service/graficarte-store-api';
 
 export class GraficarteStoreLoginController extends LitElement {

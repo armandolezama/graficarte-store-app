@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import 'sophos-chimera-button/sophos-chimera-button';
 import 'sophos-simple-modal/sophos-simple-modal';
 import getLocal from '../locales/'
@@ -11,7 +11,26 @@ export class GraficarteStoreLoginPage extends LitElement {
     */
   constructor () {
     super();
-    this.inputList = [];
+    this.inputsList = [
+      {
+        styleOfInput: 'rounded-mobile-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-login-form-user-placeholder'),
+        type: 'text',
+        isRequired: true,
+        fieldName: 'email',
+        missingField: false
+      },
+      {
+        styleOfInput: 'rounded-mobile-input',
+        maxLength : 30,
+        label: getLocal('graficarte-store-login-form-password-placeholder'),
+        type: 'password',
+        isRequired: true,
+        fieldName: 'password',
+        missingField: false
+      }
+    ];
     this._email = '';
     this._password = '';
     this.isModalOpened = false;
@@ -26,6 +45,8 @@ export class GraficarteStoreLoginPage extends LitElement {
         label: 'Cancelar'
       }
     ];
+    this.missingFields = [];
+    this.emptyMessage = 'Este campo es requerido';
   }
 
   /**
@@ -33,11 +54,12 @@ export class GraficarteStoreLoginPage extends LitElement {
     */
   static get properties () {
     return {
-      inputList : { type : Array },
+      inputsList : { type : Array },
       isModalOpened : { type : Boolean },
       modalTitle : { type : String },
       modalMessage : { type : String },
       modalFooterMessage : { type : String },
+      missingFields : { type : Array }
     };
   }
 
@@ -67,26 +89,22 @@ export class GraficarteStoreLoginPage extends LitElement {
     `;
   }
 
+  set missingFields (value) {
+    const currValue = value;
+    const oldValue = this._missingFields;
+    if(currValue.length > 0){
+      this.inputsList = this.inputsList.map(input => {
+        input.missingField = currValue.includes(input.fieldName);
+        return input;
+      });
+      this._missingFields = currValue;
+      this._closeModal();
+      this.requestUpdate('missingFields', oldValue);
+    }
+  }
+
   createForm (){
-    return this.inputList.map(inputData => {
-      return html`
-      
-      <sophos-simple-modal
-      modalStyle="full-screen"
-      ?isModalOpened=${this.isModalOpened}
-      .modalTitle=${this.modalTitle}
-      .modalMessage=${this.modalMessage}
-      .modalFooterMessage=${this.modalFooterMessage}>
-
-        <sophos-chimera-button
-        slot="modal-body"
-        type="simple-multi-button"
-        .buttonsLabels=${this.modalLabelsButtons}
-        @sophos-chimera-button-click=${this._manageModalButtons}>
-        </sophos-chimera-button>
-
-      </sophos-simple-modal>
-
+    return this.inputsList.map(inputData => html`
       <sophos-chimera-input
         field-name=${inputData.fieldName}
         .styleOfInput=${inputData.styleOfInput}
@@ -98,8 +116,8 @@ export class GraficarteStoreLoginPage extends LitElement {
         .emptyMessage=${this.emptyMessage}
         @sophos-input-changed=${this.setUserCredentialField}>
       </sophos-chimera-input>
-      `;
-    });
+      `
+    );
   }
 
   setUserCredentialField (e){
@@ -181,7 +199,24 @@ export class GraficarteStoreLoginPage extends LitElement {
     return html`
       <div id="login-container">
         <div id="login-form-container">
-        ${this.createForm()}
+          <sophos-simple-modal
+          modalStyle="full-screen"
+          ?isModalOpened=${this.isModalOpened}
+          .modalTitle=${this.modalTitle}
+          .modalMessage=${this.modalMessage}
+          .modalFooterMessage=${this.modalFooterMessage}>
+
+            <sophos-chimera-button
+            slot="modal-body"
+            type="simple-multi-button"
+            .buttonsLabels=${this.modalLabelsButtons}
+            @sophos-chimera-button-click=${this._manageModalButtons}>
+            </sophos-chimera-button>
+
+          </sophos-simple-modal>
+          
+          ${this.createForm()}
+          
           <sophos-chimera-button 
           type="simple-multi-button"
           .buttonsLabels=${[

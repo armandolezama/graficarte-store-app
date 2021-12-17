@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import 'sophos-chimera-button/sophos-chimera-button';
 import getLocal from '../locales/';
 

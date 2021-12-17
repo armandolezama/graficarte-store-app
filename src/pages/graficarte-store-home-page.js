@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import 'sophos-card/sophos-card';
 export class GraficarteStoreHomePage extends LitElement {
   /**
@@ -64,7 +64,7 @@ export class GraficarteStoreHomePage extends LitElement {
     return this.products.map(product => html`
     <div class="product-container">  
       <sophos-card
-      .configContent=${['pickture', 'title', 'subtitle', 'description']}
+      .configContent=${['pickture', 'subtitle', 'description']}
       .pictureSRC=${product.productImage}
       .pictureAlt=${this.altImage}
       .title=${product.productName}

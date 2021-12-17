@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit-element';
+import { LitElement, html } from 'lit';
 import styles from './graficarte-store-app-styles';
 import 'sophos-simple-template/sophos-simple-template';
 import './pages/graficarte-store-inventory-page';
@@ -29,98 +29,9 @@ export class GraficarteStoreApp extends LitElement {
     super();
     this.inventory = inventoryMocks;
     this.storeProducts = productMocks;
-    this.createAccountForm = [
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-name-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'name',
-        handler: 'set data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-last-name-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'lastName',
-        handler: 'set data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-phone-number-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'phoneNumber',
-        handler: 'set data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-email-placeholder'),
-        type: 'email',
-        isRequired: true,
-        fieldName: 'email',
-        handler: 'set data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-address-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'address',
-        handler: 'set data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-password-placeholder'),
-        type: 'password',
-        isRequired: true,
-        fieldName: 'password',
-        handler: 'set data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-repeat-password-placeholder'),
-        type: 'password',
-        isRequired: true,
-        fieldName: 'confirm-password',
-        handler: 'confirm pass',
-        missingField: false
-      },
-    ];
-    this.signInForm = [
-      {
-        styleOfInput: 'rounded-mobile-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-login-form-user-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'email',
-        missingField: false
-      },
-      {
-        styleOfInput: 'rounded-mobile-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-login-form-password-placeholder'),
-        type: 'password',
-        isRequired: true,
-        fieldName: 'password',
-        missingField: false
-      }
-    ];
+    this.signinMissingFields = [];
+    this.loginMissingFields = [];
+    this.signInForm = [];
     this.page = '';
     this.clientContent = '';
     this.showCreateAccountMissingFieldsMessages = false;
@@ -138,6 +49,8 @@ export class GraficarteStoreApp extends LitElement {
     return {
       inventory : { type : Array },
       storeProducts : { type : Array },
+      signinMissingFields : { type : Array },
+      loginMissingFields : { type : Array },
       page : { type : String},
       clientContent : { type : String},
       showCreateAccountMissingFieldsMessages : { type : Boolean},
@@ -154,7 +67,6 @@ export class GraficarteStoreApp extends LitElement {
 
   firstUpdated (){
     super.firstUpdated();
-    this.setCreateAccountFieldsNames();
     this.showPublicStore();
   }
 
@@ -164,6 +76,7 @@ export class GraficarteStoreApp extends LitElement {
   }
 
   login (e) {
+    this.showLoginMissingFields = true;
     this._loginData = {...e.detail.userCredentials};
   }
 
@@ -182,7 +95,6 @@ export class GraficarteStoreApp extends LitElement {
 
   cancelCreateAccount () {
     this.showCreateAccountMissingFieldsMessages = false;
-    this.restartCreateAccountMissingFields();
     this.showPublicStore();
   }
 
@@ -194,32 +106,18 @@ export class GraficarteStoreApp extends LitElement {
     this.isValidCreateAccountPassword = false;
   }
 
-  setCreateAccountFieldsNames (){
-    for (const input of this.createAccountForm) {
-      this._signinData[input.fieldName] = '';
-    }
-  }
-
   setCreateAccountMissingFields (e){
     if (this.showCreateAccountMissingFieldsMessages) {
       const { emptyFields } = e.detail;
-      this.createAccountForm = this.createAccountForm.map(input => {
-        input.missingField = emptyFields.includes(input.fieldName)
-        return input;
-      });
+      this.signinMissingFields = emptyFields;
     }
-    this.requestUpdate();
   }
 
-  restartCreateAccountMissingFields (){
-    this.createAccountForm = this.createAccountForm.map(input => {
-      input.missingField = false;
-      return input;
-    });
-  }
-
-  loginMissingFields (e){
-
+  setLoginMissingFields (e){
+    if (this.showLoginMissingFields) {
+      const { emptyFields } = e.detail;
+      this.loginMissingFields = emptyFields;
+    }
   }
 
   successSignIn (){
@@ -270,7 +168,7 @@ export class GraficarteStoreApp extends LitElement {
         <graficarte-store-login-controller
         .email=${this._loginData.email}
         .password=${this._loginData.password}
-        @missing-fields=${this.loginMissingFields}
+        @missing-fields=${this.setLoginMissingFields}
         @request-is-done=${this.successLogin}
         @request-failed=${this.errorLogin}
         @request-in-progress=${this.setProgressState}>
@@ -279,8 +177,8 @@ export class GraficarteStoreApp extends LitElement {
         <graficarte-store-sign-in-controller
           .name = ${this._signinData.name}
           .lastName = ${this._signinData.lastName}
-          .email = ${this._signinData.email}
           .phoneNumber = ${this._signinData.phoneNumber}
+          .email = ${this._signinData.email}
           .address = ${this._signinData.address}
           .password = ${this._signinData.password}
           ?isPasswordValid = ${this.isValidCreateAccountPassword}
@@ -299,7 +197,7 @@ export class GraficarteStoreApp extends LitElement {
           styleTemplate="full-header">
 
           <graficarte-store-create-account
-            .inputsList=${this.createAccountForm}
+            .missingFields=${this.signinMissingFields}
             @create-account=${this.createAccount}
             @cancel-create-account=${this.cancelCreateAccount}
             @valid-password=${this.setValidCreateAccountPassword}
@@ -418,7 +316,7 @@ export class GraficarteStoreApp extends LitElement {
       this.page === 'login' && html`
 
         <graficarte-store-login-page
-          .inputList=${this.signInForm}
+          .missingFields=${this.loginMissingFields}
           @graficarte-login-submit=${this.login}
           @graficarte-cancel-login=${this.cancelLogin}>
         </graficarte-store-login-page>

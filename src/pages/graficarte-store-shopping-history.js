@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit-element';
-import 'sophos-plastic-table/sophos-plastic-table';
+import { LitElement, html, css } from 'lit';
+import 'sophos-card/sophos-card';
 
 export class GraficarteStoreShoppingHistory extends LitElement {
   /**
@@ -9,15 +9,6 @@ export class GraficarteStoreShoppingHistory extends LitElement {
     */
   constructor () {
     super();
-    this.notificationsTable = [
-      [0, 1, 2, 3, 4, 5],
-      [0, 1, 2, 3, 4, 5],
-      [0, 1, 2, 3, 4, 5],
-      [0, 1, 2, 3, 4, 5],
-      [0, 1, 2, 3, 4, 5],
-    ];
-    this.colnames = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth']
-    this.rownames = ['first', 'second', 'third', 'fourth', 'fifth']
   }
 
   /**
@@ -31,19 +22,46 @@ export class GraficarteStoreShoppingHistory extends LitElement {
 
   static get styles () {
     return css`
-      sophos-plastic-table {
-        --sophos-plastic-table-table-cell-padding: 15px;
+      sophos-card {
+        margin: 20px;
+        --sophos-card-main-container-display: flex;
+        --sophos-card-main-container-flex-direction: row;
+        --sophos-card-host-height: 150px;
+        --sophos-card-host-width: 600px;
+        --sophos-card-picture-width: 200px;
+        --sophos-card-picture-container-width: 200px;
+        --sophos-card-main-container-justify-content: space-between;
+        --sophos-card-picture-border-radius: 5px;
+        --sophos-card-picture-height: 100px;
       }
     `;
   }
 
   render () {
     return html`
-      <sophos-plastic-table
-      .tableData=${this.notificationsTable}
-      .columnNames=${this.colnames}
-      .rowNames=${this.rownames}>
-      </sophos-plastic-table>
+    <sophos-card
+    .configContent=${['pickture', 'title' ,'subtitle', 'description']}
+    .cardTitle=${'Product 1'}
+    .pictureSRC=${'./assets/paint-art.jpg'}
+    .pictureAlt=${'non available'}
+    .subtitle=${'$50.00'}
+    .description=${'buyed yesterday'}></sophos-card>
+
+    <sophos-card
+    .configContent=${['pickture', 'title' ,'subtitle', 'description']}
+    .cardTitle=${'Product 1'}
+    .pictureSRC=${'./assets/paint-art.jpg'}
+    .pictureAlt=${'non available'}
+    .subtitle=${'$50.00'}
+    .description=${'buyed yesterday'}></sophos-card>
+
+    <sophos-card
+    .configContent=${['pickture', 'title' ,'subtitle', 'description']}
+    .cardTitle=${'Product 1'}
+    .pictureSRC=${'./assets/paint-art.jpg'}
+    .pictureAlt=${'non available'}
+    .subtitle=${'$50.00'}
+    .description=${'buyed yesterday'}></sophos-card>
     `;
   }
 }

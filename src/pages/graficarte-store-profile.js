@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import 'sophos-card/sophos-card';
 import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';

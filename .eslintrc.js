@@ -30,6 +30,7 @@ module.exports = {
         "lit/no-invalid-escape-sequences" : "error",
         "lit/no-invalid-html" : "error",
         "lit/no-legacy-template-syntax" : "error",
+        "lit/no-legacy-imports" : "error",
         "lit/no-private-properties" : "error",
         "lit/no-property-change-update" : "error",
         "lit/no-template-arrow" : "error",

@@ -1,7 +1,7 @@
 /**
  * TO-DO: turn this controller modal into gneneral controllers model (Super class maybe);
  */
-import { LitElement } from 'lit-element';
+import { LitElement } from 'lit';
 import GraficarteStoreAPI from '../service/graficarte-store-api';
 
 export class GraficarteStoreSignInController extends LitElement {
@@ -32,7 +32,8 @@ export class GraficarteStoreSignInController extends LitElement {
       phoneNumber: { type : String},
       email : { type : String },
       address : { type : String },
-      password : { type : String }
+      password : { type : String },
+      isPasswordValid : { type : Boolean }
     };
   }
 
@@ -59,6 +60,7 @@ export class GraficarteStoreSignInController extends LitElement {
   }
 
    _signIn (){
+     console.log('im signing')
     this.service.setRequestBody({
       name : this.name,
       lastName : this.lastName,
