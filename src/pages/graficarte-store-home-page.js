@@ -64,11 +64,11 @@ export class GraficarteStoreHomePage extends LitElement {
     return this.products.map(product => html`
     <div class="product-container">  
       <sophos-card
-      .configContent=${['pickture', 'subtitle', 'description']}
+      .configContent=${['title', 'pickture', 'subtitle', 'description']}
       .pictureSRC=${product.productImage}
       .pictureAlt=${this.altImage}
-      .title=${product.productName}
-      .subtitle= $${product.price}
+      .cardTitle=${product.productName}
+      .subtitle= ${`$${product.price}`}
       .description=${product.desctiption}
       ></sophos-card>
     </div>

@@ -44,7 +44,7 @@ export class GraficarteStoreInventoryPage extends LitElement {
       .pictureSRC = ${product.productImage}
       .pictureAlt = ${this.altImage}
       .title = ${product.productName}
-      .subtitle = 'En stock: ${product.stock}'
+      .subtitle = '${getLocal('graficarte-store-inventory-product-stock-counter')}: ${product.stock}'
       ></sophos-card>
     `)
   }

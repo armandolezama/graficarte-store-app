@@ -138,8 +138,8 @@ export class GraficarteStoreProfile extends LitElement {
     _manageSaveCancelOptions (e){
       const { option } = e.detail;
       if (option === 0) {
-        
-      } 
+        this.saveData();
+      }
     }
 
     saveData (){
@@ -175,6 +175,7 @@ export class GraficarteStoreProfile extends LitElement {
         <div id="main-container">
           <div id="card-container">
             <sophos-card
+            .configContent=${['pickture', 'title' ,'subtitle', 'description']}
             .pictureSRC=${this.profilePicture}
             .pictureAlt=${this.profilePictureAlt}
             .title=${this.clientName}

@@ -26,5 +26,6 @@ export default {
   'graficarte-store-client-nav-bar-options-notifications' : 'Notificaciones',
   'graficarte-store-client-nav-bar-options-configuration' : 'Configuración',
   'graficarte-store-client-nav-bar-options-end-session' : 'Cerrar sesión',
-  'graficarte-store-search-bar-place-holder' : 'Buscar'
+  'graficarte-store-search-bar-place-holder' : 'Buscar',
+  'graficarte-store-inventory-product-stock-counter' : 'En stock'
 };

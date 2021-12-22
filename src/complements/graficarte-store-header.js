@@ -141,3 +141,7 @@ export class GraficarteStoreHeader extends LitElement {
   }
 }
 customElements.define('graficarte-store-header', GraficarteStoreHeader);
+
+/**
+ * TOD-DO: add shopping cart button
+ */

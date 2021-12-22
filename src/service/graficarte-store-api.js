@@ -1,8 +1,8 @@
 /**
  * TO-DO: add fetch module and validation
  */
-
 import envCongif from '../../env-config';
+
 export default class GraficarteStoreAPI extends HTMLElement {
   //Class to manage login service
   constructor (method = '', url = ''){
