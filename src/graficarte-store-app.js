@@ -9,6 +9,7 @@ import './pages/graficarte-store-profile';
 import './pages/graficarte-store-profile-configuration';
 import './pages/graficarte-store-payment-methods';
 import './pages/graficarte-store-error-page';
+import './pages/graficarte-store-shopping-cart';
 import './pages/graficarte-store-shopping-history';
 import './pages/graficarte-store-notifications';
 import './complements/graficarte-store-admin-nav-bar';
@@ -18,7 +19,7 @@ import './controllers/graficarte-store-login-controller';
 import './controllers/graficarte-store-sign-in-controller';
 import productMocks from './mocks/products-mocks';
 import inventoryMocks from './mocks/inventory-mocks';
-import getLocal from './locales';
+
 export class GraficarteStoreApp extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -120,7 +121,8 @@ export class GraficarteStoreApp extends LitElement {
     }
   }
 
-  successSignIn (){
+  successSignIn (e){
+    console.log(e.detail.payload)
     this.page = 'client-store';
     this.clientContent = 'home';
   }
@@ -161,6 +163,153 @@ export class GraficarteStoreApp extends LitElement {
     this.clientContent = clientPage;
   }
 
+  createFullContent (){
+    return [
+    this.page === 'create-account' && html`
+
+      <sophos-simple-template
+        id="create-account-container"
+        page-name=${this.page}
+        styleTemplate="full-header">
+
+        <graficarte-store-create-account
+          .missingFields=${this.signinMissingFields}
+          @create-account=${this.createAccount}
+          @cancel-create-account=${this.cancelCreateAccount}
+          @valid-password=${this.setValidCreateAccountPassword}
+          @invalid-password=${this.setInvalidCreateAccountPassword}
+          slot="main-view-content">
+        </graficarte-store-create-account>
+
+      </sophos-simple-template>
+    `,
+    this.page === 'client-store' && html`
+
+      <sophos-simple-template
+        id="client-store-container"
+        styleTemplate="full-nav"
+        page-name=${this.page}>
+
+        <graficarte-store-header
+          slot="header-content"
+          ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+          @searching-for-term=${this.searchTerm}>
+        </graficarte-store-header>
+
+        ${this.createClientContent()}
+
+        <graficarte-store-client-nav-bar
+          @graficarte-navigate-to-page=${this.clientNavigation}
+          @finish-sesion=${this.logOut}
+          slot="nav-bar-content">
+        </graficarte-store-client-nav-bar>
+
+      </sophos-simple-template>
+    `,
+    this.page === 'inventory' && html`
+        
+      <sophos-simple-template
+        id="admin-inventory-container"
+        styleTemplate="full-nav"
+        page-name=${this.page}>
+
+        <graficarte-store-inventory-page 
+          .products=${this.inventory}
+          slot="main-view-content">
+        </graficarte-store-inventory-page>
+
+        <graficarte-store-admin-nav-bar
+          @finish-sesion=${this.logOut}
+          slot="nav-bar-content">
+        </graficarte-store-admin-nav-bar>
+
+      </sophos-simple-template>
+    `,
+    this.page === 'public-store' && html`
+
+      <sophos-simple-template
+        id="public-store-container"
+        page-name=${this.page}
+        styleTemplate="full-header">
+
+        <graficarte-store-header
+          slot="header-content"
+          ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+          @navigate=${this.headerNavigate}
+          @searching-for-term=${this.searchTerm}>
+        </graficarte-store-header>
+
+        <graficarte-store-home-page 
+          .products=${this.storeProducts}
+          slot="main-view-content">
+        </graficarte-store-home-page>
+
+      </sophos-simple-template>
+    `,
+    this.page === 'login' && html`
+
+      <graficarte-store-login-page
+        .missingFields=${this.loginMissingFields}
+        @graficarte-login-submit=${this.login}
+        @graficarte-cancel-login=${this.cancelLogin}>
+      </graficarte-store-login-page>
+
+    `,].filter(template => template);
+  }
+
+
+
+  createClientContent (){
+    return [
+      this.clientContent === 'home' && html`
+        <graficarte-store-home-page 
+          .products=${this.storeProducts}
+          slot="main-view-content">
+        </graficarte-store-home-page>
+      `,
+      this.clientContent === 'profile' && html`
+        <graficarte-store-profile
+          slot="main-view-content">
+        </graficarte-store-profile>
+      `,
+      this.clientContent === 'profile-config' && html`
+        <graficarte-store-profile-configuration
+          slot="main-view-content">
+        </graficarte-store-profile-configuration>
+      `,
+
+      this.clientContent === 'shopping-history' && html`
+        <graficarte-store-shopping-history
+          slot="main-view-content">
+        </graficarte-store-shopping-history>
+      `,
+
+      this.clientContent === 'notifications' && html`
+        <graficarte-store-notifications
+          slot="main-view-content">
+        </graficarte-store-notifications>
+      `,
+
+      this.clientContent === 'payment-methods' && html`
+        <graficarte-store-payment-methods
+          slot="main-view-content">
+        </graficarte-store-payment-methods>
+      `,
+
+      this.clientContent === 'error' && html`
+        <graficarte-store-error-page
+          slot="main-view-content">
+        </graficarte-store-error-page>
+      `,
+
+      this.clientContent === 'shopping-cart' && html`
+        <graficarte-store-shopping-cart
+          slot="main-view-content">
+        </graficarte-store-shopping-cart>
+      `,
+    ].filter(template => template);
+  }
+
   render () {
     return html`
       <div id="main-app-container">
@@ -188,140 +337,7 @@ export class GraficarteStoreApp extends LitElement {
           @request-in-progress=${this.setProgressState}>
         </graficarte-store-sign-in-controller>
 
-      ${[
-        this.page === 'create-account' && html`
-
-        <sophos-simple-template 
-          id="create-account-container"
-          page-name=${this.page}
-          styleTemplate="full-header">
-
-          <graficarte-store-create-account
-            .missingFields=${this.signinMissingFields}
-            @create-account=${this.createAccount}
-            @cancel-create-account=${this.cancelCreateAccount}
-            @valid-password=${this.setValidCreateAccountPassword}
-            @invalid-password=${this.setInvalidCreateAccountPassword}
-            slot="main-view-content">
-          </graficarte-store-create-account>
-
-        </sophos-simple-template>
-      `,
-      this.page === 'client-store' && html`
-
-        <sophos-simple-template
-          id="client-store-container"
-          styleTemplate="full-nav"
-          page-name=${this.page}>
-
-          <graficarte-store-header
-            slot="header-content"
-            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
-            @searching-for-term=${this.searchTerm}>
-          </graficarte-store-header>
-
-          ${[
-
-              this.clientContent === 'home' && html`
-                <graficarte-store-home-page 
-                  .products=${this.storeProducts}
-                  slot="main-view-content">
-                </graficarte-store-home-page>
-              `,
-              this.clientContent === 'profile' && html`
-                <graficarte-store-profile
-                  slot="main-view-content">
-                </graficarte-store-profile>
-              `,
-              this.clientContent === 'profile-config' && html`
-                <graficarte-store-profile-configuration
-                  slot="main-view-content">
-                </graficarte-store-profile-configuration>
-              `,
-
-              this.clientContent === 'shopping-history' && html`
-                <graficarte-store-shopping-history
-                  slot="main-view-content">
-                </graficarte-store-shopping-history>
-              `,
-
-              this.clientContent === 'notifications' && html`
-                <graficarte-store-notifications
-                  slot="main-view-content">
-                </graficarte-store-notifications>
-              `,
-
-              this.clientContent === 'payment-methods' && html`
-                <graficarte-store-payment-methods
-                  slot="main-view-content">
-                </graficarte-store-payment-methods>
-              `,
-
-              this.clientContent === 'error' && html`
-                <graficarte-store-error-page
-                  slot="main-view-content">
-                </graficarte-store-error-page>
-              `,
-
-          ].filter(template => template)}
-
-          <graficarte-store-client-nav-bar
-            @graficarte-navigate-to-page=${this.clientNavigation}
-            @finish-sesion=${this.logOut}
-            slot="nav-bar-content">
-          </graficarte-store-client-nav-bar>
-
-        </sophos-simple-template>
-      `,
-      this.page === 'inventory' && html`
-          
-        <sophos-simple-template
-          id="admin-inventory-container"
-          styleTemplate="full-nav"
-          page-name=${this.page}>
-
-          <graficarte-store-inventory-page 
-            .products=${this.inventory}
-            slot="main-view-content">
-          </graficarte-store-inventory-page>
-
-          <graficarte-store-admin-nav-bar
-            @finish-sesion=${this.logOut}
-            slot="nav-bar-content">
-          </graficarte-store-admin-nav-bar>
-
-        </sophos-simple-template>
-      `,
-      this.page === 'public-store' && html`
-
-        <sophos-simple-template 
-          id="public-store-container"
-          page-name=${this.page}
-          styleTemplate="full-header">
-
-          <graficarte-store-header
-            slot="header-content"
-            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
-            @navigate=${this.headerNavigate}
-            @searching-for-term=${this.searchTerm}>
-          </graficarte-store-header>
-
-          <graficarte-store-home-page 
-            .products=${this.storeProducts}
-            slot="main-view-content">
-          </graficarte-store-home-page>
-
-        </sophos-simple-template>
-      `,
-      this.page === 'login' && html`
-
-        <graficarte-store-login-page
-          .missingFields=${this.loginMissingFields}
-          @graficarte-login-submit=${this.login}
-          @graficarte-cancel-login=${this.cancelLogin}>
-        </graficarte-store-login-page>
-
-      `,].filter(template => template)}
+      ${this.createFullContent()}
       </div>
     `;
   }
@@ -335,9 +351,13 @@ customElements.define('graficarte-store-app', GraficarteStoreApp);
  */
 
  /**
-  * TO-DO: Add recoverty password feature 
+  * TO-DO: Add recovery password feature 
   */
 
  /**
   * TO-GO: Add change password feature
+  */
+
+ /**
+  * TO-DO: Add buy product feature
   */
