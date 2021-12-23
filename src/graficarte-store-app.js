@@ -35,6 +35,7 @@ export class GraficarteStoreApp extends LitElement {
     this.signInForm = [];
     this.page = '';
     this.clientContent = '';
+    this.templateStyle = '';
     this.showCreateAccountMissingFieldsMessages = false;
     this.isValidCreateAccountPassword = false;
     this.isCreateAccountOptionDisplayed = false;
@@ -54,6 +55,7 @@ export class GraficarteStoreApp extends LitElement {
       loginMissingFields : { type : Array },
       page : { type : String},
       clientContent : { type : String},
+      templateStyle : { type : String},
       showCreateAccountMissingFieldsMessages : { type : Boolean},
       isCreateAccountOptionDisplayed : { type : Boolean},
       _loginData : { type : Object},
@@ -74,6 +76,7 @@ export class GraficarteStoreApp extends LitElement {
   showPublicStore (){
     this.page = 'public-store';
     this.isCreateAccountOptionDisplayed = true;
+    this.templateClass = 'public-store-container';
   }
 
   login (e) {
@@ -121,16 +124,31 @@ export class GraficarteStoreApp extends LitElement {
     }
   }
 
+  setLoginConfig (){
+    this.templateStyle = 'full-header';
+    this.templateClass = 'login-store-container';
+    this.isCreateAccountOptionDisplayed = false;
+  }
+
+  setCreateAccountConfig (){
+    this.templateStyle = 'full-header';
+    this.templateClass = 'create-account-container';
+  }
+
   successSignIn (e){
     console.log(e.detail.payload)
     this.page = 'client-store';
     this.clientContent = 'home';
+    this.templateStyle = 'full-header';
+    this.templateClass = 'client-store-container'
   }
 
   successLogin (e){
     console.log(e.detail.payload)
     this.page = 'client-store';
     this.clientContent = 'home';
+    this.templateStyle = 'full-header';
+    this.templateClass = 'client-store-container'
   }
 
   setProgressState (){
@@ -152,6 +170,7 @@ export class GraficarteStoreApp extends LitElement {
   headerNavigate (e){
     const { page } = e.detail;
     this.page = page;
+    return page === 'login' ? this.setLoginConfig() : this.setCreateAccountConfig();
   }
 
   searchTerm (e){
@@ -163,151 +182,193 @@ export class GraficarteStoreApp extends LitElement {
     this.clientContent = clientPage;
   }
 
-  createFullContent (){
-    return [
-    this.page === 'create-account' && html`
+  contentCreator (contentController = '', templates = [['', html``]]){
+    const contentArray = templates.map(template => {
+      return contentController === template[0] && template[1];
+    });
 
-      <sophos-simple-template
-        id="create-account-container"
-        page-name=${this.page}
-        styleTemplate="full-header">
-
-        <graficarte-store-create-account
-          .missingFields=${this.signinMissingFields}
-          @create-account=${this.createAccount}
-          @cancel-create-account=${this.cancelCreateAccount}
-          @valid-password=${this.setValidCreateAccountPassword}
-          @invalid-password=${this.setInvalidCreateAccountPassword}
-          slot="main-view-content">
-        </graficarte-store-create-account>
-
-      </sophos-simple-template>
-    `,
-    this.page === 'client-store' && html`
-
-      <sophos-simple-template
-        id="client-store-container"
-        styleTemplate="full-nav"
-        page-name=${this.page}>
-
-        <graficarte-store-header
-          slot="header-content"
-          ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
-          @searching-for-term=${this.searchTerm}>
-        </graficarte-store-header>
-
-        ${this.createClientContent()}
-
-        <graficarte-store-client-nav-bar
-          @graficarte-navigate-to-page=${this.clientNavigation}
-          @finish-sesion=${this.logOut}
-          slot="nav-bar-content">
-        </graficarte-store-client-nav-bar>
-
-      </sophos-simple-template>
-    `,
-    this.page === 'inventory' && html`
-        
-      <sophos-simple-template
-        id="admin-inventory-container"
-        styleTemplate="full-nav"
-        page-name=${this.page}>
-
-        <graficarte-store-inventory-page 
-          .products=${this.inventory}
-          slot="main-view-content">
-        </graficarte-store-inventory-page>
-
-        <graficarte-store-admin-nav-bar
-          @finish-sesion=${this.logOut}
-          slot="nav-bar-content">
-        </graficarte-store-admin-nav-bar>
-
-      </sophos-simple-template>
-    `,
-    this.page === 'public-store' && html`
-
-      <sophos-simple-template
-        id="public-store-container"
-        page-name=${this.page}
-        styleTemplate="full-header">
-
-        <graficarte-store-header
-          slot="header-content"
-          ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
-          @navigate=${this.headerNavigate}
-          @searching-for-term=${this.searchTerm}>
-        </graficarte-store-header>
-
-        <graficarte-store-home-page 
-          .products=${this.storeProducts}
-          slot="main-view-content">
-        </graficarte-store-home-page>
-
-      </sophos-simple-template>
-    `,
-    this.page === 'login' && html`
-
-      <graficarte-store-login-page
-        .missingFields=${this.loginMissingFields}
-        @graficarte-login-submit=${this.login}
-        @graficarte-cancel-login=${this.cancelLogin}>
-      </graficarte-store-login-page>
-
-    `,].filter(template => template);
+    return contentArray.filter(template => template);
   }
 
-
-
   createClientContent (){
-    return [
-      this.clientContent === 'home' && html`
-        <graficarte-store-home-page 
-          .products=${this.storeProducts}
-          slot="main-view-content">
-        </graficarte-store-home-page>
-      `,
-      this.clientContent === 'profile' && html`
-        <graficarte-store-profile
-          slot="main-view-content">
-        </graficarte-store-profile>
-      `,
-      this.clientContent === 'profile-config' && html`
-        <graficarte-store-profile-configuration
-          slot="main-view-content">
-        </graficarte-store-profile-configuration>
-      `,
+    const templates = [
+      [
+        'home',
+        html`
+          <graficarte-store-home-page 
+            .products=${this.storeProducts}>
+          </graficarte-store-home-page>
+        `
+      ],
+      [
+        'profile',
+        html`
+          <graficarte-store-profile>
+          </graficarte-store-profile>
+        `
+      ],
+      [
+        'profile-config',
+        html`
+          <graficarte-store-profile-configuration>
+          </graficarte-store-profile-configuration>
+        `
+      ],
+      [
+        'shopping-history',
+        html`
+          <graficarte-store-shopping-history>
+          </graficarte-store-shopping-history>
+        `
+      ],
+      [
+        'notifications',
+        html`
+          <graficarte-store-notifications>
+          </graficarte-store-notifications>
+        `
+      ],
+      [
+        'payment-methods',
+        html`
+          <graficarte-store-payment-methods>
+          </graficarte-store-payment-methods>
+        `
+      ],
+      [
+        'error',
+        html`
+          <graficarte-store-error-page>
+          </graficarte-store-error-page>
+        `,
+      ],
+      [
+        'shopping-cart',
+        html`
+          <graficarte-store-shopping-cart>
+          </graficarte-store-shopping-cart>
+        `
+      ],
+    ];
 
-      this.clientContent === 'shopping-history' && html`
-        <graficarte-store-shopping-history
-          slot="main-view-content">
-        </graficarte-store-shopping-history>
-      `,
+    return this.contentCreator(this.clientContent, templates);
+  }
 
-      this.clientContent === 'notifications' && html`
-        <graficarte-store-notifications
-          slot="main-view-content">
-        </graficarte-store-notifications>
-      `,
+  createMainViewContent (){
+    const templates = [
+      [
+        'create-account',
+        html`
+          <graficarte-store-create-account
+            .missingFields=${this.signinMissingFields}
+            @create-account=${this.createAccount}
+            @cancel-create-account=${this.cancelCreateAccount}
+            @valid-password=${this.setValidCreateAccountPassword}
+            @invalid-password=${this.setInvalidCreateAccountPassword}>
+          </graficarte-store-create-account>
+        `
+      ],
+      [
+        'client-store',
+        this.createClientContent()
+      ],
+      [
+        'inventory',
+        html`
+          <graficarte-store-inventory-page 
+            .products=${this.inventory}>
+          </graficarte-store-inventory-page>
+        `
+      ],
+      [
+        'public-store',
+        html`
+          <graficarte-store-home-page 
+            .products=${this.storeProducts}>
+          </graficarte-store-home-page>
+        `
+      ],
+      [
+        'login',
+        html`
+          <graficarte-store-login-page
+            .missingFields=${this.loginMissingFields}
+            @graficarte-login-submit=${this.login}
+            @graficarte-cancel-login=${this.cancelLogin}>
+          </graficarte-store-login-page>
+        `
+      ],
+    ];
 
-      this.clientContent === 'payment-methods' && html`
-        <graficarte-store-payment-methods
-          slot="main-view-content">
-        </graficarte-store-payment-methods>
-      `,
+    return this.contentCreator(this.page, templates);
 
-      this.clientContent === 'error' && html`
-        <graficarte-store-error-page
-          slot="main-view-content">
-        </graficarte-store-error-page>
-      `,
+  }
 
-      this.clientContent === 'shopping-cart' && html`
-        <graficarte-store-shopping-cart
-          slot="main-view-content">
-        </graficarte-store-shopping-cart>
-      `,
-    ].filter(template => template);
+  createHeaderContent (){
+    const templates = [ 
+      [
+        'client-store',
+        html`
+          <graficarte-store-header
+            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            @searching-for-term=${this.searchTerm}>
+          </graficarte-store-header>
+        `
+      ],
+      [
+        'inventory',
+        html`
+          <graficarte-store-header
+            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            @searching-for-term=${this.searchTerm}>
+          </graficarte-store-header>
+        `
+      ],
+      [
+        'public-store',
+        html`
+          <graficarte-store-header
+            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            @navigate=${this.headerNavigate}
+            @searching-for-term=${this.searchTerm}>
+          </graficarte-store-header>
+        `
+      ],
+      [
+        'login',
+        html`
+          <graficarte-store-header
+            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            @searching-for-term=${this.searchTerm}>
+          </graficarte-store-header>
+        `
+      ],
+    ];
+    return this.contentCreator(this.page, templates);
+  }
+
+  createNavBarContent (){
+    const templates = [
+      [
+        'client-store',
+        html`
+          <graficarte-store-client-nav-bar
+            @graficarte-navigate-to-page=${this.clientNavigation}
+            @finish-sesion=${this.logOut}>
+          </graficarte-store-client-nav-bar>
+        `
+      ],
+      [
+        'inventory',
+        html`
+          <graficarte-store-admin-nav-bar
+            @finish-sesion=${this.logOut}>
+          </graficarte-store-admin-nav-bar>
+        `
+      ],
+    ];
+
+    return this.contentCreator(this.page, templates);
   }
 
   render () {
@@ -337,7 +398,21 @@ export class GraficarteStoreApp extends LitElement {
           @request-in-progress=${this.setProgressState}>
         </graficarte-store-sign-in-controller>
 
-      ${this.createFullContent()}
+        <sophos-simple-template
+        id="app-main-template"
+        page-name=${this.page}
+        .styleTemplate=${this.templateStyle}
+        class=${this.templateClass}>
+          <div slot="header-content">
+            ${this.createHeaderContent()}
+          </div>
+          <div slot="main-view-content">
+            ${this.createMainViewContent()}
+          </div>
+          <div slot="nav-bar-content">
+            ${this.createNavBarContent()}
+          </div>
+        </sophos-simple-template>
       </div>
     `;
   }

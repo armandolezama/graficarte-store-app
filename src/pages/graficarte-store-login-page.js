@@ -69,7 +69,7 @@ export class GraficarteStoreLoginPage extends LitElement {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        height: 99vh;
+        height: 100%;
       }
 
       #login-form-container{

@@ -9,7 +9,7 @@ export default css`
     background: linear-gradient(90deg, rgba(145,255,59,1) 0%, rgba(0,80,249,1) 100%);
   }
 
-  #create-account-container {
+  .create-account-container {
     --sophos-simple-template-main-container-template-style-full-header-width: 100%;
     --sophos-simple-template-main-view-template-style-full-header-width: 100%;
     --sophos-simple-template-nav-bar-display: none;
@@ -17,13 +17,18 @@ export default css`
     --sophos-simple-template-main-view-container-overflow-y: none;
   }
 
-  #public-store-container {
+  .public-store-container {
     --sophos-simple-template-main-container-template-style-full-header-width: auto;
     --sophos-simple-template-main-view-template-style-full-header-width: auto;
     --sophos-simple-template-nav-bar-display: none;
   }
 
-  #admin-inventory-container {
+  .login-store-container {
+    --sophos-simple-template-nav-bar-display: none;
+    --sophos-simple-template-main-view-template-style-full-header-width: 100%;
+  }
+
+  .admin-inventory-container {
     --sophos-simple-template-main-view-template-style-full-nav-height: 100%;
     --sophos-simple-template-header-display: none;
   }
