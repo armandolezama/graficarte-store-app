@@ -147,7 +147,7 @@ export class GraficarteStoreApp extends LitElement {
     console.log(e.detail.payload)
     this.page = 'client-store';
     this.clientContent = 'home';
-    this.templateStyle = 'full-header';
+    this.templateStyle = 'full-nav';
     this.templateClass = 'client-store-container'
   }
 

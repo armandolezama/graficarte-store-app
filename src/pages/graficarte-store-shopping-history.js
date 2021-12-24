@@ -45,7 +45,8 @@ export class GraficarteStoreShoppingHistory extends LitElement {
     .pictureSRC=${'./assets/paint-art.jpg'}
     .pictureAlt=${'non available'}
     .subtitle=${'$50.00'}
-    .description=${'buyed yesterday'}></sophos-card>
+    .description=${'buyed yesterday'}>
+    </sophos-card>
 
     <sophos-card
     .configContent=${['pickture', 'title' ,'subtitle', 'description']}
@@ -53,7 +54,8 @@ export class GraficarteStoreShoppingHistory extends LitElement {
     .pictureSRC=${'./assets/paint-art.jpg'}
     .pictureAlt=${'non available'}
     .subtitle=${'$50.00'}
-    .description=${'buyed yesterday'}></sophos-card>
+    .description=${'buyed yesterday'}>
+    </sophos-card>
 
     <sophos-card
     .configContent=${['pickture', 'title' ,'subtitle', 'description']}
@@ -61,7 +63,8 @@ export class GraficarteStoreShoppingHistory extends LitElement {
     .pictureSRC=${'./assets/paint-art.jpg'}
     .pictureAlt=${'non available'}
     .subtitle=${'$50.00'}
-    .description=${'buyed yesterday'}></sophos-card>
+    .description=${'buyed yesterday'}>
+    </sophos-card>
     `;
   }
 }
