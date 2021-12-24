@@ -48,6 +48,8 @@ export class GraficarteStoreShoppingCart extends LitElement {
     this.builder = {
       cellBuilder: this._customCellBuilder.bind(this),
     };
+    this._increaseProductQuantity = this._increaseQuantity.bind(this);
+    this._decreaseProductQuantity = this._decreaseQuantity.bind(this);
     this.row = 0;
     this.counter = 0;
     this.maxCounter = 3;
@@ -120,7 +122,7 @@ export class GraficarteStoreShoppingCart extends LitElement {
     return template;
   }
 
-  _increaseQuantity(e){
+  _increaseQuantity (e){
     const row = parseInt(e.target.getAttribute('row'));
     const column = parseInt(e.target.getAttribute('column'));
     const priceColumn = column + 1;
@@ -133,7 +135,7 @@ export class GraficarteStoreShoppingCart extends LitElement {
     this.requestUpdate();
   }
 
-  _decreaseQuantity(e){
+  _decreaseQuantity (e){
     const row = parseInt(e.target.getAttribute('row'));
     const column = parseInt(e.target.getAttribute('column'));
     const priceColumn = column + 1;
@@ -167,8 +169,7 @@ export class GraficarteStoreShoppingCart extends LitElement {
         `;
         break;
       case 1:
-        const increaseHandler = this._increaseQuantity.bind(this);
-        const decreaseHandler = this._decreaseQuantity.bind(this);
+        
         payload = html`
           <div 
             class="product-quantity-container"
@@ -182,7 +183,7 @@ export class GraficarteStoreShoppingCart extends LitElement {
                   column=${this.counter}
                   class="increase-quantity-button"
                   style=${getStyle('.increase-quantity-button')}
-                  @click=${increaseHandler}>
+                  @click=${this._increaseProductQuantity}>
                 
                   +
                 
@@ -206,7 +207,7 @@ export class GraficarteStoreShoppingCart extends LitElement {
                   column=${this.counter}
                   class="decrease-quantity-button"
                   style=${getStyle('.decrease-quantity-button')}
-                  @click=${decreaseHandler}>
+                  @click=${this._decreaseProductQuantity}>
                 
                   -
                 

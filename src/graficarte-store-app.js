@@ -39,6 +39,7 @@ export class GraficarteStoreApp extends LitElement {
     this.showCreateAccountMissingFieldsMessages = false;
     this.isValidCreateAccountPassword = false;
     this.isCreateAccountOptionDisplayed = false;
+    this.isShoppingCartIconDisplayed = false;
     this._loginData = {};
     this._signinData = {};
     this._clientData = {};
@@ -58,6 +59,7 @@ export class GraficarteStoreApp extends LitElement {
       templateStyle : { type : String},
       showCreateAccountMissingFieldsMessages : { type : Boolean},
       isCreateAccountOptionDisplayed : { type : Boolean},
+      isShoppingCartIconDisplayed : { type : Boolean},
       _loginData : { type : Object},
       _signinData : { type : Object},
       _clientData : { type : Object},
@@ -76,6 +78,7 @@ export class GraficarteStoreApp extends LitElement {
   showPublicStore (){
     this.page = 'public-store';
     this.isCreateAccountOptionDisplayed = true;
+    this.isShoppingCartIconDisplayed = false;
     this.templateClass = 'public-store-container';
   }
 
@@ -141,14 +144,18 @@ export class GraficarteStoreApp extends LitElement {
     this.clientContent = 'home';
     this.templateStyle = 'full-header';
     this.templateClass = 'client-store-container'
+    this.isCreateAccountOptionDisplayed = false;
+    this.isShoppingCartIconDisplayed = true;
   }
 
   successLogin (e){
     console.log(e.detail.payload)
     this.page = 'client-store';
-    this.clientContent = 'home';
     this.templateStyle = 'full-nav';
     this.templateClass = 'client-store-container'
+    this.clientContent = 'home';
+    this.isCreateAccountOptionDisplayed = false;
+    this.isShoppingCartIconDisplayed = true;
   }
 
   setProgressState (){
@@ -173,6 +180,12 @@ export class GraficarteStoreApp extends LitElement {
     return page === 'login' ? this.setLoginConfig() : this.setCreateAccountConfig();
   }
 
+  openShoppingCartPage(){
+    this.page = 'client-store';
+    this.clientContent = 'shopping-cart';
+    this.isShoppingCartIconDisplayed = false;
+  }
+
   searchTerm (e){
     console.log(e.detail.term);
   }
@@ -180,6 +193,7 @@ export class GraficarteStoreApp extends LitElement {
   clientNavigation (e){
     const clientPage = e.detail.page;
     this.clientContent = clientPage;
+    this.isShoppingCartIconDisplayed = true;
   }
 
   contentCreator (contentController = '', templates = [['', html``]]){
@@ -310,8 +324,10 @@ export class GraficarteStoreApp extends LitElement {
         'client-store',
         html`
           <graficarte-store-header
-            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
-            @searching-for-term=${this.searchTerm}>
+            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
+            ?isShoppingCartIconEnable=${this.isShoppingCartIconDisplayed}
+            @searching-for-term=${this.searchTerm}
+            @shopping-cart-page=${this.openShoppingCartPage}>
           </graficarte-store-header>
         `
       ],
@@ -319,7 +335,7 @@ export class GraficarteStoreApp extends LitElement {
         'inventory',
         html`
           <graficarte-store-header
-            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
             @searching-for-term=${this.searchTerm}>
           </graficarte-store-header>
         `
@@ -328,7 +344,7 @@ export class GraficarteStoreApp extends LitElement {
         'public-store',
         html`
           <graficarte-store-header
-            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
             @navigate=${this.headerNavigate}
             @searching-for-term=${this.searchTerm}>
           </graficarte-store-header>
@@ -338,7 +354,7 @@ export class GraficarteStoreApp extends LitElement {
         'login',
         html`
           <graficarte-store-header
-            ?isCreateAccountAvailable=${this.isCreateAccountOptionDisplayed}
+            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
             @searching-for-term=${this.searchTerm}>
           </graficarte-store-header>
         `

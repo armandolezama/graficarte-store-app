@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import 'sophos-chimera-button/sophos-chimera-button';
+import 'sophos-icon/sophos-icon';
 import getLocal from '../locales/';
 
 export class GraficarteStoreHeader extends LitElement {
@@ -10,7 +11,8 @@ export class GraficarteStoreHeader extends LitElement {
     */
   constructor () {
     super();
-    this.isCreateAccountAvailable = false;
+    this.isCreateAccountEnable = false;
+    this.isShoppingCartIconEnable = false;
     this.headerOptions = [
       {
         label: 'Crear cuenta',
@@ -28,7 +30,8 @@ export class GraficarteStoreHeader extends LitElement {
     */
   static get properties () {
     return {
-      isCreateAccountAvailable : { type : Boolean}
+      isCreateAccountEnable : { type : Boolean},
+      isShoppingCartIconEnable : { type : Boolean},
     };
   }
 
@@ -90,6 +93,33 @@ export class GraficarteStoreHeader extends LitElement {
         --sophos-chimera-button-flex-direction: column;
         --sophos-chimera-button-flex-flow: column;
       }
+
+      #shopping-cart-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      sophos-icon {
+        margin: 5px;
+        box-sizing: border-box;
+        --sophos-icon-icon-image-margin: 15px 5px 5px 5px;
+        --sophos-icon-icon-image-border-radius: 50%;
+        --sophos-icon-icon-image-box-sizing: border-box;
+        --sophos-icon-icon-text-margin: 5px 0 5px 0;
+      }
+
+      sophos-icon:hover {
+        --sophos-icon-icon-image-border: 2px solid;
+        --sophos-icon-icon-image-border-radius: 50%;
+        --sophos-icon-icon-text-margin: 5px 0 5px 0;
+        --sophos-icon-icon-text-color: #000000;
+      }
+
+      sophos-icon:active {
+        border: 2px dotted;
+        border-radius: 10px;
+      }
     `;
   }
 
@@ -108,6 +138,10 @@ export class GraficarteStoreHeader extends LitElement {
     }));
   }
 
+  _setShoppingCartPage(){
+    this.dispatchEvent(new CustomEvent('shopping-cart-page'));
+  }
+
   searchProduct (e) {
     this.dispatchEvent(new CustomEvent('searching-for-term', {detail : {
       term : e.target.value}}));
@@ -118,7 +152,7 @@ export class GraficarteStoreHeader extends LitElement {
       <div 
         id="search-bar">
         <div id="input-container"
-        ?show-create-account-button=${this.isCreateAccountAvailable}>
+        ?show-create-account-button=${this.isCreateAccountEnable}>
           <input 
             id="search-bar-input" 
             type="text" name="search-bar" 
@@ -126,13 +160,25 @@ export class GraficarteStoreHeader extends LitElement {
             @input=${this.searchProduct}>
         </div>
 
-        ${this.isCreateAccountAvailable ? html`
+        ${this.isCreateAccountEnable ? html`
           <div id="session-manager-container">
             <sophos-chimera-button
             id="session-multi-button"
             type="simple-multi-button"
             .buttonsLabels=${this.headerOptions}
             @sophos-chimera-button-click=${this._navigate}></sophos-chimera-button>
+          </div>
+        ` : html``}
+
+        ${this.isShoppingCartIconEnable ? html`
+          <div id="shopping-cart-container">
+            <sophos-icon
+            .iconText=${'Carrito'}
+            .imageSource=${'./assets/shopping-cart.png'}
+            .imageAlt=${'shopping-cart'}
+            .iconDirection=${'top'}
+            @click=${this._setShoppingCartPage}>
+            </sophos-icon>
           </div>
         ` : html``}
 
