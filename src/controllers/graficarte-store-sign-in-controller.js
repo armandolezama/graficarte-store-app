@@ -19,7 +19,9 @@ export class GraficarteStoreSignInController extends LitElement {
     this.address = '';
     this.password = '';
     this.isPasswordValid = false;
-    this.service = new GraficarteStoreAPI('POST', 'public/signin');
+    this.method = 'POST';
+    this.url = 'public/signin';
+    this.setService();
   }
 
   /**
@@ -79,10 +81,12 @@ export class GraficarteStoreSignInController extends LitElement {
       this.dispatchEvent(new CustomEvent('request-is-done', {
         detail: { payload }
       }));
+      this.setService();
     });
 
     this.service.addEventListener('request-failed', () => {
       this.dispatchEvent(new CustomEvent('request-failed'));
+      this.setService();
     });
     this.service.doRequest();
   }
@@ -93,6 +97,10 @@ export class GraficarteStoreSignInController extends LitElement {
         emptyFields
       }
     }));
+  }
+
+  setService (method = this.method, url = this.url){
+    this.service = new GraficarteStoreAPI(method, url);
   }
 }
 

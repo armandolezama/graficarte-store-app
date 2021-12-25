@@ -60,12 +60,20 @@ export class GraficarteStoreClientNavBar extends LitElement {
         --sophos-icon-icon-image-width: 100px;
         --sophos-icon-icon-image-height: 100px;
         --sophos-icon-icon-text-font-size: 20px;
+        --sophos-icon-icon-text-margin: 5px 0 15px 0;
+        --sophos-icon-icon-text-color: #000000;
       }
 
       #client-options-multi-button{
         --sophos-chimera-button-flex-direction: column;
         --sophos-chimera-button-flex-flow: column;
         --sophos-chimera-button-width: 140px;
+      }
+
+      #client-nav-bar-container {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
       }
     `;
   }
@@ -85,10 +93,10 @@ export class GraficarteStoreClientNavBar extends LitElement {
     return html`
       <div id="client-nav-bar-container">
         <sophos-icon
-        imageSource="./assets/client-user.png"
-        imageAlt="client-pickture"
-        iconText="Client-user"
-        iconDirection="top">
+        .imageSource=${'./assets/client-user.png'}
+        .imageAlt=${'client-pickture'}
+        .iconText=${'Client-user'}
+        .iconDirection=${'top'}>
         </sophos-icon>
         <div>
           <sophos-chimera-button

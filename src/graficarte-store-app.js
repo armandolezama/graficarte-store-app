@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-store-app-styles';
 import 'sophos-simple-template/sophos-simple-template';
+import 'sophos-simple-modal/sophos-simple-modal';
 import './pages/graficarte-store-inventory-page';
 import './pages/graficarte-store-home-page';
 import './pages/graficarte-store-login-page';
@@ -37,12 +38,23 @@ export class GraficarteStoreApp extends LitElement {
     this.clientContent = '';
     this.templateStyle = '';
     this.showCreateAccountMissingFieldsMessages = false;
+    this.showLoginMissingFieldsMessages = false;
     this.isValidCreateAccountPassword = false;
     this.isCreateAccountOptionDisplayed = false;
     this.isShoppingCartIconDisplayed = false;
     this._loginData = {};
     this._signinData = {};
     this._clientData = {};
+    this.isModalOpened = false;
+    this.modalTitle = '';
+    this.modalMessage = '';
+    this.modalFooterMessage = '';
+    this.modalLabelsButtons = [
+      {
+      label: '',
+      key: '',
+      }
+    ];
   }
 
   /**
@@ -57,7 +69,12 @@ export class GraficarteStoreApp extends LitElement {
       page : { type : String},
       clientContent : { type : String},
       templateStyle : { type : String},
+      isModalOpened : { type : Boolean },
+      modalTitle : { type : String },
+      modalMessage : { type : String },
+      modalFooterMessage : { type : String },
       showCreateAccountMissingFieldsMessages : { type : Boolean},
+      showLoginMissingFieldsMessages : { type : Boolean},
       isCreateAccountOptionDisplayed : { type : Boolean},
       isShoppingCartIconDisplayed : { type : Boolean},
       _loginData : { type : Object},
@@ -83,7 +100,7 @@ export class GraficarteStoreApp extends LitElement {
   }
 
   login (e) {
-    this.showLoginMissingFields = true;
+    this.showLoginMissingFieldsMessages = true;
     this._loginData = {...e.detail.userCredentials};
   }
 
@@ -91,11 +108,38 @@ export class GraficarteStoreApp extends LitElement {
     this.showPublicStore();
   }
 
-  logOut () {
-    this.showPublicStore();
+  openLogoutModal (){
+    this.setLogoutModal();
+    this.openModal();
   }
 
-  createAccount (e) {
+  setLogoutModal (){
+    this.modalTitle = '¿Desea salir de la sesión?';
+    this.modalMessage = 'Presione "Continuar si desea quedarse, o presione "Salir" para terminar su sesión"';
+    this.modalLabelsButtons = [
+      {
+        label: 'Continuar',
+        key: 'close-modal',
+      },
+      {
+        label: 'Salir',
+        key: 'close-session',
+      },
+    ];
+    this.modalFooterMessage = 'Graficarte';
+  }
+
+  manageModalOptions (e){
+    const option = e.detail.buttonDescription.key;
+    if (option === 'close-modal') {
+      this.closeModal();
+    } else {
+      this.showPublicStore();
+      this.closeModal();
+    }
+  }
+
+  createAccount (e){
     this.showCreateAccountMissingFieldsMessages = true;
     this._signinData = e.detail.userData;
   }
@@ -121,7 +165,7 @@ export class GraficarteStoreApp extends LitElement {
   }
 
   setLoginMissingFields (e){
-    if (this.showLoginMissingFields) {
+    if (this.showLoginMissingFieldsMessages) {
       const { emptyFields } = e.detail;
       this.loginMissingFields = emptyFields;
     }
@@ -140,6 +184,8 @@ export class GraficarteStoreApp extends LitElement {
 
   successSignIn (e){
     console.log(e.detail.payload)
+    this.showCreateAccountMissingFieldsMessages = false;
+    this._signinData = {};
     this.page = 'client-store';
     this.clientContent = 'home';
     this.templateStyle = 'full-header';
@@ -150,6 +196,8 @@ export class GraficarteStoreApp extends LitElement {
 
   successLogin (e){
     console.log(e.detail.payload)
+    this.showLoginMissingFieldsMessages = false;
+    this._loginData = {};
     this.page = 'client-store';
     this.templateStyle = 'full-nav';
     this.templateClass = 'client-store-container'
@@ -180,7 +228,7 @@ export class GraficarteStoreApp extends LitElement {
     return page === 'login' ? this.setLoginConfig() : this.setCreateAccountConfig();
   }
 
-  openShoppingCartPage(){
+  openShoppingCartPage (){
     this.page = 'client-store';
     this.clientContent = 'shopping-cart';
     this.isShoppingCartIconDisplayed = false;
@@ -363,6 +411,14 @@ export class GraficarteStoreApp extends LitElement {
     return this.contentCreator(this.page, templates);
   }
 
+  openModal (){
+    this.isModalOpened = true;
+  }
+
+  closeModal (){
+    this.isModalOpened = false;
+  }
+
   createNavBarContent (){
     const templates = [
       [
@@ -370,7 +426,7 @@ export class GraficarteStoreApp extends LitElement {
         html`
           <graficarte-store-client-nav-bar
             @graficarte-navigate-to-page=${this.clientNavigation}
-            @finish-sesion=${this.logOut}>
+            @finish-sesion=${this.openLogoutModal}>
           </graficarte-store-client-nav-bar>
         `
       ],
@@ -378,7 +434,7 @@ export class GraficarteStoreApp extends LitElement {
         'inventory',
         html`
           <graficarte-store-admin-nav-bar
-            @finish-sesion=${this.logOut}>
+            @finish-sesion=${this.openLogoutModal}>
           </graficarte-store-admin-nav-bar>
         `
       ],
@@ -429,6 +485,23 @@ export class GraficarteStoreApp extends LitElement {
             ${this.createNavBarContent()}
           </div>
         </sophos-simple-template>
+
+        <sophos-simple-modal
+          modalStyle="full-screen"
+          ?isModalOpened=${this.isModalOpened}
+          .modalTitle=${this.modalTitle}
+          .modalMessage=${this.modalMessage}
+          .modalFooterMessage=${this.modalFooterMessage}>
+
+          <sophos-chimera-button
+          slot="modal-body"
+          type="simple-multi-button"
+          .buttonsLabels=${this.modalLabelsButtons}
+          @sophos-chimera-button-click=${this.manageModalOptions}>
+          </sophos-chimera-button>
+
+        </sophos-simple-modal>
+
       </div>
     `;
   }

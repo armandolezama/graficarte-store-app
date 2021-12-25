@@ -138,7 +138,7 @@ export class GraficarteStoreHeader extends LitElement {
     }));
   }
 
-  _setShoppingCartPage(){
+  _setShoppingCartPage (){
     this.dispatchEvent(new CustomEvent('shopping-cart-page'));
   }
 

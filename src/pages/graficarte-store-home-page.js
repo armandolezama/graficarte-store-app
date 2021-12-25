@@ -52,7 +52,6 @@ export class GraficarteStoreHomePage extends LitElement {
         --sophos-card-host-width: 100%;
         --sophos-card-host-max-width: 200px;
         --sophos-card-host-min-width: 100px;
-        --sophos-card-main-container-cursor: pointer;
         --sophos-card-main-container-background-color: transparent;
         margin: clamp(20px, 40px, 90px);
         flex-grow: 2;
