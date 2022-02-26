@@ -88,7 +88,7 @@ export class GraficarteStoreLoginController extends LitElement {
     this.service = new GraficarteStoreAPI(method, url);
   }
 
-  flushData() {
+  flushData () {
     this.email = '';
     this.password = '';
   }
