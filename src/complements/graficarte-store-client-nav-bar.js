@@ -11,6 +11,8 @@ export class GraficarteStoreClientNavBar extends LitElement {
     */
   constructor () {
     super();
+    this.name = '';
+    this.lastName = '';
     this.clientOptions = [
       {
         label: getLocal('graficarte-store-client-nav-bar-options-client-store'),
@@ -78,6 +80,10 @@ export class GraficarteStoreClientNavBar extends LitElement {
     `;
   }
 
+  get fullUserName () {
+    return `${this.name} ${this.lastName}`
+  }
+
   navigate (e){
     const page = e.detail.buttonDescription.key;
     this.dispatchEvent(new CustomEvent('graficarte-navigate-to-page', { detail: {
@@ -95,7 +101,7 @@ export class GraficarteStoreClientNavBar extends LitElement {
         <sophos-icon
         .imageSource=${'./assets/client-user.png'}
         .imageAlt=${'client-pickture'}
-        .iconText=${'Client-user'}
+        .iconText=${this.fullUserName}
         .iconDirection=${'top'}>
         </sophos-icon>
         <div>

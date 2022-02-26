@@ -9,6 +9,10 @@ export default css`
     background: linear-gradient(90deg, rgba(145,255,59,1) 0%, rgba(0,80,249,1) 100%);
   }
 
+  #app-main-template {
+    --sophos-simple-template-main-container-template-style-full-header-height: 98.4vh;
+  }
+
   .create-account-container {
     --sophos-simple-template-main-container-template-style-full-header-width: 100%;
     --sophos-simple-template-main-view-template-style-full-header-width: 100%;

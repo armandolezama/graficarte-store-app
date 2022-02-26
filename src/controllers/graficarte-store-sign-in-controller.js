@@ -62,7 +62,6 @@ export class GraficarteStoreSignInController extends LitElement {
   }
 
    _signIn (){
-     console.log('im signing')
     this.service.setRequestBody({
       name : this.name,
       lastName : this.lastName,
@@ -85,7 +84,9 @@ export class GraficarteStoreSignInController extends LitElement {
     });
 
     this.service.addEventListener('request-failed', () => {
-      this.dispatchEvent(new CustomEvent('request-failed'));
+      this.dispatchEvent(new CustomEvent('request-failed'), {
+        detail: {}
+      });
       this.setService();
     });
     this.service.doRequest();

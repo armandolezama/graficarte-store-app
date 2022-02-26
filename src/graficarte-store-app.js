@@ -55,6 +55,14 @@ export class GraficarteStoreApp extends LitElement {
       key: '',
       }
     ];
+    this.userData = {
+      name: '',
+      lastName: '',
+      address: '',
+      email: '',
+      phoneNumber: '',
+      id: '',
+    };
   }
 
   /**
@@ -94,6 +102,7 @@ export class GraficarteStoreApp extends LitElement {
 
   showPublicStore (){
     this.page = 'public-store';
+    this.templateStyle = 'full-header';
     this.isCreateAccountOptionDisplayed = true;
     this.isShoppingCartIconDisplayed = false;
     this.templateClass = 'public-store-container';
@@ -105,6 +114,8 @@ export class GraficarteStoreApp extends LitElement {
   }
 
   cancelLogin (){
+    this.showLoginMissingFieldsMessages = false;
+    this.loginMissingFields = [];
     this.showPublicStore();
   }
 
@@ -129,9 +140,28 @@ export class GraficarteStoreApp extends LitElement {
     this.modalFooterMessage = 'Graficarte';
   }
 
+  setLoginErrorModal (error){
+    console.log(error)
+    this.modalTitle = `${error.info}`;
+    this.modalMessage = `${error.message}`;
+    this.modalLabelsButtons = [
+      {
+        label: 'Intentar de nuevo',
+        key: 'back-to-login',
+      },
+      {
+        label: 'Salir',
+        key: 'close-modal',
+      },
+    ];
+    this.modalFooterMessage = 'Graficarte';
+  }
+
   manageModalOptions (e){
     const option = e.detail.buttonDescription.key;
     if (option === 'close-modal') {
+      this.closeModal();
+    } else if(option === 'back-to-login'){
       this.closeModal();
     } else {
       this.showPublicStore();
@@ -146,6 +176,7 @@ export class GraficarteStoreApp extends LitElement {
 
   cancelCreateAccount () {
     this.showCreateAccountMissingFieldsMessages = false;
+    this.signinMissingFields = [];
     this.showPublicStore();
   }
 
@@ -159,7 +190,9 @@ export class GraficarteStoreApp extends LitElement {
 
   setCreateAccountMissingFields (e){
     if (this.showCreateAccountMissingFieldsMessages) {
+      console.log('im setting missingFields')
       const { emptyFields } = e.detail;
+      console.log(emptyFields)
       this.signinMissingFields = emptyFields;
     }
   }
@@ -183,7 +216,10 @@ export class GraficarteStoreApp extends LitElement {
   }
 
   successSignIn (e){
-    console.log(e.detail.payload)
+    const response = e.detail.payload;
+    if(response.status >= 200 && response.status < 300){
+
+    };
     this.showCreateAccountMissingFieldsMessages = false;
     this._signinData = {};
     this.page = 'client-store';
@@ -194,16 +230,29 @@ export class GraficarteStoreApp extends LitElement {
     this.isShoppingCartIconDisplayed = true;
   }
 
-  successLogin (e){
-    console.log(e.detail.payload)
+  successLoginRequest (e){
+    const response = e.detail.payload;
     this.showLoginMissingFieldsMessages = false;
     this._loginData = {};
-    this.page = 'client-store';
-    this.templateStyle = 'full-nav';
-    this.templateClass = 'client-store-container'
-    this.clientContent = 'home';
-    this.isCreateAccountOptionDisplayed = false;
-    this.isShoppingCartIconDisplayed = true;
+
+    if(response.status >= 200 && response.status < 300){
+      this.page = 'client-store';
+      this.templateStyle = 'full-nav';
+      this.templateClass = 'client-store-container'
+      this.clientContent = 'home';
+      this.isCreateAccountOptionDisplayed = false;
+      this.isShoppingCartIconDisplayed = true;
+      this.successLogin(response.data.registry)
+    } else if(response.status >= 400 && response.status < 500) {
+      this.setLoginErrorModal({error: response.error, message: response.message});
+      console.log(response)
+      this.openModal();
+    };
+
+  }
+
+  successLogin (userData){
+    this.userData = {...userData};
   }
 
   setProgressState (){
@@ -425,6 +474,8 @@ export class GraficarteStoreApp extends LitElement {
         'client-store',
         html`
           <graficarte-store-client-nav-bar
+            .name=${this.userData.name}
+            .lastName=${this.userData.lastName}
             @graficarte-navigate-to-page=${this.clientNavigation}
             @finish-sesion=${this.openLogoutModal}>
           </graficarte-store-client-nav-bar>
@@ -448,12 +499,12 @@ export class GraficarteStoreApp extends LitElement {
       <div id="main-app-container">
         
         <graficarte-store-login-controller
-        .email=${this._loginData.email}
-        .password=${this._loginData.password}
-        @missing-fields=${this.setLoginMissingFields}
-        @request-is-done=${this.successLogin}
-        @request-failed=${this.errorLogin}
-        @request-in-progress=${this.setProgressState}>
+          .email=${this._loginData.email}
+          .password=${this._loginData.password}
+          @missing-fields=${this.setLoginMissingFields}
+          @request-is-done=${this.successLoginRequest}
+          @request-failed=${this.errorLogin}
+          @request-in-progress=${this.setProgressState}>
         </graficarte-store-login-controller>
 
         <graficarte-store-sign-in-controller
@@ -471,19 +522,19 @@ export class GraficarteStoreApp extends LitElement {
         </graficarte-store-sign-in-controller>
 
         <sophos-simple-template
-        id="app-main-template"
-        page-name=${this.page}
-        .styleTemplate=${this.templateStyle}
-        class=${this.templateClass}>
-          <div slot="header-content">
-            ${this.createHeaderContent()}
-          </div>
-          <div slot="main-view-content">
-            ${this.createMainViewContent()}
-          </div>
-          <div slot="nav-bar-content">
-            ${this.createNavBarContent()}
-          </div>
+          id="app-main-template"
+          page-name=${this.page}
+          .styleTemplate=${this.templateStyle}
+          class=${this.templateClass}>
+            <div slot="header-content">
+              ${this.createHeaderContent()}
+            </div>
+            <div slot="main-view-content">
+              ${this.createMainViewContent()}
+            </div>
+            <div slot="nav-bar-content">
+              ${this.createNavBarContent()}
+            </div>
         </sophos-simple-template>
 
         <sophos-simple-modal
@@ -494,10 +545,10 @@ export class GraficarteStoreApp extends LitElement {
           .modalFooterMessage=${this.modalFooterMessage}>
 
           <sophos-chimera-button
-          slot="modal-body"
-          type="simple-multi-button"
-          .buttonsLabels=${this.modalLabelsButtons}
-          @sophos-chimera-button-click=${this.manageModalOptions}>
+            slot="modal-body"
+            type="simple-multi-button"
+            .buttonsLabels=${this.modalLabelsButtons}
+            @sophos-chimera-button-click=${this.manageModalOptions}>
           </sophos-chimera-button>
 
         </sophos-simple-modal>
@@ -508,6 +559,11 @@ export class GraficarteStoreApp extends LitElement {
 }
 
 customElements.define('graficarte-store-app', GraficarteStoreApp);
+
+/**
+ * TO-DO: decouple missing fields function and move logic to controller file
+ */
+
 
 /**
  * TO-DO: Add session management system 
