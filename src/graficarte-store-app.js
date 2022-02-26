@@ -177,6 +177,7 @@ export class GraficarteStoreApp extends LitElement {
   cancelCreateAccount () {
     this.showCreateAccountMissingFieldsMessages = false;
     this.signinMissingFields = [];
+    this._signinData = {};
     this.showPublicStore();
   }
 
