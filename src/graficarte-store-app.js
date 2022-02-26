@@ -110,12 +110,13 @@ export class GraficarteStoreApp extends LitElement {
 
   login (e) {
     this.showLoginMissingFieldsMessages = true;
-    this._loginData = {...e.detail.userCredentials};
+    this._loginData = e.detail.userCredentials;
   }
 
   cancelLogin (){
     this.showLoginMissingFieldsMessages = false;
     this.loginMissingFields = [];
+    this._loginData = {};
     this.showPublicStore();
   }
 
@@ -141,7 +142,6 @@ export class GraficarteStoreApp extends LitElement {
   }
 
   setLoginErrorModal (error){
-    console.log(error)
     this.modalTitle = `${error.info}`;
     this.modalMessage = `${error.message}`;
     this.modalLabelsButtons = [
@@ -191,9 +191,7 @@ export class GraficarteStoreApp extends LitElement {
 
   setCreateAccountMissingFields (e){
     if (this.showCreateAccountMissingFieldsMessages) {
-      console.log('im setting missingFields')
       const { emptyFields } = e.detail;
-      console.log(emptyFields)
       this.signinMissingFields = emptyFields;
     }
   }
@@ -246,7 +244,6 @@ export class GraficarteStoreApp extends LitElement {
       this.successLogin(response.data.registry)
     } else if(response.status >= 400 && response.status < 500) {
       this.setLoginErrorModal({error: response.error, message: response.message});
-      console.log(response)
       this.openModal();
     };
 
