@@ -19,6 +19,7 @@ export default css`
     --sophos-simple-template-nav-bar-display: none;
     --sophos-simple-template-main-view-container-overflow: visible;
     --sophos-simple-template-main-view-container-overflow-y: none;
+    --sophos-simple-template-header-height: 90px;
   }
 
   .public-store-container {

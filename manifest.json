@@ -1,0 +1,9 @@
+{
+    "name": "Graficarte",
+    "short_name": "Graficarte",
+    "theme_color": "#0d8203",
+    "background_color": "#1c4ed1",
+    "display": "browser",
+    "scope": "/",
+    "start_url": "/"
+  }

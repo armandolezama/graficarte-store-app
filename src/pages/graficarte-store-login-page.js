@@ -86,6 +86,14 @@ export class GraficarteStoreLoginPage extends LitElement {
       sophos-chimera-input {
         --sophos-chimera-input-main-container-height: auto;
       }
+
+      sophos-chimera-button {
+        --sophos-chimera-button-simple-single-buttons-simple-multi-button-margin: 0 20px;
+      }
+
+      .modal-buttons {
+        --sophos-chimera-button-simple-single-buttons-simple-multi-button-margin: 20px 20px;
+      }
     `;
   }
 
@@ -113,7 +121,7 @@ export class GraficarteStoreLoginPage extends LitElement {
         .type=${inputData.type}
         .isRequired=${inputData.isRequired}
         .showMessage=${inputData.missingField}
-        .emptyMessage=${this.emptyMessage}
+        .inputMessage=${this.emptyMessage}
         @sophos-input-changed=${this.setUserCredentialField}>
       </sophos-chimera-input>
       `
@@ -209,6 +217,7 @@ export class GraficarteStoreLoginPage extends LitElement {
             <sophos-chimera-button
             slot="modal-body"
             type="simple-multi-button"
+            class="modal-buttons"
             .buttonsLabels=${this.modalLabelsButtons}
             @sophos-chimera-button-click=${this._manageModalButtons}>
             </sophos-chimera-button>

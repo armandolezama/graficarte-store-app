@@ -117,7 +117,9 @@ export class GraficarteStoreCreateAccount extends LitElement {
   static get styles () {
     return css`
       sophos-chimera-input {
-        --sophos-chimera-input-main-container-height: auto;
+        --sophos-chimera-input-main-container-height: 85px;
+        --sophos-chimera-input-input-container-input-style-simple-bar-input-input-tag-height: 30px;
+        --sophos-chimera-input-input-message-margin: 5px 0 10px;
         --sophos-chimera-input-input-container-input-style-simple-bar-input-margin-bottom: 40px;
       }
 
@@ -188,7 +190,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         .type=${inputData.type}
         .isRequired=${inputData.isRequired}
         .showMessage=${inputData.missingField}
-        .emptyMessage=${this.emptyMessage}
+        .inputMessage=${this.emptyMessage}
         @sophos-input-changed=${this._handlers[inputData.handler]}>
       </sophos-chimera-input>
       `;

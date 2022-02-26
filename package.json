@@ -18,12 +18,12 @@
   "dependencies": {
     "lit": "^2.0.2",
     "sophos-card": "github:armandolezama/sophos-card#2.0.0",
-    "sophos-chimera-button": "github:armandolezama/sophos-chimera-button#3.0.0",
-    "sophos-chimera-input": "github:armandolezama/sophos-chimera-input#2.0.0",
-    "sophos-icon": "github:armandolezama/sophos-icon#2.1.0",
-    "sophos-plastic-table": "github:armandolezama/sophos-plastic-table#2.0.0",
-    "sophos-simple-modal": "github:armandolezama/sophos-simple-modal#4.0.0",
-    "sophos-simple-template": "github:armandolezama/sophos-simple-template#2.0.0"
+    "sophos-chimera-button": "github:armandolezama/sophos-chimera-button",
+    "sophos-chimera-input": "github:armandolezama/sophos-chimera-input",
+    "sophos-icon": "github:armandolezama/sophos-icon",
+    "sophos-plastic-table": "github:armandolezama/sophos-plastic-table",
+    "sophos-simple-modal": "github:armandolezama/sophos-simple-modal",
+    "sophos-simple-template": "github:armandolezama/sophos-simple-template"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
