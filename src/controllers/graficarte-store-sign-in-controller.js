@@ -18,7 +18,6 @@ export class GraficarteStoreSignInController extends LitElement {
     this.email = '';
     this.address = '';
     this.password = '';
-    this.isPasswordValid = false;
     this.method = 'POST';
     this.url = 'public/signin';
     this.setService();
@@ -35,7 +34,6 @@ export class GraficarteStoreSignInController extends LitElement {
       email : { type : String },
       address : { type : String },
       password : { type : String },
-      isPasswordValid : { type : Boolean }
     };
   }
 
@@ -43,10 +41,8 @@ export class GraficarteStoreSignInController extends LitElement {
     super.updated( changedProps );
     const emptyFields = this.getEmptyFields();
 
-    if(emptyFields.length === 0 && this.isPasswordValid){
+    if(emptyFields.length === 0){
       this._signIn();
-    } else {
-      this.missingFieldsMessage(emptyFields);
     }
   }
 
@@ -90,6 +86,7 @@ export class GraficarteStoreSignInController extends LitElement {
       this.setService();
     });
     this.service.doRequest();
+    this.flushData()
   }
 
   missingFieldsMessage (emptyFields){
@@ -102,6 +99,15 @@ export class GraficarteStoreSignInController extends LitElement {
 
   setService (method = this.method, url = this.url){
     this.service = new GraficarteStoreAPI(method, url);
+  }
+
+  flushData () {
+    this.name = '';
+    this.lastName = '';
+    this.phoneNumber = '';
+    this.email = '';
+    this.address = '';
+    this.password = '';
   }
 }
 

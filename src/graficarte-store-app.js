@@ -27,19 +27,14 @@ export class GraficarteStoreApp extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.inventory = inventoryMocks;
     this.storeProducts = productMocks;
-    this.signinMissingFields = [];
-    this.loginMissingFields = [];
     this.signInForm = [];
     this.page = '';
     this.clientContent = '';
     this.templateStyle = '';
-    this.showCreateAccountMissingFieldsMessages = false;
-    this.showLoginMissingFieldsMessages = false;
-    this.isValidCreateAccountPassword = false;
     this.isCreateAccountOptionDisplayed = false;
     this.isShoppingCartIconDisplayed = false;
     this._loginData = {};
@@ -68,12 +63,10 @@ export class GraficarteStoreApp extends LitElement {
   /**
     * Object describing property-related metadata used by Polymer features
     */
-  static get properties() {
+  static get properties () {
     return {
       inventory: { type: Array },
       storeProducts: { type: Array },
-      signinMissingFields: { type: Array },
-      loginMissingFields: { type: Array },
       page: { type: String },
       clientContent: { type: String },
       templateStyle: { type: String },
@@ -81,8 +74,6 @@ export class GraficarteStoreApp extends LitElement {
       modalTitle: { type: String },
       modalMessage: { type: String },
       modalFooterMessage: { type: String },
-      showCreateAccountMissingFieldsMessages: { type: Boolean },
-      showLoginMissingFieldsMessages: { type: Boolean },
       isCreateAccountOptionDisplayed: { type: Boolean },
       isShoppingCartIconDisplayed: { type: Boolean },
       _loginData: { type: Object },
@@ -91,16 +82,16 @@ export class GraficarteStoreApp extends LitElement {
     };
   }
 
-  static get styles() {
+  static get styles () {
     return styles;
   }
 
-  firstUpdated() {
+  firstUpdated () {
     super.firstUpdated();
     this.showPublicStore();
   }
 
-  showPublicStore() {
+  showPublicStore () {
     this.page = 'public-store';
     this.templateStyle = 'full-header';
     this.isCreateAccountOptionDisplayed = true;
@@ -108,24 +99,21 @@ export class GraficarteStoreApp extends LitElement {
     this.templateClass = 'public-store-container';
   }
 
-  login(e) {
-    this.showLoginMissingFieldsMessages = true;
+  login (e) {
     this._loginData = e.detail.userCredentials;
   }
 
-  cancelLogin() {
-    this.showLoginMissingFieldsMessages = false;
-    this.loginMissingFields = [];
+  cancelLogin () {
     this._loginData = {};
     this.showPublicStore();
   }
 
-  openLogoutModal() {
+  openLogoutModal () {
     this.setLogoutModal();
     this.openModal();
   }
 
-  setLogoutModal() {
+  setLogoutModal () {
     this.modalTitle = '¿Desea salir de la sesión?';
     this.modalMessage = 'Presione "Continuar si desea quedarse, o presione "Salir" para terminar su sesión"';
     this.modalLabelsButtons = [
@@ -142,22 +130,19 @@ export class GraficarteStoreApp extends LitElement {
   }
 
   setLoginErrorModal (error) {
+
     this.modalTitle = `${error.info}`;
     this.modalMessage = `${error.message}`;
     this.modalLabelsButtons = [
       {
-        label: 'Intentar de nuevo',
-        key: 'back-to-login',
-      },
-      {
-        label: 'Salir',
+        label: 'Aceptar',
         key: 'close-modal',
       },
     ];
     this.modalFooterMessage = 'Graficarte';
   }
 
-  setApiServerErrorModal() {
+  setApiServerErrorModal () {
     this.modalTitle = 'Error en el servidor';
     this.modalMessage = 'Algo ha fallado con el servidor, por favor, inténtelo más tarde.';
     this.modalLabelsButtons = [
@@ -170,14 +155,13 @@ export class GraficarteStoreApp extends LitElement {
     this.openModal();
   }
 
-  manageModalOptions(e) {
+  manageModalOptions (e) {
     const option = e.detail.buttonDescription.key;
     if (option === 'close-modal') {
       this.closeModal();
     } else if (option === 'back-to-login') {
       this.closeModal();
     } else if(option === 'close-api-error-modal'){
-      this.showLoginMissingFieldsMessages = false;
       this._loginData = {};
       this.closeModal();
     } else {
@@ -186,57 +170,39 @@ export class GraficarteStoreApp extends LitElement {
     }
   }
 
-  createAccount(e) {
-    this.showCreateAccountMissingFieldsMessages = true;
+  createAccount (e) {
     this._signinData = e.detail.userData;
   }
 
-  cancelCreateAccount() {
-    this.showCreateAccountMissingFieldsMessages = false;
-    this.signinMissingFields = [];
+  cancelCreateAccount () {
     this._signinData = {};
     this.showPublicStore();
   }
 
-  setValidCreateAccountPassword() {
+  setValidCreateAccountPassword () {
     this.isValidCreateAccountPassword = true;
   }
 
-  setInvalidCreateAccountPassword() {
+  setInvalidCreateAccountPassword () {
     this.isValidCreateAccountPassword = false;
   }
 
-  setCreateAccountMissingFields(e) {
-    if (this.showCreateAccountMissingFieldsMessages) {
-      const { emptyFields } = e.detail;
-      this.signinMissingFields = emptyFields;
-    }
-  }
-
-  setLoginMissingFields(e) {
-    if (this.showLoginMissingFieldsMessages) {
-      const { emptyFields } = e.detail;
-      this.loginMissingFields = emptyFields;
-    }
-  }
-
-  setLoginConfig() {
+  setLoginConfig () {
     this.templateStyle = 'full-header';
     this.templateClass = 'login-store-container';
     this.isCreateAccountOptionDisplayed = false;
   }
 
-  setCreateAccountConfig() {
+  setCreateAccountConfig () {
     this.templateStyle = 'full-header';
     this.templateClass = 'create-account-container';
   }
 
-  successSignIn(e) {
+  successSignIn (e) {
     const response = e.detail.payload;
     if (response.status >= 200 && response.status < 300) {
 
     }
-    this.showCreateAccountMissingFieldsMessages = false;
     this._signinData = {};
     this.page = 'client-store';
     this.clientContent = 'home';
@@ -246,9 +212,8 @@ export class GraficarteStoreApp extends LitElement {
     this.isShoppingCartIconDisplayed = true;
   }
 
-  successLoginRequest(e) {
+  successLoginRequest (e) {
     const response = e.detail.payload;
-    this.showLoginMissingFieldsMessages = false;
     this._loginData = {};
 
     if (response.status >= 200 && response.status < 300) {
@@ -260,7 +225,7 @@ export class GraficarteStoreApp extends LitElement {
       this.isShoppingCartIconDisplayed = true;
       this.successLogin(response.data.registry)
     } else if (response.status >= 400 && response.status < 500) {
-      this.setLoginErrorModal({ error: response.error, message: response.message });
+      this.setLoginErrorModal({ info: response.error.info, message: response.message });
       this.openModal();
     }
 
@@ -270,11 +235,11 @@ export class GraficarteStoreApp extends LitElement {
     this.userData = { ...userData };
   }
 
-  setProgressState() {
+  setProgressState () {
     console.log('this shit is in progress');
   }
 
-  errorSignIn(e) {
+  errorSignIn (e) {
     const { title, message, notes } = e.detail;
     this.modalTitle = title;
     this.modalMessage = message;
@@ -282,27 +247,27 @@ export class GraficarteStoreApp extends LitElement {
     this.openModal();
   }
 
-  errorLogin() {
+  errorLogin () {
     this.setApiServerErrorModal();
   }
 
-  headerNavigate(e) {
+  headerNavigate (e) {
     const { page } = e.detail;
     this.page = page;
     return page === 'login' ? this.setLoginConfig() : this.setCreateAccountConfig();
   }
 
-  openShoppingCartPage() {
+  openShoppingCartPage () {
     this.page = 'client-store';
     this.clientContent = 'shopping-cart';
     this.isShoppingCartIconDisplayed = false;
   }
 
-  searchTerm(e) {
+  searchTerm (e) {
     console.log(e.detail.term);
   }
 
-  clientNavigation(e) {
+  clientNavigation (e) {
     const clientPage = e.detail.page;
     this.clientContent = clientPage;
     this.isShoppingCartIconDisplayed = true;
@@ -316,7 +281,7 @@ export class GraficarteStoreApp extends LitElement {
     return contentArray.filter(template => template);
   }
 
-  createClientContent() {
+  createClientContent () {
     const templates = [
       [
         'home',
@@ -379,13 +344,12 @@ export class GraficarteStoreApp extends LitElement {
     return this.contentCreator(this.clientContent, templates);
   }
 
-  createMainViewContent() {
+  createMainViewContent () {
     const templates = [
       [
         'create-account',
         html`
           <graficarte-store-create-account
-            .missingFields=${this.signinMissingFields}
             @create-account=${this.createAccount}
             @cancel-create-account=${this.cancelCreateAccount}
             @valid-password=${this.setValidCreateAccountPassword}
@@ -416,8 +380,7 @@ export class GraficarteStoreApp extends LitElement {
       [
         'login',
         html`
-          <graficarte-store-login-page 
-          .missingFields=${this.loginMissingFields} 
+          <graficarte-store-login-page
           @graficarte-login-submit=${this.login}
           @graficarte-cancel-login=${this.cancelLogin}>
           </graficarte-store-login-page>
@@ -429,7 +392,7 @@ export class GraficarteStoreApp extends LitElement {
 
   }
 
-  createHeaderContent() {
+  createHeaderContent () {
     const templates = [
       [
         'client-store',
@@ -474,15 +437,15 @@ export class GraficarteStoreApp extends LitElement {
     return this.contentCreator(this.page, templates);
   }
 
-  openModal() {
+  openModal () {
     this.isModalOpened = true;
   }
 
-  closeModal() {
+  closeModal () {
     this.isModalOpened = false;
   }
 
-  createNavBarContent() {
+  createNavBarContent () {
     const templates = [
       [
         'client-store',
@@ -508,14 +471,13 @@ export class GraficarteStoreApp extends LitElement {
     return this.contentCreator(this.page, templates);
   }
 
-  render() {
+  render () {
     return html`
       <div id="main-app-container">
       
         <graficarte-store-login-controller 
         .email=${this._loginData.email} 
         .password=${this._loginData.password}
-        @missing-fields=${this.setLoginMissingFields} 
         @request-is-done=${this.successLoginRequest}
         @request-failed=${this.errorLogin} 
         @request-in-progress=${this.setProgressState}>
@@ -529,7 +491,6 @@ export class GraficarteStoreApp extends LitElement {
         .address=${this._signinData.address}
         .password=${this._signinData.password} 
         ?isPasswordValid=${this.isValidCreateAccountPassword}
-        @missing-fields=${this.setCreateAccountMissingFields} 
         @request-is-done=${this.successSignIn}
         @request-failed=${this.errorSignIn} 
         @request-in-progress=${this.setProgressState}>
@@ -573,11 +534,6 @@ export class GraficarteStoreApp extends LitElement {
 }
 
 customElements.define('graficarte-store-app', GraficarteStoreApp);
-
-/**
- * TO-DO: decouple missing fields function and move logic to controller file
- */
-
 
 /**
  * TO-DO: Add session management system 

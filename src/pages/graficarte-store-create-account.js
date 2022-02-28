@@ -160,14 +160,12 @@ export class GraficarteStoreCreateAccount extends LitElement {
   set missingFields (value) {
     const currValue = value;
     const oldValue = this._missingFields;
-    if(currValue.length > 0){
-      this.inputsList = this.inputsList.map(input => {
-        input.missingField = currValue.includes(input.fieldName);
-        return input;
-      });
-      this._missingFields = currValue;
-      this.requestUpdate('missingFields', oldValue);
-    }
+    this.inputsList = this.inputsList.map(input => {
+      input.missingField = currValue.includes(input.fieldName);
+      return input;
+    });
+    this._missingFields = currValue;
+    this.requestUpdate('missingFields', oldValue);
   }
 
   firstUpdated (){
@@ -177,6 +175,24 @@ export class GraficarteStoreCreateAccount extends LitElement {
       'confirm pass' : this.confirmPassword
     };
     this.initData();
+  }
+
+  getEmptyFields (){
+    return [
+      !this.userData.name && 'name',
+      !this.userData.lastName && 'lastName',
+      !this.userData.phoneNumber && 'phoneNumber',
+      !this.userData.email && 'email',
+      !this.userData.address && 'address',
+      !this.userData.password && 'password'
+    ].filter(field => field);
+  }
+
+  resetEmptyFields (){
+    this.inputsList =  this.inputsList.map(input => {
+      input.missingField = false;
+      return input;
+    })
   }
 
   showForm (){
@@ -199,10 +215,16 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   manageCreateAccountActions (e){
     const { key } = e.detail.buttonDescription;
-    if(key === 'create-account') {
-      this.createAccount();
+    const emptyFields = this.getEmptyFields();
+    if(emptyFields.length > 0 && key !== 'cancel'){
+      this.missingFields = emptyFields;
     } else {
-      this.cancel();
+      this.resetEmptyFields();
+      if(key === 'create-account') {
+        this.createAccount();
+      } else {
+        this.cancel();
+      }
     }
   }
 
@@ -213,7 +235,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
   }
 
   cancel () {
-    this.restartMissingFields();
+    this.resetEmptyFields();
     this.dispatchEvent(new CustomEvent('cancel-create-account'));
   }
 
@@ -236,13 +258,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     });
   }
 
-  restartMissingFields (){
-    this.inputsList = this.inputsList.map(input => {
-      input.missingField = false;
-      return input;
-    });
-  }
-
   _showPasswordErrorMessage () {
     this.passwordMessageStyle = 'error';
     this.passwordMessageText = 'Las contraseñas no coinciden'
@@ -259,7 +274,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
     return html`
     <div>
       ${this.showForm()}
-      <div id=password-message-container message-style=password-message-${this.passwordMessageStyle}>
+      <div id=password-message-container message-style=${`password-message-${this.passwordMessageStyle}`}>
         <p id=password-message message=${this.passwordMessageStyle}>
           ${this.passwordMessageText}
         </p>

@@ -34,8 +34,6 @@ export class GraficarteStoreLoginController extends LitElement {
 
     if(emptyFields.length === 0){
       this._login();
-    } else {
-      this.missingFieldsMessage(emptyFields);
     }
   }
 
@@ -63,7 +61,6 @@ export class GraficarteStoreLoginController extends LitElement {
         detail: JSON.parse(payload)
       }));
       this.setService();
-      this.flushData();
     });
 
     this.service.addEventListener('request-failed', () => {
@@ -74,14 +71,6 @@ export class GraficarteStoreLoginController extends LitElement {
     this.service.doRequest();
     this.flushData();
   
-  }
-
-  missingFieldsMessage (emptyFields){
-    this.dispatchEvent(new CustomEvent('missing-fields', {
-      detail: {
-        emptyFields
-      }
-    }));
   }
 
   setService (method = this.method, url = this.url){

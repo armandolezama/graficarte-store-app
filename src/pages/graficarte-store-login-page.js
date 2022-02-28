@@ -100,15 +100,27 @@ export class GraficarteStoreLoginPage extends LitElement {
   set missingFields (value) {
     const currValue = value;
     const oldValue = this._missingFields;
-    if(currValue.length > 0){
-      this.inputsList = this.inputsList.map(input => {
-        input.missingField = currValue.includes(input.fieldName);
-        return input;
-      });
-      this._missingFields = currValue;
-      this._closeModal();
-      this.requestUpdate('missingFields', oldValue);
-    }
+    this.inputsList = this.inputsList.map(input => {
+      input.missingField = currValue.includes(input.fieldName);
+      return input;
+    });
+    this._missingFields = currValue;
+    this._closeModal();
+    this.requestUpdate('missingFields', oldValue);
+  }
+
+  getEmptyFields (){
+    return [
+      !this._email && 'email',
+      !this._password && 'password'
+    ].filter(field => field);
+  }
+
+  resetEmptyFields (){
+    this.inputsList =  this.inputsList.map(input => {
+      input.missingField = false;
+      return input;
+    })
   }
 
   createForm (){
@@ -143,7 +155,12 @@ export class GraficarteStoreLoginPage extends LitElement {
 
   manageLoginActions (e){
     const payload = e.detail.buttonDescription;
-    payload.option === 0 ? this._openSubmitModal() : payload.option === 1 ? this._openCancelModal() : payload;
+    const emptyFields = this.getEmptyFields();
+    if(emptyFields.length > 0 && payload.key !== 'cancel' ) {
+      this.missingFields = emptyFields
+    } else {
+      payload.option === 0 ? this._openLoginModal() : payload.option === 1 ? this._openCancelModal() : payload;
+    }
   }
 
   _manageModalButtons (e){
@@ -151,7 +168,7 @@ export class GraficarteStoreLoginPage extends LitElement {
     payload.option === 0 ? payload.key === 'store' ? this._cancel() : this._submit() : this._closeModal();
   }
 
-  _openSubmitModal (){
+  _openLoginModal (){
     this.modalTitle = 'Ingresar';
     this.modalMessage = '¿Desea continuar?';
     this.modalFooterMessage = "Graficarte";
@@ -192,6 +209,7 @@ export class GraficarteStoreLoginPage extends LitElement {
   }
 
   _submit (){
+    this._closeModal()
     const userCredentials = {
       email: this._email,
       password: this._password
@@ -230,10 +248,12 @@ export class GraficarteStoreLoginPage extends LitElement {
           type="simple-multi-button"
           .buttonsLabels=${[
             {
-              label: 'Entrar'
+              label: 'Entrar',
+              key: 'login-modal'
             }, 
             {
-              label: 'Cancelar'
+              label: 'Cancelar',
+              key: 'cancel'
             }
             ]}
           @sophos-chimera-button-click=${this.manageLoginActions} id="login-submit">Entrar</sophos-chimera-button>
