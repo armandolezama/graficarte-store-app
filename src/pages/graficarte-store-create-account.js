@@ -189,7 +189,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
   }
 
   resetEmptyFields (){
-    this.inputsList =  this.inputsList.map(input => {
+    this.inputsList = this.inputsList.map(input => {
       input.missingField = false;
       return input;
     })
