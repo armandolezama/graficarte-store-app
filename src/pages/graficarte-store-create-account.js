@@ -110,7 +110,11 @@ export class GraficarteStoreCreateAccount extends LitElement {
       missingFields : { type : Array },
       passwordMessageStyle : { type : String },
       passwordMessageText : { type : String },
-      _handlers : { type : Object}
+      _handlers : { type : Object},
+      isModalOpened : { type : Boolean },
+      modalTitle : { type : String },
+      modalMessage : { type : String },
+      modalFooterMessage : { type : String },
     };
   }
 
@@ -177,6 +181,51 @@ export class GraficarteStoreCreateAccount extends LitElement {
     this.initData();
   }
 
+  _openLoginModal (){
+    this.modalTitle = 'Ingresar';
+    this.modalMessage = '¿Desea continuar?';
+    this.modalFooterMessage = "Graficarte";
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Entrar',
+        key: 'login'
+      }, 
+      {
+        label: 'Volver',
+        key: 'edit-login'
+      }];
+  }
+
+  _openCancelModal (){
+    this.modalTitle = 'Salir';
+    this.modalMessage = '¿Desea regresar a la tienda?';
+    this.modalFooterMessage = 'Graficarte';
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Salir',
+        key: 'store',
+      }, 
+      {
+        label: 'Quedarse',
+        key: 'edit-login',
+      }];
+  }
+
+  _closeModal (){
+    this.modalTitle = '';
+    this.modalMessage = '';
+    this.modalFooterMessage = '';
+    this.modalLabelsButtons = ['', ''];
+    this.isModalOpened = false;
+  }
+
+  _manageModalButtons (e){
+    const payload = e.detail.buttonDescription;
+    payload.option === 0 ? payload.key === 'store' ? this.cancel() : this.createAccount() : this._closeModal();
+  }
+
   getEmptyFields (){
     return [
       !this.userData.name && 'name',
@@ -221,9 +270,9 @@ export class GraficarteStoreCreateAccount extends LitElement {
     } else {
       this.resetEmptyFields();
       if(key === 'create-account') {
-        this.createAccount();
+        this._openLoginModal();
       } else {
-        this.cancel();
+        this._openCancelModal();
       }
     }
   }
@@ -275,6 +324,23 @@ export class GraficarteStoreCreateAccount extends LitElement {
     <div>
       ${this.showForm()}
       <div id=password-message-container message-style=${`password-message-${this.passwordMessageStyle}`}>
+      <sophos-simple-modal
+        modalStyle="full-screen"
+        ?isModalOpened=${this.isModalOpened}
+        .modalTitle=${this.modalTitle}
+        .modalMessage=${this.modalMessage}
+        .modalFooterMessage=${this.modalFooterMessage}>
+
+          <sophos-chimera-button
+            slot="modal-body"
+            type="simple-multi-button"
+            class="modal-buttons"
+            .buttonsLabels=${this.modalLabelsButtons}
+            @sophos-chimera-button-click=${this._manageModalButtons}>
+          </sophos-chimera-button>
+
+      </sophos-simple-modal>
+
         <p id=password-message message=${this.passwordMessageStyle}>
           ${this.passwordMessageText}
         </p>
