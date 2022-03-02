@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
+import 'sophos-simple-modal/sophos-simple-modal';
 import getLocal from '../locales/'
 
 export class GraficarteStoreCreateAccount extends LitElement {
@@ -19,7 +20,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         type: 'text',
         isRequired: true,
         fieldName: 'name',
-        handler: 'set data',
+        handler: 'set-data',
         missingField: false
       },
       {
@@ -29,7 +30,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         type: 'text',
         isRequired: true,
         fieldName: 'lastName',
-        handler: 'set data',
+        handler: 'set-data',
         missingField: false
       },
       {
@@ -39,7 +40,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         type: 'text',
         isRequired: true,
         fieldName: 'phoneNumber',
-        handler: 'set data',
+        handler: 'set-data',
         missingField: false
       },
       {
@@ -49,7 +50,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         type: 'email',
         isRequired: true,
         fieldName: 'email',
-        handler: 'set data',
+        handler: 'set-data',
         missingField: false
       },
       {
@@ -59,7 +60,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         type: 'text',
         isRequired: true,
         fieldName: 'address',
-        handler: 'set data',
+        handler: 'set-data',
         missingField: false
       },
       {
@@ -69,7 +70,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         type: 'password',
         isRequired: true,
         fieldName: 'password',
-        handler: 'set data',
+        handler: 'set-data',
         missingField: false
       },
       {
@@ -79,7 +80,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         type: 'password',
         isRequired: true,
         fieldName: 'confirm-password',
-        handler: 'confirm pass',
+        handler: 'confirm-pass',
         missingField: false
       },
     ];
@@ -97,7 +98,18 @@ export class GraficarteStoreCreateAccount extends LitElement {
     this.missingFields = [];
     this.passwordMessageStyle = '';
     this.emptyMessage = 'Este campo es requerido';
-    this._handlers = {};
+    this.createAccountActionsHandlers = {};
+    this.modalLabelsButtons = [
+      {
+      label: ''
+      }, 
+      {
+        label: 'Cancelar'
+      }
+    ];
+    this.isPasswordValid = false;
+    this.createAccountActionsHandlers = {};
+    this.modalButtonsHandlers = {};
   }
 
   /**
@@ -110,7 +122,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       missingFields : { type : Array },
       passwordMessageStyle : { type : String },
       passwordMessageText : { type : String },
-      _handlers : { type : Object},
+      createAccountActionsHandlers : { type : Object},
       isModalOpened : { type : Boolean },
       modalTitle : { type : String },
       modalMessage : { type : String },
@@ -174,11 +186,17 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   firstUpdated (){
     super.firstUpdated();
-    this._handlers = {
-      'set data' : this.setUserDataField,
-      'confirm pass' : this.confirmPassword
+
+    this.createAccountActionsHandlers = {
+      'set-data' : this.setUserDataField,
+      'confirm-pass' : this.confirmPassword
     };
-    this.initData();
+
+    this.modalButtonsHandlers = {
+      'login' : this.createAccount,
+      'back-to-store' : this.cancel,
+      'close-modal' : this._closeModal,
+    }
   }
 
   _openLoginModal (){
@@ -193,7 +211,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       }, 
       {
         label: 'Volver',
-        key: 'edit-login'
+        key: 'close-modal'
       }];
   }
 
@@ -205,11 +223,23 @@ export class GraficarteStoreCreateAccount extends LitElement {
     this.modalLabelsButtons = [
       {
         label: 'Salir',
-        key: 'store',
+        key: 'back-to-store',
       }, 
       {
         label: 'Quedarse',
-        key: 'edit-login',
+        key: 'close-modal',
+      }];
+  }
+
+  _openPasswordConfirmationErrorModal(){
+    this.modalTitle = 'Las contraseñas no coinciden';
+    this.modalMessage = 'Por favor, asegúrese que la contraseña corresponda con su confirmación';
+    this.modalFooterMessage = 'Graficarte';
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Aceptar',
+        key: 'close-modal',
       }];
   }
 
@@ -222,8 +252,11 @@ export class GraficarteStoreCreateAccount extends LitElement {
   }
 
   _manageModalButtons (e){
-    const payload = e.detail.buttonDescription;
-    payload.option === 0 ? payload.key === 'store' ? this.cancel() : this.createAccount() : this._closeModal();
+    const { key } = e.detail.buttonDescription;
+
+    const handler = this.modalButtonsHandlers[key].bind(this);
+
+    handler();
   }
 
   getEmptyFields (){
@@ -256,7 +289,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
         .isRequired=${inputData.isRequired}
         .showMessage=${inputData.missingField}
         .inputMessage=${this.emptyMessage}
-        @sophos-input-changed=${this._handlers[inputData.handler]}>
+        @sophos-input-changed=${this.createAccountActionsHandlers[inputData.handler]}>
       </sophos-chimera-input>
       `;
     });
@@ -270,7 +303,11 @@ export class GraficarteStoreCreateAccount extends LitElement {
     } else {
       this.resetEmptyFields();
       if(key === 'create-account') {
-        this._openLoginModal();
+        if(this.isPasswordValid) {
+          this._openLoginModal();
+        } else {
+          this._openPasswordConfirmationErrorModal();
+        }
       } else {
         this._openCancelModal();
       }
@@ -295,16 +332,12 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   confirmPassword (e) {
     if(this.userData.password && e.detail.value === this.userData.password) {
+      this.isPasswordValid = true;
       this._showPasswordSuccessMessage();
     } else {
+      this.isPasswordValid = false;
       this._showPasswordErrorMessage();
     }
-  }
-
-  initData () {
-    this.inputsList.map(input => {
-      this.userData[input.fieldName] = ''
-    });
   }
 
   _showPasswordErrorMessage () {
@@ -323,7 +356,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     return html`
     <div>
       ${this.showForm()}
-      <div id=password-message-container message-style=${`password-message-${this.passwordMessageStyle}`}>
       <sophos-simple-modal
         modalStyle="full-screen"
         ?isModalOpened=${this.isModalOpened}
@@ -341,10 +373,12 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
       </sophos-simple-modal>
 
+      <div id=password-message-container message-style=${`password-message-${this.passwordMessageStyle}`}>
         <p id=password-message message=${this.passwordMessageStyle}>
           ${this.passwordMessageText}
         </p>
       </div>
+
       <sophos-chimera-button
       type=simple-multi-button
       .buttonsLabels=${this.buttonLabels}
