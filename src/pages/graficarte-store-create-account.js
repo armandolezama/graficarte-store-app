@@ -315,6 +315,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
   }
 
   createAccount () {
+    this._closeModal();
     this.dispatchEvent(new CustomEvent('create-account', {
       detail : { userData: {...this.userData} }
     }));

@@ -142,6 +142,19 @@ export class GraficarteStoreApp extends LitElement {
     this.modalFooterMessage = 'Graficarte';
   }
 
+  setSigninErrorModal (error) {
+
+    this.modalTitle = `${error.info}`;
+    this.modalMessage = `${error.message}`;
+    this.modalLabelsButtons = [
+      {
+        label: 'Aceptar',
+        key: 'close-modal',
+      },
+    ];
+    this.modalFooterMessage = 'Graficarte';
+  }
+
   setApiServerErrorModal () {
     this.modalTitle = 'Error en el servidor';
     this.modalMessage = 'Algo ha fallado con el servidor, por favor, inténtelo más tarde.';
@@ -201,15 +214,18 @@ export class GraficarteStoreApp extends LitElement {
   successSignIn (e) {
     const response = e.detail.payload;
     if (response.status >= 200 && response.status < 300) {
-
+      this._signinData = {};
+      this.page = 'client-store';
+      this.clientContent = 'home';
+      this.templateStyle = 'full-header';
+      this.templateClass = 'client-store-container'
+      this.isCreateAccountOptionDisplayed = false;
+      this.isShoppingCartIconDisplayed = true;
+      this.successSignin(response.data.registry)
+    } else if (response.status >= 400 && response.status < 500) {
+      this.setLoginErrorModal({ info: response.error.info, message: response.message });
+      this.openModal();
     }
-    this._signinData = {};
-    this.page = 'client-store';
-    this.clientContent = 'home';
-    this.templateStyle = 'full-header';
-    this.templateClass = 'client-store-container'
-    this.isCreateAccountOptionDisplayed = false;
-    this.isShoppingCartIconDisplayed = true;
   }
 
   successLoginRequest (e) {
@@ -235,16 +251,16 @@ export class GraficarteStoreApp extends LitElement {
     this.userData = { ...userData };
   }
 
+  successSignin (userData) {
+    this.userData = { ...userData };
+  }
+
   setProgressState () {
     console.log('this shit is in progress');
   }
 
-  errorSignIn (e) {
-    const { title, message, notes } = e.detail;
-    this.modalTitle = title;
-    this.modalMessage = message;
-    this.modalFooterMessage = notes;
-    this.openModal();
+  errorSignIn () {
+    this.setApiServerErrorModal();
   }
 
   errorLogin () {

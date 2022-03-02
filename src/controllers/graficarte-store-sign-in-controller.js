@@ -74,7 +74,7 @@ export class GraficarteStoreSignInController extends LitElement {
     this.service.addEventListener('request-is-done', e => {
       const payload =e.detail.response;
       this.dispatchEvent(new CustomEvent('request-is-done', {
-        detail: { payload }
+        detail: JSON.parse(payload)
       }));
       this.setService();
     });
