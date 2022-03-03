@@ -27,6 +27,7 @@ module.exports = {
         "no-console" : "error",
         "no-debugger" : "error",
         "no-alert" : "error",
+        "eol-last" : "error",
         "lit/attribute-value-entities" : "error",
         "lit/binding-positions" : "error",
         "lit/no-duplicate-template-bindings" : "error",
