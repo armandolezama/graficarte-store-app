@@ -28,36 +28,25 @@ export default class GraficarteStoreAPI extends HTMLElement {
     this.request.open(this.method, this.url);
     this.request.setRequestHeader("Accept", "application/json");
     this.request.setRequestHeader('Content-Type', 'application/json');
-    this.setOnProgressMethod(this.request, () =>{
+    
+    this.request.onprogress = () => {
       this.dispatchEvent(new CustomEvent('request-is-in-progress'));
-    });
+    };
 
-    this.setOnLoadMethod(this.request, () => {
+    this.request.onload = () => {
       const response = this.request.response;
       this.dispatchEvent(new CustomEvent('request-is-done', { detail: {
         response
       }}));
-    });
+    };
 
-    this.setOnErrorMethod(this.request, () => {
+    this.request.onerror = () => {
       this.serviceFailEvent();
-    });
+    };
   }
 
   serviceFailEvent (){
     this.dispatchEvent(new CustomEvent('request-failed'))
-  }
-
-  setOnProgressMethod (requestObject, method){
-    requestObject.onprogress = method;
-  }
-
-  setOnLoadMethod (requestObject, method){
-    requestObject.onload = method;
-  }
-
-  setOnErrorMethod (requestObject, method){
-    requestObject.onerror = method;
   }
 
   setRequestBody (requestBody){

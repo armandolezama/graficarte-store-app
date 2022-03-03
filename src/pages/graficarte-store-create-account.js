@@ -231,7 +231,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
       }];
   }
 
-  _openPasswordConfirmationErrorModal(){
+  _openPasswordConfirmationErrorModal (){
     this.modalTitle = 'Las contraseñas no coinciden';
     this.modalMessage = 'Por favor, asegúrese que la contraseña corresponda con su confirmación';
     this.modalFooterMessage = 'Graficarte';
