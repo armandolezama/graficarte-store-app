@@ -19,6 +19,7 @@ export class GraficarteStoreProfile extends LitElement {
       this.clientDescription = 'Usuario desde hace rato';
       this.clientInputStyle = 'basic';
       this.clientButtonStyle = 'simple-multi-button';
+      this.userData = {};
       this.clientEditButtonMessage = {
         label: getLocal('graficarte-store-client-profile-client-edit-field-button'),
         key: 'edit',
@@ -29,30 +30,35 @@ export class GraficarteStoreProfile extends LitElement {
           fieldName: 'client-name',
           type: 'text',
           isDisabled: true,
+          value: '',
         },
         {
           label: getLocal('graficarte-store-client-profile-client-surname'),
           fieldName: 'client-surname',
           type: 'text',
           isDisabled: true,
+          value: '',
         },
         {
           label: getLocal('graficarte-store-client-profile-client-phone-number'),
           fieldName: 'client-phone-number',
           type: 'text',
           isDisabled: true,
+          value: '',
         },
         {
           label: getLocal('graficarte-store-client-profile-client-email'),
           fieldName: 'client-email',
           type: 'text',
           isDisabled: true,
+          value: '',
         },
         {
           label: getLocal('graficarte-store-client-profile-client-address'),
           fieldName: 'client-address',
           type: 'text',
           isDisabled: true,
+          value: '',
         },
       ];
       this.formButtonLabels = [
@@ -73,7 +79,8 @@ export class GraficarteStoreProfile extends LitElement {
         clientName : { type : String},
         clienSurname : { type : String},
         clienDescription : { type : String},
-        clientForm : { type : Array}
+        clientForm : { type : Array},
+        userData : { type : Object },
       };
     }
   
@@ -90,8 +97,9 @@ export class GraficarteStoreProfile extends LitElement {
 
         .input-form-button {
           display: flex;
-          justify-content: center;
-          align-items: center;
+          position: relative;
+          right: 0;
+          bottom: -9px;
         }
 
         #card-container {
@@ -118,14 +126,34 @@ export class GraficarteStoreProfile extends LitElement {
 
         .form-input {
           --sophos-chimera-input-main-container-height : auto;
+          --sophos-chimera-input-main-container-height: 80px;
         }
         
         .form-button {
-          --sophos-chimera-button-simple-single-buttons-simple-multi-button-margin-bottom: 0;
           --sophos-chimera-button-height: 20px;
           margin-top: 45px;
         }
       `;
+    }
+
+    set userData (value) {
+      const currValue = value;
+      const oldValue = this.userData;
+      const orderedInputs = [
+        currValue.name,
+        currValue.lastName,
+        currValue.phoneNumber,
+        currValue.email,
+        currValue.address,
+      ]
+
+      this.clientForm = this.clientForm?.map((input, index) => {
+        input.value = orderedInputs[index];
+        return input
+      })
+
+      this._userData = currValue;
+      this.requestUpdate('userData', oldValue);
     }
 
     editField (e){
@@ -155,6 +183,7 @@ export class GraficarteStoreProfile extends LitElement {
           .styleOfInput=${this.clientInputStyle}
           .label=${inputForm.label}
           .type=${inputForm.type}
+          .value=${inputForm.value}
           ?isDisabled=${inputForm.isDisabled}>
         </sophos-chimera-input>
         <div class="input-form-button">

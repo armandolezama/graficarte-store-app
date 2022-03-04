@@ -309,7 +309,8 @@ export class GraficarteStoreApp extends LitElement {
       [
         'profile',
         html`
-          <graficarte-store-profile>
+          <graficarte-store-profile
+          .userData=${this.userData}>
           </graficarte-store-profile>
         `
       ],
