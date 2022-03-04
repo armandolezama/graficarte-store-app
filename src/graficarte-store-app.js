@@ -58,6 +58,7 @@ export class GraficarteStoreApp extends LitElement {
       phoneNumber: '',
       id: '',
     };
+    this.shownBuyingOptions = false;
   }
 
   /**
@@ -79,6 +80,7 @@ export class GraficarteStoreApp extends LitElement {
       _loginData: { type: Object },
       _signinData: { type: Object },
       _clientData: { type: Object },
+      shownBuyingOptions:  { type: Boolean },
     };
   }
 
@@ -97,6 +99,7 @@ export class GraficarteStoreApp extends LitElement {
     this.isCreateAccountOptionDisplayed = true;
     this.isShoppingCartIconDisplayed = false;
     this.templateClass = 'public-store-container';
+    this.shownBuyingOptions = true;
   }
 
   login (e) {
@@ -283,15 +286,25 @@ export class GraficarteStoreApp extends LitElement {
     console.log(e.detail.term);
   }
 
+  buyProduct (e){
+    console.log('im buying this product:');
+    console.log(e.detail.productDescription);
+  }
+
+  addProductToCart (e){
+    console.log('im adding to cart this product:');
+    console.log(e.detail.productDescription);
+  }
+
   clientNavigation (e) {
     const clientPage = e.detail.page;
     this.clientContent = clientPage;
     this.isShoppingCartIconDisplayed = true;
   }
 
-  contentCreator (contentController = '', templates = [['', html``]]) {
+  contentCreator (contentTag = '', templates = [['', html``]]) {
     const contentArray = templates.map(template => {
-      return contentController === template[0] && template[1];
+      return contentTag === template[0] && template[1];
     });
 
     return contentArray.filter(template => template);
@@ -302,7 +315,11 @@ export class GraficarteStoreApp extends LitElement {
       [
         'home',
         html`
-          <graficarte-store-home-page .products=${this.storeProducts}>
+          <graficarte-store-home-page 
+          .products=${this.storeProducts}
+          .shownBuyingOptions=${this.shownBuyingOptions}
+          @add-product-to-cart=${this.addProductToCart}
+          @buy-product=${this.buyProduct}>
           </graficarte-store-home-page>
         `
       ],
