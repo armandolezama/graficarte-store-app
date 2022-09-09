@@ -19,7 +19,7 @@ export class GraficarteStoreProfile extends LitElement {
       this.clientDescription = 'Usuario desde hace rato';
       this.clientInputStyle = 'basic';
       this.clientButtonStyle = 'simple-multi-button';
-      this.userData = {};
+      this._userData = {};
       this.clientEditButtonMessage = {
         label: getLocal('graficarte-store-client-profile-client-edit-field-button'),
         key: 'edit',
@@ -138,7 +138,7 @@ export class GraficarteStoreProfile extends LitElement {
 
     set userData (value) {
       const currValue = value;
-      const oldValue = this.userData;
+      const oldValue = {...this.userData};
       const orderedInputs = [
         currValue.name,
         currValue.lastName,
@@ -153,7 +153,7 @@ export class GraficarteStoreProfile extends LitElement {
       })
 
       this._userData = currValue;
-      this.requestUpdate('userData', oldValue);
+      this.requestUpdate('userData', {...oldValue});
     }
 
     editField (e){
