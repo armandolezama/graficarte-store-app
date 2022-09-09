@@ -38,9 +38,9 @@ export class GraficarteStoreHeader extends LitElement {
   static get styles () {
     return css`
       #search-bar {
-        background: rgb(147,199,237);
-        background: linear-gradient(69deg, rgba(147,199,237,1) 0%, rgba(35,132,240,1) 30%, rgba(30,97,238,1) 65%, rgba(30,204,236,0.9304096638655462) 100%);
-        height: 100px;
+        background-color: black;
+        height: 130px;
+        width: 70vw;
         display: flex;
         margin: 20px;
         padding: 0 20px;
@@ -83,7 +83,6 @@ export class GraficarteStoreHeader extends LitElement {
         justify-content: space-around;
         width: 20%;
         flex-direction: column;
-        align-items: baseline;
       }
 
       sophos-chimera-button {

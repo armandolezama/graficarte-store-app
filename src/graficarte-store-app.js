@@ -534,7 +534,7 @@ export class GraficarteStoreApp extends LitElement {
           id="app-main-template"
           page-name=${this.page}
           .styleTemplate=${this.templateStyle}
-          class=${this.templateClass}>
+          .class=${this.templateClass}>
           <div slot="header-content">
             ${this.createHeaderContent()}
           </div>
@@ -584,4 +584,8 @@ customElements.define('graficarte-store-app', GraficarteStoreApp);
 
 /**
  * TO-DO: Add buy product feature
+ */
+
+/**
+ * TO-GO: Add reset password feature
  */

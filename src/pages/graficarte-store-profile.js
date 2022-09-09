@@ -77,7 +77,7 @@ export class GraficarteStoreProfile extends LitElement {
         profilePicture : { type : String },
         profilePictureAlt : { type: String },
         clientName : { type : String},
-        clienSurname : { type : String},
+        clientSurname : { type : String},
         clienDescription : { type : String},
         clientForm : { type : Array},
         userData : { type : Object },
@@ -158,8 +158,8 @@ export class GraficarteStoreProfile extends LitElement {
 
     editField (e){
       const field = e.target.getAttribute('field-name');
-      const editableField = this.clientForm.filter(input => input.fieldName === field);
-      editableField[0].isDisabled = false;
+      const editableField = this.clientForm.find(input => input.fieldName === field);
+      editableField.isDisabled = false;
       this.requestUpdate();
     }
 
@@ -180,6 +180,7 @@ export class GraficarteStoreProfile extends LitElement {
         <sophos-chimera-input
           class="form-input"
           field-name=${inputForm.fieldName}
+          maxLength="20"
           .styleOfInput=${this.clientInputStyle}
           .label=${inputForm.label}
           .type=${inputForm.type}
@@ -207,8 +208,8 @@ export class GraficarteStoreProfile extends LitElement {
             .configContent=${['pickture', 'title' ,'subtitle', 'description']}
             .pictureSRC=${this.profilePicture}
             .pictureAlt=${this.profilePictureAlt}
-            .title=${this.clientName}
-            .subtitle=${this.clienSurname}
+            .cardTitle=${this.clientName}
+            .subtitle=${this.clientSurname}
             .description=${this.clientDescription}>
             </sophos-card>
           </div>

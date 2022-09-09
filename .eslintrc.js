@@ -1,6 +1,7 @@
 module.exports = {
     "plugins": [
-        "lit"
+        "lit",
+        "lit-a11y",
       ],
     "env": {
         "browser": true,
@@ -15,12 +16,15 @@ module.exports = {
         "eslint:recommended",
         "plugin:lit/recommended",
         "plugin:wc/recommended",
+        "plugin:lit-a11y/recommended",
     ],
     "parserOptions": {
         "ecmaVersion": 13,
         "sourceType": "module"
     },
     "rules": {
+        "lit-a11y/alt-text": "error",
+        "lit-a11y/aria-role": "error",
         "space-before-function-paren": ["error", "always"],
         "no-multi-spaces" : "error",
         "no-irregular-whitespace" : "error",

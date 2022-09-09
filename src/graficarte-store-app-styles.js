@@ -6,7 +6,9 @@ export default css`
     width: 100%;
     justify-content: space-around;
     align-items: center;
-    background: linear-gradient(90deg, rgba(145,255,59,1) 0%, rgba(0,80,249,1) 100%);
+    background: gray;
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
   #app-main-template {
@@ -19,7 +21,7 @@ export default css`
     --sophos-simple-template-nav-bar-display: none;
     --sophos-simple-template-main-view-container-overflow: visible;
     --sophos-simple-template-main-view-container-overflow-y: none;
-    --sophos-simple-template-header-height: 90px;
+    --sophos-simple-template-header-height: 20%;
   }
 
   .public-store-container {
@@ -42,15 +44,15 @@ export default css`
     width: 100%;
   }
 
-  sophos-simple-template{
+  sophos-simple-template {
     max-width: 1700px;
-    --sophos-simple-template-main-view-template-style-full-header-border-style: none;
-    --sophos-simple-template-main-view-template-style-full-nav-border-style: none;
-    --sophos-simple-template-main-section-template-style-full-header-border-style: none;
-    --sophos-simple-template-main-section-template-style-full-nav-border-style: none;
-    --sophos-simple-template-nav-bar-border-style: none;
-    --sophos-simple-template-header-border-style: none;
-    --sophos-simple-template-main-container-template-style-full-header-border-style: none;
-    --sophos-simple-template-main-container-template-style-full-nav-border-style: none;
+    --sophos-simple-template-main-view-template-style-full-header-border: none;
+    --sophos-simple-template-main-view-template-style-full-nav-border: none;
+    --sophos-simple-template-main-section-template-style-full-header-border: none;
+    --sophos-simple-template-main-section-template-style-full-nav-border: none;
+    --sophos-simple-template-nav-bar-border: none;
+    --sophos-simple-template-header-border: none;
+    --sophos-simple-template-main-container-template-style-full-header-border: none;
+    --sophos-simple-template-main-container-template-style-full-nav-border: none;
   }
 `;
