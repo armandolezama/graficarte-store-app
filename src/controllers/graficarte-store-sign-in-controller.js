@@ -20,6 +20,7 @@ export class GraficarteStoreSignInController extends LitElement {
     this.password = '';
     this.method = 'POST';
     this.url = 'public/signin';
+    this.service = () => {};
     this.setService();
   }
 

@@ -14,9 +14,9 @@ export class GraficarteStoreProfile extends LitElement {
       super();
       this.profilePicture = './assets/client-user.png';
       this.profilePictureAlt = 'profile image';
-      this.clientName = 'John Doe';
-      this.clientSurname = 'Doe Doe';
-      this.clientDescription = 'Usuario desde hace rato';
+      this.clientName = '';
+      this.clientLastName = '';
+      this.clientEmail = '';
       this.clientInputStyle = 'basic';
       this.clientButtonStyle = 'simple-multi-button';
       this._userData = {};
@@ -33,8 +33,8 @@ export class GraficarteStoreProfile extends LitElement {
           value: '',
         },
         {
-          label: getLocal('graficarte-store-client-profile-client-surname'),
-          fieldName: 'client-surname',
+          label: getLocal('graficarte-store-client-profile-client-lastName'),
+          fieldName: 'client-lastName',
           type: 'text',
           isDisabled: true,
           value: '',
@@ -42,13 +42,6 @@ export class GraficarteStoreProfile extends LitElement {
         {
           label: getLocal('graficarte-store-client-profile-client-phone-number'),
           fieldName: 'client-phone-number',
-          type: 'text',
-          isDisabled: true,
-          value: '',
-        },
-        {
-          label: getLocal('graficarte-store-client-profile-client-email'),
-          fieldName: 'client-email',
           type: 'text',
           isDisabled: true,
           value: '',
@@ -77,7 +70,7 @@ export class GraficarteStoreProfile extends LitElement {
         profilePicture : { type : String },
         profilePictureAlt : { type: String },
         clientName : { type : String},
-        clientSurname : { type : String},
+        clientLastName : { type : String},
         clienDescription : { type : String},
         clientForm : { type : Array},
         userData : { type : Object },
@@ -137,23 +130,31 @@ export class GraficarteStoreProfile extends LitElement {
     }
 
     set userData (value) {
+      console.log(value)
       const currValue = value;
       const oldValue = {...this.userData};
       const orderedInputs = [
         currValue.name,
         currValue.lastName,
         currValue.phoneNumber,
-        currValue.email,
         currValue.address,
       ]
 
+      this.clientName = currValue.name;
+      this.clientLastName = currValue.lastName;
+      this.clientEmail = currValue.email;
+
       this.clientForm = this.clientForm?.map((input, index) => {
         input.value = orderedInputs[index];
-        return input
+        return input;
       })
 
       this._userData = currValue;
       this.requestUpdate('userData', {...oldValue});
+    }
+
+    get userData (){
+      return this._userData;
     }
 
     editField (e){
@@ -163,15 +164,21 @@ export class GraficarteStoreProfile extends LitElement {
       this.requestUpdate();
     }
 
-    _manageSaveCancelOptions (e){
-      const { option } = e.detail;
-      if (option === 0) {
-        this.saveData();
-      }
+    savefield (e){
+      const field = e.target.getAttribute('field-name');
+      const editableField = this.clientForm.find(input => input.fieldName === field);
+      editableField.value = e.detail.value;
     }
 
     saveData (){
-      this.dispatchEvent(new CustomEvent('graficarte-store-profile-has-changed'));
+      const payload = {
+        name: this.clientForm[0].value,
+        lastName: this.clientForm[1].value,
+        phoneNumber: this.clientForm[2].value,
+        address: this.clientForm[3].value,
+        email: this.clientEmail,
+      };
+      this.dispatchEvent(new CustomEvent('graficarte-store-profile-has-changed', { detail: payload }));
     }
 
     createClientForm (){
@@ -185,7 +192,8 @@ export class GraficarteStoreProfile extends LitElement {
           .label=${inputForm.label}
           .type=${inputForm.type}
           .value=${inputForm.value}
-          ?isDisabled=${inputForm.isDisabled}>
+          ?isDisabled=${inputForm.isDisabled}
+          @sophos-input-changed=${this.savefield}>
         </sophos-chimera-input>
         <div class="input-form-button">
           <sophos-chimera-button
@@ -209,8 +217,8 @@ export class GraficarteStoreProfile extends LitElement {
             .pictureSRC=${this.profilePicture}
             .pictureAlt=${this.profilePictureAlt}
             .cardTitle=${this.clientName}
-            .subtitle=${this.clientSurname}
-            .description=${this.clientDescription}>
+            .subtitle=${this.clientLastName}
+            .description=${this.clientEmail}>
             </sophos-card>
           </div>
           <div id="client-form-container">
@@ -219,7 +227,8 @@ export class GraficarteStoreProfile extends LitElement {
               <sophos-chimera-button
               id="save-cancel-button"
               .type=${this.clientButtonStyle}
-              .buttonsLabels=${this.formButtonLabels}></sophos-chimera-button>
+              .buttonsLabels=${this.formButtonLabels}
+              @sophos-chimera-button-click=${this.saveData}></sophos-chimera-button>
             </div>
           </div>
         </div>

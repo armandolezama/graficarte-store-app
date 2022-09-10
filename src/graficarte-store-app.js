@@ -18,6 +18,7 @@ import './complements/graficarte-store-client-nav-bar';
 import './complements/graficarte-store-header';
 import './controllers/graficarte-store-login-controller';
 import './controllers/graficarte-store-sign-in-controller';
+import './controllers/graficarte-store-client-controller';
 import productMocks from './mocks/products-mocks';
 import inventoryMocks from './mocks/inventory-mocks';
 
@@ -59,6 +60,7 @@ export class GraficarteStoreApp extends LitElement {
       id: '',
     };
     this.shownBuyingOptions = false;
+    this.updatedUserData = {};
   }
 
   /**
@@ -81,6 +83,8 @@ export class GraficarteStoreApp extends LitElement {
       _signinData: { type: Object },
       _clientData: { type: Object },
       shownBuyingOptions:  { type: Boolean },
+      updatedUserData: { type: Object },
+      userData: { type: Object }
     };
   }
 
@@ -195,6 +199,11 @@ export class GraficarteStoreApp extends LitElement {
     this.showPublicStore();
   }
 
+  updateUserData(e){
+    const payload = e.detail;
+    this.updatedUserData = {...payload};
+  }
+
   setValidCreateAccountPassword () {
     this.isValidCreateAccountPassword = true;
   }
@@ -258,6 +267,10 @@ export class GraficarteStoreApp extends LitElement {
     this.userData = { ...userData };
   }
 
+  successUpdatingClientData(e){
+    this.userData = {...this.userData, ...e.detail.userData}
+  }
+
   setProgressState () {
     console.log('this shit is in progress');
   }
@@ -267,6 +280,10 @@ export class GraficarteStoreApp extends LitElement {
   }
 
   errorLogin () {
+    this.setApiServerErrorModal();
+  }
+
+  errorUpdatingClientData(){
     this.setApiServerErrorModal();
   }
 
@@ -327,7 +344,8 @@ export class GraficarteStoreApp extends LitElement {
         'profile',
         html`
           <graficarte-store-profile
-          .userData=${this.userData}>
+          .userData=${this.userData}
+          @graficarte-store-profile-has-changed=${this.updateUserData}>
           </graficarte-store-profile>
         `
       ],
@@ -529,6 +547,14 @@ export class GraficarteStoreApp extends LitElement {
         @request-failed=${this.errorSignIn} 
         @request-in-progress=${this.setProgressState}>
         </graficarte-store-sign-in-controller>
+
+        <graficarte-store-client-controller
+        .userData=${this.userData}
+        .updatedUserData=${this.updatedUserData}
+        @request-failed=${this.errorUpdatingClientData}
+        @request-in-progress=${this.setProgressState}
+        @request-is-done=${this.successUpdatingClientData}>
+        </graficarte-store-client-controller>
       
         <sophos-simple-template
           id="app-main-template"

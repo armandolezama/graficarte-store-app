@@ -13,7 +13,7 @@ export default {
   'graficarte-store-login-form-user-placeholder' : 'Correo electrónico',
   'graficarte-store-login-form-password-placeholder' : 'Contraseña',
   'graficarte-store-client-profile-client-name' : 'Nombre(s)',
-  'graficarte-store-client-profile-client-surname' : 'Apellidos',
+  'graficarte-store-client-profile-client-lastName' : 'Apellidos',
   'graficarte-store-client-profile-client-phone-number' : 'Número de teléfono',
   'graficarte-store-client-profile-client-email': 'Correo electrónico',
   'graficarte-store-client-profile-client-address': 'Dirección',
