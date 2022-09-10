@@ -7,7 +7,7 @@ export class GraficarteStoreSignInController extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.userData = {};
     this.updatedUserData = {};
@@ -17,7 +17,7 @@ export class GraficarteStoreSignInController extends LitElement {
     this.url = '/client'
   }
 
-  static get properties() {
+  static get properties () {
     return {
       updatedUserData: { type: Object },
     };
@@ -26,7 +26,7 @@ export class GraficarteStoreSignInController extends LitElement {
   /**
    * @param {any} value
    */
-  set updatedUserData(value) {
+  set updatedUserData (value) {
     const currValue = {...value};
     console.log(value)
 
@@ -63,19 +63,19 @@ export class GraficarteStoreSignInController extends LitElement {
     
   }
 
-  get updatedUserData(){
+  get updatedUserData (){
     return this._updatedUserData;
   }
 
-  isCurrValueValid(currValue){
+  isCurrValueValid (currValue){
     let shouldUpdate = false;
 
     for(const property in currValue){
       if(this.userData[property] !== currValue[property]) {
         shouldUpdate = true;
         break;
-      };
-    };
+      }
+    }
     return shouldUpdate;
   }
 

@@ -199,7 +199,7 @@ export class GraficarteStoreApp extends LitElement {
     this.showPublicStore();
   }
 
-  updateUserData(e){
+  updateUserData (e){
     const payload = e.detail;
     this.updatedUserData = {...payload};
   }
@@ -267,7 +267,7 @@ export class GraficarteStoreApp extends LitElement {
     this.userData = { ...userData };
   }
 
-  successUpdatingClientData(e){
+  successUpdatingClientData (e){
     this.userData = {...this.userData, ...e.detail.userData}
   }
 
@@ -283,7 +283,7 @@ export class GraficarteStoreApp extends LitElement {
     this.setApiServerErrorModal();
   }
 
-  errorUpdatingClientData(){
+  errorUpdatingClientData (){
     this.setApiServerErrorModal();
   }
 

@@ -130,7 +130,6 @@ export class GraficarteStoreProfile extends LitElement {
     }
 
     set userData (value) {
-      console.log(value)
       const currValue = value;
       const oldValue = {...this.userData};
       const orderedInputs = [
