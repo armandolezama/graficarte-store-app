@@ -1,7 +1,5 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-store-app-styles';
-import 'sophos-simple-template/sophos-simple-template';
-import 'sophos-simple-modal/sophos-simple-modal';
 import './controllers/graficarte-main-controller';
 import './controllers/graficarte-view-controller';
 
@@ -50,9 +48,6 @@ export class GraficarteStoreApp extends LitElement {
         .inputChannel=${this.viewControllerInput}
         @output-channel=${this.setViewControllerOutput}>
         </graficarte-view-controller>
-
-        <graficarte-store-modal>
-        </graficarte-store-modal>
       
       </div>
     `;
@@ -80,4 +75,9 @@ customElements.define('graficarte-store-app', GraficarteStoreApp);
 
 /**
  * TO-GO: Add reset password feature
+ */
+
+/**
+ * TO-DO: Add models implementation for iterative instances inside controlers e.g. 
+ * product controllers, product views, client controllers, client views, and so on.
  */

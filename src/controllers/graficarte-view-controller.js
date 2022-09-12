@@ -17,6 +17,14 @@ export class GraficarteViewController extends LitElement {
       ['graficarte-login'] : this.loginControllerData,
       ['graficarte-client-data'] : this.clientData,
     }
+    this.userData = {
+      name: '',
+      lastName: '',
+      address: '',
+      email: '',
+      phoneNumber: '',
+      id: '',
+    };
   }
 
   /**
@@ -35,6 +43,26 @@ export class GraficarteViewController extends LitElement {
     this.channels[currValue.channelName] = currValue.payload
 
     this.requestUpdate('inputChannel', oldValue)
+  }
+
+  createAccount (e) {
+    this._signinData = e.detail.userData;
+  }
+
+  successLogin (userData) {
+    this.userData = { ...userData };
+  }
+
+  successSignin (userData) {
+    this.userData = { ...userData };
+  }
+
+  successUpdatingClientData (e){
+    this.userData = {...this.userData, ...e.detail.userData}
+  }
+
+  setProgressState () {
+    console.log('this shit is in progress');
   }
 
   outputPayload(payload){
