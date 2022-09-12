@@ -3,6 +3,7 @@ import styles from './graficarte-store-create-account-styles';
 import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
 import 'sophos-simple-modal/sophos-simple-modal';
+import './graficarte-create-account-form/graficarte-create-account-form';
 import getLocal from '../../locales'
 
 export class GraficarteStoreCreateAccount extends LitElement {
@@ -13,78 +14,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     */
   constructor () {
     super();
-    this.inputsList = [
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-name-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'name',
-        handler: 'set-data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-last-name-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'lastName',
-        handler: 'set-data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-phone-number-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'phoneNumber',
-        handler: 'set-data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-email-placeholder'),
-        type: 'email',
-        isRequired: true,
-        fieldName: 'email',
-        handler: 'set-data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-address-placeholder'),
-        type: 'text',
-        isRequired: true,
-        fieldName: 'address',
-        handler: 'set-data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-password-placeholder'),
-        type: 'password',
-        isRequired: true,
-        fieldName: 'password',
-        handler: 'set-data',
-        missingField: false
-      },
-      {
-        styleOfInput: 'simple-bar-input',
-        maxLength : 30,
-        label: getLocal('graficarte-store-create-account-form-repeat-password-placeholder'),
-        type: 'password',
-        isRequired: true,
-        fieldName: 'confirm-password',
-        handler: 'confirm-pass',
-        missingField: false
-      },
-    ];
     this.buttonLabels = [
       {
         label: getLocal('graficarte-store-create-account-form-create-account'),
@@ -123,7 +52,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
       missingFields : { type : Array },
       passwordMessageStyle : { type : String },
       passwordMessageText : { type : String },
-      createAccountActionsHandlers : { type : Object},
       isModalOpened : { type : Boolean },
       modalTitle : { type : String },
       modalMessage : { type : String },
@@ -148,11 +76,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   firstUpdated (){
     super.firstUpdated();
-
-    this.createAccountActionsHandlers = {
-      'set-data' : this.setUserDataField,
-      'confirm-pass' : this.confirmPassword
-    };
 
     this.modalButtonsHandlers = {
       'login' : this.createAccount,
@@ -288,21 +211,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     this.dispatchEvent(new CustomEvent('cancel-create-account'));
   }
 
-
-  setUserDataField (e) {
-    this.userData[e.target.getAttribute('field-name')] = e.detail.value;
-  }
-
-  confirmPassword (e) {
-    if(this.userData.password && e.detail.value === this.userData.password) {
-      this.isPasswordValid = true;
-      this._showPasswordSuccessMessage();
-    } else {
-      this.isPasswordValid = false;
-      this._showPasswordErrorMessage();
-    }
-  }
-
   _showPasswordErrorMessage () {
     this.passwordMessageStyle = 'error';
     this.passwordMessageText = 'Las contraseñas no coinciden'
@@ -318,7 +226,8 @@ export class GraficarteStoreCreateAccount extends LitElement {
   render () {
     return html`
     <div>
-      ${this.showForm()}
+      <graficarte-create-account-form>
+      </graficarte-create-account-form>
       <sophos-simple-modal
         modalStyle="full-screen"
         ?isModalOpened=${this.isModalOpened}

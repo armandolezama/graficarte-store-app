@@ -1,10 +1,9 @@
 /**
  * TO-DO: turn this controller modal into gneneral controllers model (Super class maybe);
  */
-import { LitElement } from 'lit';
-import GraficarteStoreAPI from '../service/graficarte-store-api';
+import { ServiceController } from "./controller-class/ServiceController";
 
-export class GraficarteStoreSignInController extends LitElement {
+export class GraficarteStoreSignInController extends ServiceController {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
     * state, set up event listeners, create shadow dom.
@@ -20,8 +19,6 @@ export class GraficarteStoreSignInController extends LitElement {
     this.password = '';
     this.method = 'POST';
     this.url = 'public/signin';
-    this.service = () => {};
-    this.setService();
   }
 
   /**
@@ -59,35 +56,18 @@ export class GraficarteStoreSignInController extends LitElement {
   }
 
    _signIn (){
-    this.service.setRequestBody({
-      name : this.name,
-      lastName : this.lastName,
-      phoneNumber : this.phoneNumber,
-      email : this.email,
-      address : this.address,
-      password : this.password
-    })
-
-    this.service.addEventListener('request-is-in-progress', () => {
-      this.dispatchEvent(new CustomEvent('request-in-progress'));
-    });
-    
-    this.service.addEventListener('request-is-done', e => {
-      const payload =e.detail.response;
-      this.dispatchEvent(new CustomEvent('request-is-done', {
-        detail: JSON.parse(payload)
-      }));
-      this.setService();
-    });
-
-    this.service.addEventListener('request-failed', () => {
-      this.dispatchEvent(new CustomEvent('request-failed'), {
-        detail: {}
-      });
-      this.setService();
-    });
-    this.service.doRequest();
-    this.flushData()
+    this.body = {
+      name: this.name,
+      lastName: this.lastName,
+      phoneNumber: this.phoneNumber,
+      email: this.email,
+      address: this.address,
+      password: this.password,
+    }
+    this.setService();
+    this.setListeners();
+    this.doRequest();
+    this.flushData();
   }
 
   missingFieldsMessage (emptyFields){
@@ -96,10 +76,6 @@ export class GraficarteStoreSignInController extends LitElement {
         emptyFields
       }
     }));
-  }
-
-  setService (method = this.method, url = this.url){
-    this.service = new GraficarteStoreAPI(method, url);
   }
 
   flushData () {

@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import styles from './graficarte-store-home-page-styles';
 import 'sophos-card/sophos-card';
 import 'sophos-chimera-button/sophos-chimera-button';
 export class GraficarteStoreHomePage extends LitElement {
@@ -37,40 +38,7 @@ export class GraficarteStoreHomePage extends LitElement {
   }
 
   static get styles () {
-    return css`
-      #home-page-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-      }
-
-      .product-container {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: space-around;
-      }
-
-      .buttons-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-around;
-      }
-
-      .product-button {
-        border-radius: 30px;
-      }
-
-      sophos-card {
-        --sophos-card-host-width: 100%;
-        --sophos-card-host-max-width: 200px;
-        --sophos-card-host-min-width: 100px;
-        --sophos-card-main-container-background-color: transparent;
-        margin: clamp(20px, 40px, 90px);
-        flex-grow: 2;
-      }
-    `;
+    return styles;
   }
 
   firstUpdated (){

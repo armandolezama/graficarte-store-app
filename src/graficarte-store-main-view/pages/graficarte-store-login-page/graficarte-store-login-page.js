@@ -1,4 +1,5 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
+import styles from './graficarte-store-login-page-styles';
 import 'sophos-chimera-button/sophos-chimera-button';
 import 'sophos-simple-modal/sophos-simple-modal';
 import getLocal from '../locales/'
@@ -64,37 +65,7 @@ export class GraficarteStoreLoginPage extends LitElement {
   }
 
   static get styles () {
-    return css`
-      #login-container {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        height: 100%;
-      }
-
-      #login-form-container{
-        background: #FFFFFF;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        flex-direction: column;
-        width: 400px;
-        height: 400px;
-        border-radius: 30px;
-      }
-      
-      sophos-chimera-input {
-        --sophos-chimera-input-main-container-height: auto;
-      }
-
-      sophos-chimera-button {
-        --sophos-chimera-button-simple-single-buttons-simple-multi-button-margin: 0 20px;
-      }
-
-      .modal-buttons {
-        --sophos-chimera-button-simple-single-buttons-simple-multi-button-margin: 20px 20px;
-      }
-    `;
+    return styles;
   }
 
   set missingFields (value) {

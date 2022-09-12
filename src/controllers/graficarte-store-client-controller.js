@@ -1,7 +1,6 @@
-import { LitElement } from 'lit';
-import GraficarteStoreAPI from '../service/graficarte-store-api';
+import { ServiceController } from "./controller-class/ServiceController";
 
-export class GraficarteStoreSignInController extends LitElement {
+export class GraficarteStoreClientController extends ServiceController {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
     * state, set up event listeners, create shadow dom.
@@ -14,7 +13,7 @@ export class GraficarteStoreSignInController extends LitElement {
     this.newOrderData = {};
     this.updatedOrderData = {};
     this.canceledOrderData = {};
-    this.url = '/client'
+    this.baseURL = '/client'
   }
 
   static get properties () {
@@ -28,36 +27,13 @@ export class GraficarteStoreSignInController extends LitElement {
    */
   set updatedUserData (value) {
     const currValue = {...value};
-    console.log(value)
 
     if(this.isCurrValueValid(currValue)){
-      console.log(currValue)
-
-      this.setService('PATCH', `${this.url}/updateUserData`)
-      this.service.setRequestBody({
-        ...currValue
-      })
-  
-      this.service.addEventListener('request-is-in-progress', () => {
-        this.dispatchEvent(new CustomEvent('request-in-progress'));
-      });
-      
-      this.service.addEventListener('request-is-done', e => {
-        const payload =e.detail.response;
-        this.dispatchEvent(new CustomEvent('request-is-done', {
-          detail: JSON.parse(payload)
-        }));
-      });
-  
-      this.service.addEventListener('request-failed', () => {
-        this.dispatchEvent(new CustomEvent('request-failed'), {
-          detail: {}
-        });
-      });
-  
-      this.service.doRequest();
-  
-      this.service = () => {}
+      this.body = {...currValue};
+      this.url = `${this.baseURL}/updateUserData`
+      this.setService();
+      this.setListeners();
+      this.doRequest;
     }
     this._updatedUserData = currValue;
     
@@ -78,10 +54,6 @@ export class GraficarteStoreSignInController extends LitElement {
     }
     return shouldUpdate;
   }
-
-  setService (method, url){
-    this.service = new GraficarteStoreAPI(method, url);
-  }
 }
 
-customElements.define('graficarte-store-client-controller', GraficarteStoreSignInController)
+customElements.define('graficarte-store-client-controller', GraficarteStoreClientController)

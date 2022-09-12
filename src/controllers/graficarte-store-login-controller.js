@@ -1,7 +1,6 @@
-import { LitElement } from 'lit';
-import GraficarteStoreAPI from '../service/graficarte-store-api';
+import { ServiceController } from "./controller-class/ServiceController";
 
-export class GraficarteStoreLoginController extends LitElement {
+export class GraficarteStoreLoginController extends ServiceController {
   //component to manage error or success response from login service
 
   /**
@@ -15,7 +14,6 @@ export class GraficarteStoreLoginController extends LitElement {
     this.password = '';
     this.method = 'POST';
     this.url = 'public/login';
-    this.setService();
   }
 
   /**
@@ -46,35 +44,15 @@ export class GraficarteStoreLoginController extends LitElement {
 
   _login (){
     
-    this.service.setRequestBody({
+    this.body = {
       email: this.email,
       password: this.password
-    });
-    
-    this.service.addEventListener('request-is-in-progress', () => {
-      this.dispatchEvent(new CustomEvent('request-in-progress'));
-    });
-    
-    this.service.addEventListener('request-is-done', e => {
-      const payload =e.detail.response;
-      this.dispatchEvent(new CustomEvent('request-is-done', {
-        detail: JSON.parse(payload)
-      }));
-      this.setService();
-    });
-
-    this.service.addEventListener('request-failed', () => {
-      this.dispatchEvent(new CustomEvent('request-failed'));
-      this.setService();
-    });
-    
-    this.service.doRequest();
+    }
+    this.setService();
+    this.setListeners();
+    this.doRequest();
     this.flushData();
   
-  }
-
-  setService (method = this.method, url = this.url){
-    this.service = new GraficarteStoreAPI(method, url);
   }
 
   flushData () {
