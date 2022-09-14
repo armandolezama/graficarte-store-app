@@ -43,6 +43,7 @@ export class GraficarteViewController extends LitElement {
   static get properties () {
     return {
       inputChannel: { type: Object},
+      viewConfig: { type: Object},
     };
   }
 
@@ -54,11 +55,10 @@ export class GraficarteViewController extends LitElement {
     const oldValue = {...this._inputChannel}
 
     if(currValue.channelName){
-      this.channels[currValue.channelName] = currValue.payload
+      this.channels[currValue.channelName] = currValue.payload;
     }
 
-
-    this.requestUpdate('inputChannel', oldValue)
+    this.requestUpdate('inputChannel', oldValue);
   }
 
   createAccount (e) {
@@ -79,11 +79,35 @@ export class GraficarteViewController extends LitElement {
   }
 
   successUpdatingClientData (e){
-    this.userData = {...this.userData, ...e.detail.userData}
+    this.userData = {...this.userData, ...e.detail.userData};
   }
 
   setProgressState () {
     console.log('this shit is in progress');
+  }
+
+  pageNavigation (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-view-config';
+    this.sendOutputPayload(channelName, payload);
+  }
+
+  requestUpdateOfUserData (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-updated-user-data';
+    this.sendOutputPayload(channelName, payload);
+  }
+
+  requestLogin (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-login-user';
+    this.sendOutputPayload(channelName, payload);
+  }
+
+  requestSignIn (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-signin-user';
+    this.sendOutputPayload(channelName, payload);
   }
 
   sendOutputPayload (channelName, payload = {}){
@@ -93,30 +117,6 @@ export class GraficarteViewController extends LitElement {
         payload,
       }
     }));
-  }
-
-  pageNavigation (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-view-config';
-    this.sendOutputPayload(channelName, payload)
-  }
-
-  requestUpdateOfUserData (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-updated-user-data';
-    this.sendOutputPayload(channelName, payload)
-  }
-
-  requestLogin (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-login-user';
-    this.sendOutputPayload(channelName, payload)
-  }
-
-  requestSignIn (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-signin-user';
-    this.sendOutputPayload(channelName, payload)
   }
 
   render () {

@@ -4,7 +4,7 @@ import '../controllers/graficarte-store-sign-in-controller'
 import '../controllers/graficarte-store-login-controller'
 import '../controllers/graficarte-store-views-configs-controller';
 
-export class GraficarteMainController extends LitElement {
+export class GraficarteStoreMainController extends LitElement {
   
   /**
     * Instance of the element is created/upgraded. Useful for initializing
@@ -57,22 +57,18 @@ export class GraficarteMainController extends LitElement {
     };
   }
 
+  /**
+   * @param {inputChannel} value
+   */
   set inputChannel (value) {
     const currValue = {...value};
     const oldValue = {...this._inputChannel}
 
-    this.channels[currValue.channelName] = currValue.payload
+    if(currValue.channelName) {
+      this.channels[currValue.channelName] = currValue.payload
+    }
 
     this.requestUpdate('inputChannel', oldValue)
-  }
-
-  sendOutputPayload (channelName, payload = {}){
-    this.dispatchEvent(new CustomEvent('output-channel', {
-      detail: {
-        channelName,
-        payload
-      }
-    }));
   }
 
   sendViewConfig (e){
@@ -99,6 +95,15 @@ export class GraficarteMainController extends LitElement {
     this.sendOutputPayload(channelName, payload)
   }
 
+  sendOutputPayload (channelName, payload = {}){
+    this.dispatchEvent(new CustomEvent('output-channel', {
+      detail: {
+        channelName,
+        payload
+      }
+    }));
+  }
+
   render () {
     return html`
       <graficarte-store-login-controller
@@ -118,23 +123,23 @@ export class GraficarteMainController extends LitElement {
       </graficarte-store-client-controller>
 
       <graficarte-store-sign-in-controller
-        .name = ${this.signinControllerData.name};
-        .lastName = ${this.signinControllerData.lastName};
-        .phoneNumber = ${this.signinControllerData.phoneNumber};
-        .email = ${this.signinControllerData.email};
-        .address = ${this.signinControllerData.address};
-        .password = ${this.signinControllerData.password};
+        .name = ${this.signinControllerData.name}
+        .lastName = ${this.signinControllerData.lastName}
+        .phoneNumber = ${this.signinControllerData.phoneNumber}
+        .email = ${this.signinControllerData.email}
+        .address = ${this.signinControllerData.address}
+        .password = ${this.signinControllerData.password}
         @request-is-done=${this.manageSucessRequest}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-sign-in-controller>
 
-      <graficarte-view-controller
+      <graficarte-store-views-configs-controller
       .viewConfig=${this.viewConfig}
       @view-config-setted=${this.sendViewConfig}>
-      </graficarte-view-controller>
+      </graficarte-store-views-configs-controller>
     `;
   }
 
 }
-customElements.define('graficarte-main-controller', GraficarteMainController);
+customElements.define('graficarte-store-main-controller', GraficarteStoreMainController);

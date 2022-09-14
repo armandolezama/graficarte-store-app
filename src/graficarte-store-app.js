@@ -21,6 +21,16 @@ export class GraficarteStoreApp extends LitElement {
     }
   }
 
+  /**
+    * Declared properties and their corresponding attributes
+    */
+  static get properties () {
+    return {
+      viewControllerInput: { type: Object},
+      mainControllerInput: { type: Object},
+    };
+  }
+
   static get styles () {
     return styles;
   }

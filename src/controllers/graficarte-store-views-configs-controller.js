@@ -31,5 +31,12 @@ export class GraficarteStoreViewsConfigsController extends LitElement {
     this._viewConfig = currValue
     this.requestUpdate('viewConfig', oldValue)
   }
+
+  firstUpdated () {
+    super.firstUpdated();
+    this.dispatchEvent(new CustomEvent('view-config-setted', {
+      detail: viewsConfigs['public-store-page']
+    }))
+  }
 }
 customElements.define('graficarte-store-views-configs-controller', GraficarteStoreViewsConfigsController);

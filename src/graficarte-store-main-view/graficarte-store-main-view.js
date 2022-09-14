@@ -23,18 +23,20 @@ export class GraficarteStoreMainView extends LitElement {
     this.shownBuyingOptions = false;
   }
 
-    /**
-    * Object describing property-related metadata used by Polymer features
-    */
-     static get properties () {
-      return {
-        page: { type: String },
-        clientContent: { type: String },
-        templateStyle: { type: String },
-        isCreateAccountOptionDisplayed: { type: Boolean },
-        isShoppingCartIconDisplayed: { type: Boolean },
-      };
-    }
+  /**
+  * Object describing property-related metadata used by Polymer features
+  */
+  static get properties () {
+    return {
+      mainPage: { type: String },
+      clientContent: { type: String },
+      templateStyle: { type: String },
+      templateClass: { type: String },
+      isCreateAccountOptionDisplayed: { type: Boolean },
+      isShoppingCartIconDisplayed: { type: Boolean },
+      shownBuyingOptions: { type: Boolean },
+    };
+  }
 
   static get styles () {
     return styles;
