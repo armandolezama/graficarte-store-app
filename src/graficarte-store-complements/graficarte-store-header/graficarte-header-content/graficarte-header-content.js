@@ -11,7 +11,7 @@ export class GraficarteHeaderContent extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.isCreateAccountEnable = false;
     this.isShoppingCartIconEnable = false;
@@ -37,7 +37,7 @@ export class GraficarteHeaderContent extends LitElement {
     };
   }
 
-  static get styles() {
+  static get styles () {
     return styles;
   }
 
@@ -65,7 +65,7 @@ export class GraficarteHeaderContent extends LitElement {
       term : e.target.value}}));
   }
 
-  render() {
+  render () {
     return html`
     <div 
       id="search-bar">

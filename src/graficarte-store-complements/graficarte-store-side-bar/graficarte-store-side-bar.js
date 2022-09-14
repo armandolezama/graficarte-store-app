@@ -8,7 +8,7 @@ export class GraficarteStoreSideBar extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.sideBarContent = [
       [
@@ -57,7 +57,7 @@ export class GraficarteStoreSideBar extends LitElement {
     return contentArray.filter(template => template);
   }
 
-  render() {
+  render () {
     return html`${this.contentCreator(this.content, this.sideBarContent)}`;
   }
 }

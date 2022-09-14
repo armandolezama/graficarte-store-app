@@ -8,7 +8,7 @@ export class ServiceController extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.method = '';
     this.url = '';
@@ -22,7 +22,7 @@ export class ServiceController extends LitElement {
     this.setListeners();
   }
 
-  setListeners(){
+  setListeners (){
     this.service.addEventListener('request-is-in-progress', () => {
       this.dispatchEvent(new CustomEvent('request-in-progress'));
     });
@@ -41,7 +41,7 @@ export class ServiceController extends LitElement {
     });
   }
 
-  doRequest(){
+  doRequest (){
     this.service.doRequest();
   
     this.service = () => {};

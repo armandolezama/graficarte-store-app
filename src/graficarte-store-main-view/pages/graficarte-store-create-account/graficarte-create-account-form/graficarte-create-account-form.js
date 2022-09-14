@@ -1,9 +1,10 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-create-account-form-styles';
+import getLocal from '../../../../locales';
 
 export class GraficarteCreateAccountForm extends LitElement {
 
-  constructor(){
+  constructor (){
     super();
     this.inputsList = [
       {
@@ -106,7 +107,7 @@ export class GraficarteCreateAccountForm extends LitElement {
     }
   }
 
-  render() {
+  render () {
     return this.inputsList.map(inputData => {
       return html`
       <sophos-chimera-input
@@ -121,7 +122,7 @@ export class GraficarteCreateAccountForm extends LitElement {
         @sophos-input-changed=${this.createAccountActionsHandlers[inputData.handler]}>
       </sophos-chimera-input>
       `;
-    });;
+    });
   }
 }
 customElements.define('graficarte-create-account-form', GraficarteCreateAccountForm);

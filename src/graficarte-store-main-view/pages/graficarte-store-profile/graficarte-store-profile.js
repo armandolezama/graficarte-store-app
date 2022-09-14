@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 import styles from './graficarte-store-profile-styles';
 import 'sophos-card/sophos-card';
 import 'sophos-chimera-input/sophos-chimera-input';
@@ -25,7 +25,7 @@ export class GraficarteStoreProfile extends LitElement {
         label: getLocal('graficarte-store-client-profile-client-edit-field-button'),
         key: 'edit',
       };
-      ;
+      
       this.formButtonLabels = [
         {
           label: getLocal('graficarte-store-client-profile-client-save-button'),

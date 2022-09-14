@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import '../graficarte-store-main-view/graficarte-store-main-view';
+import viewsConfigs from '../utils/graficarte-view-config';
 
 export class GraficarteViewController extends LitElement {
   /**
@@ -7,16 +8,13 @@ export class GraficarteViewController extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.inputChannel = {
       channelName: '',
+      //Payload: Standard to declare variable objects
       payload: () => {},
     };
-    this.channels = {
-      ['graficarte-login'] : this.loginControllerData,
-      ['graficarte-client-data'] : this.clientData,
-    }
     this.userData = {
       name: '',
       lastName: '',
@@ -25,12 +23,25 @@ export class GraficarteViewController extends LitElement {
       phoneNumber: '',
       id: '',
     };
+    this.viewConfig = {
+      mainPage: '',
+      clientContent: '',
+      templateStyle: '',
+      templateClass: '',
+      isCreateAccountOptionDisplayed: false,
+      isShoppingCartIconDisplayed: false,
+      shownBuyingOptions: false,
+    }
+    this.channels = {
+      ['graficarte-user-data'] : this.userData,
+      ['graficarte-view-config'] : this.viewConfig
+    }
   }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       inputChannel: { type: Object},
     };
@@ -49,6 +60,11 @@ export class GraficarteViewController extends LitElement {
     this._signinData = e.detail.userData;
   }
 
+  cancelCreateAccount () {
+    this._signinData = {};
+    this.showPublicStore();
+  }
+
   successLogin (userData) {
     this.userData = { ...userData };
   }
@@ -65,15 +81,34 @@ export class GraficarteViewController extends LitElement {
     console.log('this shit is in progress');
   }
 
-  outputPayload(payload){
+  sendOutputPayload (channelName, payload = {}){
     this.dispatchEvent(new CustomEvent('output-channel', {
-      detail: payload
+      detail: {
+        channelName,
+        payload,
+      }
     }));
   }
 
-  render() {
+  requestUpdateOfUserData (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-updated-user-data';
+    this.sendOutputPayload({
+      channelName, payload,
+    })
+  }
+
+  render () {
     return html`
-      <graficarte-store-main-view>
+      <graficarte-store-main-view
+        .mainPage = ${this.viewConfig.mainPage}
+        .clientContent = ${this.viewConfig.clientContent}
+        .templateStyle = ${this.viewConfig.templateStyle}
+        .templateClass = ${this.viewConfig.templateClass}
+        .isCreateAccountOptionDisplayed = ${this.viewConfig.isCreateAccountOptionDisplayed}
+        .isShoppingCartIconDisplayed = ${this.viewConfig.isShoppingCartIconDisplayed}
+        .shownBuyingOptions = ${this.viewConfig.shownBuyingOptions}
+        @request-update-of-user-data=${this.requestUpdateOfUserData}>
       </graficarte-store-main-view>
     `;
   }

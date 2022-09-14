@@ -1,15 +1,6 @@
 import { css } from 'lit';
 
 export default css`
-#main-app-container{
-  display: block;
-  width: 100%;
-  justify-content: space-around;
-  align-items: center;
-  background: gray;
-  overflow: hidden;
-  box-sizing: border-box;
-}
 
 #app-main-template {
   --sophos-simple-template-main-container-template-style-full-header-height: 98.4vh;

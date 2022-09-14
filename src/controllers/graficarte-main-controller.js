@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
-import { GraficarteStoreClientController } from './controllers/graficarte-store-client-controller';
-import { GraficarteStoreSignInController } from './controllers/graficarte-store-sign-in-controller';
-import { GraficarteStoreLoginController } from './controllers/graficarte-store-login-controller';
+import '../controllers/graficarte-store-client-controller';
+import '../controllers/graficarte-store-sign-in-controller'
+import '../controllers/graficarte-store-login-controller'
 
 export class GraficarteMainController extends LitElement {
   
@@ -10,11 +10,12 @@ export class GraficarteMainController extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.inputChannel = {
       channelName: '',
-      payload: {}
+      //Payload: Standard to declare variable objects
+      payload: () => {},
     };
     this.loginControllerData = {
       email: '',
@@ -29,15 +30,16 @@ export class GraficarteMainController extends LitElement {
     };
     this.updatedUserData = {...this.clientData};
     this.channels = {
-      ['graficarte-login'] : this.loginControllerData,
+      ['graficarte-login-user'] : this.loginControllerData,
       ['graficarte-client-data'] : this.clientData,
+      ['graficarte-updated-user-data'] : this.updatedUserData,
     }
   }
 
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       inputChannel: { type: Object},
     };
@@ -52,13 +54,28 @@ export class GraficarteMainController extends LitElement {
     this.requestUpdate('inputChannel', oldValue)
   }
 
-  outputPayload(payload){
+  sendOutputPayload (channelName, payload = {}){
     this.dispatchEvent(new CustomEvent('output-channel', {
-      detail: payload
+      detail: {
+        channelName,
+        payload
+      }
     }));
   }
 
-  render() {
+  manageSucessLoginEvent (e){
+    this.sendOutputPayload('request-success', e.detail)
+  }
+
+  manageErrorRequest (e){
+    this.sendOutputPayload('request-error', e.detail)
+  }
+  
+  manageInProgressRequest (e){
+    this.sendOutputPayload('request-in-progress', e.detail)
+  }
+
+  render () {
     return html`
       <graficarte-store-login-controller
         .email=${this.loginControllerData.email}

@@ -25,19 +25,19 @@ export class GraficarteStoreApp extends LitElement {
     return styles;
   }
 
-  setMainControllerOutput(e){
+  setMainControllerOutput (e){
     const payload = e.detail;
     this.viewControllerInput = payload;
   }
 
-  setViewControllerOutput(e){
+  setViewControllerOutput (e){
     const payload = e.detail;
     this.mainControllerInput = payload;
   }
 
   render () {
     return html`
-      <div id="main-app-contain.0321er0">
+      <div id="main-app-container">
 
         <graficarte-store-main-controller
         .innputChannel=${this.mainControllerInput}

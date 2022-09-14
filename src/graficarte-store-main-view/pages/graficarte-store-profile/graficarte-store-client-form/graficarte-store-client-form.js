@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-store-client-form-styles';
+import getLocal from '../../../../locales';
 
 export class GraficarteStoreClientForm extends LitElement {
   
@@ -8,7 +9,7 @@ export class GraficarteStoreClientForm extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.clientForm = [
       {
@@ -42,7 +43,7 @@ export class GraficarteStoreClientForm extends LitElement {
     ]
   }
 
-  static get styles() {
+  static get styles () {
     return styles;
   }
 
@@ -59,8 +60,8 @@ export class GraficarteStoreClientForm extends LitElement {
     editableField.value = e.detail.value;
   }
 
-  render() {
-    return html`${this.clientForm.map(inputForm => html`
+  createForm (){
+    return this.clientForm.map(inputForm => html`
     <div class="input-form-container">
       <sophos-chimera-input
         class="form-input"
@@ -83,7 +84,11 @@ export class GraficarteStoreClientForm extends LitElement {
         </sophos-chimera-button>
       </div>
     </div>
-  `)}`;
+  `)
+  }
+
+  render () {
+    return html`${this.createForm()}`;
   }
 }
 customElements.define('graficarte-store-client-form', GraficarteStoreClientForm);

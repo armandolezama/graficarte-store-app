@@ -4,8 +4,6 @@ import './pages/graficarte-store-page-router';
 import '../graficarte-store-complements/graficarte-store-side-bar/graficarte-store-side-bar';
 import '../graficarte-store-complements/graficarte-store-header/graficarte-store-header';
 import '../graficarte-store-complements/graficarte-store-modal/graficarte-store-modal';
-import 'sophos-simple-template/sophos-simple-template';
-import 'sophos-simple-modal/sophos-simple-modal';
 
 export class GraficarteStoreMainView extends LitElement {
   
@@ -14,20 +12,20 @@ export class GraficarteStoreMainView extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.signInForm = [];
-    this.page = '';
+    this.mainPage = '';
     this.clientContent = '';
+    this.templateStyle = '';
+    this.templateClass = '';
     this.isCreateAccountOptionDisplayed = false;
     this.isShoppingCartIconDisplayed = false;
+    this.shownBuyingOptions = false;
     this._loginData = {};
     this._signinData = {};
     this._clientData = {};
     this.updatedUserData = {};
-    this.clientPage = '';
-    this.mainViewPage = '';
-    this.templateStyle = '';
   }
 
     /**
@@ -38,10 +36,6 @@ export class GraficarteStoreMainView extends LitElement {
         page: { type: String },
         clientContent: { type: String },
         templateStyle: { type: String },
-        isModalOpened: { type: Boolean },
-        modalTitle: { type: String },
-        modalMessage: { type: String },
-        modalFooterMessage: { type: String },
         isCreateAccountOptionDisplayed: { type: Boolean },
         isShoppingCartIconDisplayed: { type: Boolean },
         _loginData: { type: Object },
@@ -51,17 +45,12 @@ export class GraficarteStoreMainView extends LitElement {
       };
     }
 
-  static get styles() {
+  static get styles () {
     return styles;
   }
 
   firstUpdated () {
     super.firstUpdated();
-    this.showPublicStore();
-  }
-
-  cancelCreateAccount () {
-    this._signinData = {};
     this.showPublicStore();
   }
 
@@ -94,17 +83,12 @@ export class GraficarteStoreMainView extends LitElement {
 
   updateUserData (e){
     const payload = e.detail;
-    this.updatedUserData = {...payload};
+    this.dispatchEvent(new CustomEvent('request-update-of-user-data', { 
+      detail: payload
+    }))
   }
 
-  showPublicStore () {
-    this.page = 'public-store';
-    this.templateStyle = 'full-header';
-    this.isCreateAccountOptionDisplayed = true;
-    this.isShoppingCartIconDisplayed = false;
-    this.templateClass = 'public-store-container';
-    this.shownBuyingOptions = true;
-  }
+  showPublicStore () {}
 
   setLoginConfig () {
     this.templateStyle = 'full-header';
@@ -117,58 +101,47 @@ export class GraficarteStoreMainView extends LitElement {
     this.templateClass = 'create-account-container';
   }
 
-  successSignIn (e) {
-    const response = e.detail.payload;
-    if (response.status >= 200 && response.status < 300) {
-      this._signinData = {};
-      this.page = 'client-store';
-      this.clientContent = 'home';
-      this.templateStyle = 'full-header';
-      this.templateClass = 'client-store-container'
-      this.isCreateAccountOptionDisplayed = false;
-      this.isShoppingCartIconDisplayed = true;
-      this.successSignin(response.data.registry)
-    } else if (response.status >= 400 && response.status < 500) {
-      this.setLoginErrorModal({ info: response.error.info, message: response.message });
-      this.openModal();
-    }
-  }
+  successSignIn () {}
 
-  successLoginRequest (e) {
-    const response = e.detail.payload;
-    this._loginData = {};
+  successLoginRequest () {}
 
-    if (response.status >= 200 && response.status < 300) {
-      this.page = 'client-store';
-      this.templateStyle = 'full-nav';
-      this.templateClass = 'client-store-container'
-      this.clientContent = 'home';
-      this.isCreateAccountOptionDisplayed = false;
-      this.isShoppingCartIconDisplayed = true;
-      this.successLogin(response.data.registry)
-    } else if (response.status >= 400 && response.status < 500) {
-      this.setLoginErrorModal({ info: response.error.info, message: response.message });
-      this.openModal();
-    }
-  }
-
-  render() {
+  render () {
     return html`
         <sophos-simple-template
           id="app-main-template"
-          page-name=${this.page}
+          .page-name=${this.mainPage}
           .styleTemplate=${this.templateStyle}
           .class=${this.templateClass}>
           <div slot="header-content">
-            <graficarte-store-header>
+            <graficarte-store-header
+            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
+            ?isShoppingCartIconEnable=${this.isShoppingCartIconDisplayed}
+            @searching-for-term=${this.searchTerm}
+            @shopping-cart-page=${this.openShoppingCartPage}>
             </graficarte-store-header>
           </div>
           <div slot="main-view-content">
-            <graficarte-store-page-router>
+            <graficarte-store-page-router
+              .products=${this.inventory}
+              .shownBuyingOptions=${this.shownBuyingOptions}
+              .userData=${this.userData}
+              @create-account=${this.createAccount}
+              @cancel-create-account=${this.cancelCreateAccount}
+              @graficarte-login-submit=${this.login}
+              @graficarte-cancel-login=${this.cancelLogin}
+              @valid-password=${this.setValidCreateAccountPassword}
+              @invalid-password=${this.setInvalidCreateAccountPassword}
+              @add-product-to-cart=${this.addProductToCart}
+              @buy-product=${this.buyProduct}
+              @graficarte-store-profile-has-changed=${this.updateUserData}>
             </graficarte-store-page-router>
           </div>
           <div slot="nav-bar-content">
-            <graficarte-store-side-bar>
+            <graficarte-store-side-bar
+              .name=${this.userData.name}
+              .lastName=${this.userData.lastName}
+              @graficarte-navigate-to-page=${this.clientNavigation}
+              @finish-sesion=${this.openLogoutModal}>
             </graficarte-store-side-bar>
           </div>
         </sophos-simple-template>

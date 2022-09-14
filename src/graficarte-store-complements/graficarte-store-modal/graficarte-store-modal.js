@@ -8,7 +8,7 @@ export class GraficarteStoreModal extends LitElement {
     * state, set up event listeners, create shadow dom.
     * @constructor
     */
-  constructor() {
+  constructor () {
     super();
     this.isModalOpened = false;
     this.modalTitle = '';
@@ -22,7 +22,19 @@ export class GraficarteStoreModal extends LitElement {
     ];
   }
 
-  static get styles() {
+  /**
+    * Declared properties and their corresponding attributes
+    */
+  static get properties () {
+    return {
+      isModalOpened: { type: Boolean },
+      modalTitle: { type: String },
+      modalMessage: { type: String },
+      modalFooterMessage: { type: String },
+    };
+  }
+
+  static get styles () {
     return styles;
   }
 
@@ -104,7 +116,7 @@ export class GraficarteStoreModal extends LitElement {
     this.modalFooterMessage = 'Graficarte';
   }
 
-  render() {
+  render () {
     return html`
       <sophos-simple-modal
           modalStyle="full-screen"

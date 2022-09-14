@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 import styles from './graficarte-store-create-account-styles';
 import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
