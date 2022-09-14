@@ -1,5 +1,5 @@
 export default {
-  'public-store': {
+  'public-store-page': {
     mainPage: 'public-store',
     clientContent: '',
     templateStyle: 'full-header',
@@ -8,7 +8,7 @@ export default {
     isShoppingCartIconDisplayed: false,
     shownBuyingOptions: false,
   },
-  'client-store': {
+  'client-store-page': {
     mainPage: 'client-store',
     clientContent: 'home',
     templateStyle: 'full-nav',
@@ -17,7 +17,7 @@ export default {
     isShoppingCartIconDisplayed: true,
     shownBuyingOptions: true,
   },
-  'admin-store': {
+  'admin-store-page': {
     mainPage: 'client-store',
     clientContent: 'home',
     templateStyle: 'full-nav',
@@ -25,5 +25,32 @@ export default {
     isCreateAccountOptionDisplayed: false,
     isShoppingCartIconDisplayed: true,
     shownBuyingOptions: true,
+  },
+  'login-page': {
+    mainPage: 'login',
+    clientContent: '',
+    templateStyle: 'full-header',
+    templateClass: 'login-store-container',
+    isCreateAccountOptionDisplayed: false,
+    isShoppingCartIconDisplayed: false,
+    shownBuyingOptions: false,
+  },
+  'create-account-page': {
+    mainPage: 'create-account',
+    clientContent: '',
+    templateStyle: 'full-header',
+    templateClass: 'create-account-container',
+    isCreateAccountOptionDisplayed: false,
+    isShoppingCartIconDisplayed: false,
+    shownBuyingOptions: false,
+  },
+  'shopping-cart-page': {
+    mainPage: 'client-store',
+    clientContent: 'shopping-cart',
+    templateStyle: 'full-header',
+    templateClass: 'create-account-container',
+    isCreateAccountOptionDisplayed: false,
+    isShoppingCartIconDisplayed: false,
+    shownBuyingOptions: false,
   }
 }

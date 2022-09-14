@@ -3,7 +3,7 @@ import styles from './graficarte-store-profile-styles';
 import 'sophos-card/sophos-card';
 import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
-import getLocal from '../locales';
+import getLocal from '../../../locales';
 
 export class GraficarteStoreProfile extends LitElement {
     /**

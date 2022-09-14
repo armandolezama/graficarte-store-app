@@ -14,7 +14,6 @@ export class GraficarteStoreMainView extends LitElement {
     */
   constructor () {
     super();
-    this.signInForm = [];
     this.mainPage = '';
     this.clientContent = '';
     this.templateStyle = '';
@@ -22,10 +21,6 @@ export class GraficarteStoreMainView extends LitElement {
     this.isCreateAccountOptionDisplayed = false;
     this.isShoppingCartIconDisplayed = false;
     this.shownBuyingOptions = false;
-    this._loginData = {};
-    this._signinData = {};
-    this._clientData = {};
-    this.updatedUserData = {};
   }
 
     /**
@@ -38,20 +33,11 @@ export class GraficarteStoreMainView extends LitElement {
         templateStyle: { type: String },
         isCreateAccountOptionDisplayed: { type: Boolean },
         isShoppingCartIconDisplayed: { type: Boolean },
-        _loginData: { type: Object },
-        _signinData: { type: Object },
-        _clientData: { type: Object },
-        updatedUserData: { type: Object },
       };
     }
 
   static get styles () {
     return styles;
-  }
-
-  firstUpdated () {
-    super.firstUpdated();
-    this.showPublicStore();
   }
 
   setValidCreateAccountPassword () {
@@ -60,10 +46,6 @@ export class GraficarteStoreMainView extends LitElement {
 
   setInvalidCreateAccountPassword () {
     this.isValidCreateAccountPassword = false;
-  }
-
-  login (e) {
-    this._loginData = e.detail.userCredentials;
   }
 
   cancelLogin () {
@@ -81,29 +63,34 @@ export class GraficarteStoreMainView extends LitElement {
     console.log(e.detail.productDescription);
   }
 
-  updateUserData (e){
-    const payload = e.detail;
-    this.dispatchEvent(new CustomEvent('request-update-of-user-data', { 
-      detail: payload
+  login (e) {
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('request-access-for-user', {
+      detail
     }))
   }
 
-  showPublicStore () {}
-
-  setLoginConfig () {
-    this.templateStyle = 'full-header';
-    this.templateClass = 'login-store-container';
-    this.isCreateAccountOptionDisplayed = false;
+  updateUserData (e){
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('request-update-of-user-data', { 
+      detail
+    }))
   }
 
-  setCreateAccountConfig () {
-    this.templateStyle = 'full-header';
-    this.templateClass = 'create-account-container';
+  headerNavigation (e){
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('header-navigation', {
+      detail
+    }))
   }
 
-  successSignIn () {}
+  searchTerm (){}
 
-  successLoginRequest () {}
+  openShoppingCartPage () {
+    this.dispatchEvent(new CustomEvent('open-shopping-cart-page',{
+      detail: 'shopping-cart-page',
+    }));
+  }
 
   render () {
     return html`
@@ -117,7 +104,8 @@ export class GraficarteStoreMainView extends LitElement {
             ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
             ?isShoppingCartIconEnable=${this.isShoppingCartIconDisplayed}
             @searching-for-term=${this.searchTerm}
-            @shopping-cart-page=${this.openShoppingCartPage}>
+            @open-shopping-cart-page=${this.openShoppingCartPage}
+            @header-page-change=${this.headerNavigation}>
             </graficarte-store-header>
           </div>
           <div slot="main-view-content">
@@ -138,8 +126,8 @@ export class GraficarteStoreMainView extends LitElement {
           </div>
           <div slot="nav-bar-content">
             <graficarte-store-side-bar
-              .name=${this.userData.name}
-              .lastName=${this.userData.lastName}
+              .name=${this.userData?.name}
+              .lastName=${this.userData?.lastName}
               @graficarte-navigate-to-page=${this.clientNavigation}
               @finish-sesion=${this.openLogoutModal}>
             </graficarte-store-side-bar>

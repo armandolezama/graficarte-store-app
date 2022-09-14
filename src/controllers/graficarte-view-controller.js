@@ -1,6 +1,5 @@
 import { LitElement, html } from 'lit';
 import '../graficarte-store-main-view/graficarte-store-main-view';
-import viewsConfigs from '../utils/graficarte-view-config';
 
 export class GraficarteViewController extends LitElement {
   /**
@@ -34,7 +33,7 @@ export class GraficarteViewController extends LitElement {
     }
     this.channels = {
       ['graficarte-user-data'] : this.userData,
-      ['graficarte-view-config'] : this.viewConfig
+      ['graficarte-view-config'] : this.viewConfig,
     }
   }
 
@@ -47,11 +46,17 @@ export class GraficarteViewController extends LitElement {
     };
   }
 
+  /**
+   * @param {inputChannel} value
+   */
   set inputChannel (value) {
     const currValue = {...value};
     const oldValue = {...this._inputChannel}
 
-    this.channels[currValue.channelName] = currValue.payload
+    if(currValue.channelName){
+      this.channels[currValue.channelName] = currValue.payload
+    }
+
 
     this.requestUpdate('inputChannel', oldValue)
   }
@@ -90,12 +95,28 @@ export class GraficarteViewController extends LitElement {
     }));
   }
 
+  pageNavigation (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-view-config';
+    this.sendOutputPayload(channelName, payload)
+  }
+
   requestUpdateOfUserData (e){
     const payload = e.detail;
     const channelName = 'graficarte-updated-user-data';
-    this.sendOutputPayload({
-      channelName, payload,
-    })
+    this.sendOutputPayload(channelName, payload)
+  }
+
+  requestLogin (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-login-user';
+    this.sendOutputPayload(channelName, payload)
+  }
+
+  requestSignIn (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-signin-user';
+    this.sendOutputPayload(channelName, payload)
   }
 
   render () {
@@ -108,7 +129,11 @@ export class GraficarteViewController extends LitElement {
         .isCreateAccountOptionDisplayed = ${this.viewConfig.isCreateAccountOptionDisplayed}
         .isShoppingCartIconDisplayed = ${this.viewConfig.isShoppingCartIconDisplayed}
         .shownBuyingOptions = ${this.viewConfig.shownBuyingOptions}
-        @request-update-of-user-data=${this.requestUpdateOfUserData}>
+        @header-navigation=${this.pageNavigation}
+        @open-shopping-cart-page=${this.pageNavigation}
+        @request-update-of-user-data=${this.requestUpdateOfUserData}
+        @request-access-for-user=${this.requestLogin}
+        @request-registration-for-user=${this.requestSignIn}>
       </graficarte-store-main-view>
     `;
   }

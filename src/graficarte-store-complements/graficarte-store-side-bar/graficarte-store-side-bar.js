@@ -15,8 +15,8 @@ export class GraficarteStoreSideBar extends LitElement {
         'client-store',
         html`
           <graficarte-store-client-nav-bar
-            .name=${this.userData.name}
-            .lastName=${this.userData.lastName}
+            .name=${this.userData?.name}
+            .lastName=${this.userData?.lastName}
             @graficarte-navigate-to-page=${this.clientNavigation}
             @finish-sesion=${this.openLogoutModal}>
           </graficarte-store-client-nav-bar>

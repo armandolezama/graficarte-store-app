@@ -10,6 +10,7 @@ export class GraficarteStoreHeader extends LitElement {
     */
   constructor () {
     super();
+    this.content = '';
     this.headerContent = [
       [
         'client-store',
@@ -51,27 +52,29 @@ export class GraficarteStoreHeader extends LitElement {
         `
       ],
     ];
-    this.content = '';
   }
 
   static get styles () {
     return styles
   }
 
-  searchTerm (e) {
-    console.log(e.detail.term);
+  openShoppingCartPage () {
+    this.dispatchEvent(new CustomEvent('open-shopping-cart-page'));
   }
 
-  openShoppingCartPage () {
-    this.page = 'client-store';
-    this.clientContent = 'shopping-cart';
-    this.isShoppingCartIconDisplayed = false;
+  searchTerm (e) {
+    const { detail } = e;
+
+    this.dispatchEvent(new CustomEvent('searching-for-term', {
+      detail
+    }))
   }
 
   headerNavigate (e) {
     const { page } = e.detail;
-    this.page = page;
-    return page === 'login' ? this.setLoginConfig() : this.setCreateAccountConfig();
+    this.dispatchEvent(new CustomEvent('header-page-change', {
+      detail: page,
+    }));
   }
 
   contentCreator (contentTag = '', templates = [['', html``]]) {

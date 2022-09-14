@@ -1,5 +1,5 @@
 import { LitElement } from 'lit';
-import GraficarteStoreAPI from '../../../service/graficarte-store-api';
+import GraficarteStoreAPI from '../../service/graficarte-store-api';
 
 export class ServiceController extends LitElement {
 

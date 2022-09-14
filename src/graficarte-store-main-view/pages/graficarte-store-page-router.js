@@ -126,12 +126,19 @@ export class GraficarteStorePageRouter extends LitElement {
     ];
   }
 
+  login (e){
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('request-registration-for-user', {
+      detail
+    }))
+  }
+
   contentCreator (contentTag = '', templates = [['', html``]]) {
     const contentArray = templates.find(template => {
-      return template[0] === contentTag
+      return template[0] === contentTag;
     });
 
-    return contentArray[1];
+    if(contentArray && contentArray[1]) return contentArray[1];
   }
 
   render () {

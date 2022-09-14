@@ -41,14 +41,6 @@ export class GraficarteHeaderContent extends LitElement {
     return styles;
   }
 
-  _createAccountEvent () {
-    this.dispatchEvent(new CustomEvent('create-new-account'));
-  }
-
-  _loginEvent () {
-    this.dispatchEvent(new CustomEvent('sign-in'));
-  }
-
   _navigate (e){
     const page = e.detail.buttonDescription.key;
     this.dispatchEvent(new CustomEvent('navigate', {

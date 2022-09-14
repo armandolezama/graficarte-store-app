@@ -4,7 +4,7 @@ import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
 import 'sophos-simple-modal/sophos-simple-modal';
 import './graficarte-create-account-form/graficarte-create-account-form';
-import getLocal from '../../locales'
+import getLocal from '../../../locales';
 
 export class GraficarteStoreCreateAccount extends LitElement {
   /**

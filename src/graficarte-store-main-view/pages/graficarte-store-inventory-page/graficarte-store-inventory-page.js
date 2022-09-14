@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import 'sophos-card/sophos-card';
-import getLocal from '../locales';
+import getLocal from '../../../locales';
 
 export class GraficarteStoreInventoryPage extends LitElement {
   /**

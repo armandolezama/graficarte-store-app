@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import styles from './graficarte-store-login-page-styles';
 import 'sophos-chimera-button/sophos-chimera-button';
 import 'sophos-simple-modal/sophos-simple-modal';
-import getLocal from '../locales/'
+import getLocal from '../../../locales'
 
 export class GraficarteStoreLoginPage extends LitElement {
   /**

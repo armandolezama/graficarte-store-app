@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import styles from './graficarte-store-client-nav-bar-styles';
 import 'sophos-icon/sophos-icon';
 import 'sophos-chimera-button/sophos-chimera-button';
-import getLocal from '../locales';
+import getLocal from '../../../locales';
 
 export class GraficarteStoreClientNavBar extends LitElement {
   /**

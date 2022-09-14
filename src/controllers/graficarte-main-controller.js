@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import '../controllers/graficarte-store-client-controller';
 import '../controllers/graficarte-store-sign-in-controller'
 import '../controllers/graficarte-store-login-controller'
+import '../controllers/graficarte-store-views-configs-controller';
 
 export class GraficarteMainController extends LitElement {
   
@@ -21,6 +22,14 @@ export class GraficarteMainController extends LitElement {
       email: '',
       password: '',
     };
+    this.signinControllerData = {
+      name: '',
+      lastName: '',
+      phoneNumber: '',
+      address: '',
+      email: '',
+      password: '',
+    }
     this.clientData = {
       name: '',
       lastName: '',
@@ -29,10 +38,13 @@ export class GraficarteMainController extends LitElement {
       email: '',
     };
     this.updatedUserData = {...this.clientData};
+    this.viewConfig = '';
     this.channels = {
       ['graficarte-login-user'] : this.loginControllerData,
       ['graficarte-client-data'] : this.clientData,
       ['graficarte-updated-user-data'] : this.updatedUserData,
+      ['graficarte-signin-user'] : this.signinControllerData,
+      ['graficarte-view-config'] : this.viewConfig,
     }
   }
 
@@ -63,16 +75,28 @@ export class GraficarteMainController extends LitElement {
     }));
   }
 
-  manageSucessLoginEvent (e){
-    this.sendOutputPayload('request-success', e.detail)
+  sendViewConfig (e){
+    const payload = e.detail;
+    const channelName = 'graficarte-view-config';
+    this.sendOutputPayload(channelName, payload);
+  }
+
+  manageSucessRequest (e){
+    const payload = e.detail;
+    const channelName = 'request-success';
+    this.sendOutputPayload(channelName, payload)
   }
 
   manageErrorRequest (e){
-    this.sendOutputPayload('request-error', e.detail)
+    const payload = e.detail;
+    const channelName = 'request-error'
+    this.sendOutputPayload(channelName, payload)
   }
   
   manageInProgressRequest (e){
-    this.sendOutputPayload('request-in-progress', e.detail)
+    const payload = e.detail;
+    const channelName = 'request-in-progress';
+    this.sendOutputPayload(channelName, payload)
   }
 
   render () {
@@ -80,7 +104,7 @@ export class GraficarteMainController extends LitElement {
       <graficarte-store-login-controller
         .email=${this.loginControllerData.email}
         .password=${this.loginControllerData.password}
-        @request-is-done=${this.manageSucessLoginEvent}
+        @request-is-done=${this.manageSucessRequest}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-login-controller>
@@ -88,22 +112,27 @@ export class GraficarteMainController extends LitElement {
       <graficarte-store-client-controller
       .userData=${this.clientData}
       .updatedUserData=${this.updatedUserData}
-        @request-is-done=${this.manageSucessLoginEvent}
+        @request-is-done=${this.manageSucessRequest}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-client-controller>
 
       <graficarte-store-sign-in-controller
-        .name = ${this.clientData.name};
-        .lastName = ${this.clientData.lastName};
-        .phoneNumber = ${this.clientData.phoneNumber};
-        .email = ${this.clientData.email};
-        .address = ${this.clientData.address};
-        .password = ${this.clientData.password};
-        @request-is-done=${this.manageSucessLoginEvent}
+        .name = ${this.signinControllerData.name};
+        .lastName = ${this.signinControllerData.lastName};
+        .phoneNumber = ${this.signinControllerData.phoneNumber};
+        .email = ${this.signinControllerData.email};
+        .address = ${this.signinControllerData.address};
+        .password = ${this.signinControllerData.password};
+        @request-is-done=${this.manageSucessRequest}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-sign-in-controller>
+
+      <graficarte-view-controller
+      .viewConfig=${this.viewConfig}
+      @view-config-setted=${this.sendViewConfig}>
+      </graficarte-view-controller>
     `;
   }
 
