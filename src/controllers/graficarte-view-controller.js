@@ -32,8 +32,8 @@ export class GraficarteViewController extends LitElement {
       shownBuyingOptions: false,
     }
     this.channels = {
-      ['graficarte-user-data'] : this.userData,
-      ['graficarte-view-config'] : this.viewConfig,
+      ['graficarte-user-data'] : 'userData',
+      ['graficarte-view-config'] : 'viewConfig',
     }
   }
 
@@ -42,23 +42,18 @@ export class GraficarteViewController extends LitElement {
     */
   static get properties () {
     return {
-      inputChannel: { type: Object},
-      viewConfig: { type: Object},
+      inputChannel: { type: Object },
+      viewConfig: { type: Object },
+      userData: { type: Object },
     };
   }
 
-  /**
-   * @param {inputChannel} value
-   */
-  set inputChannel (value) {
-    const currValue = {...value};
-    const oldValue = {...this._inputChannel}
-
-    if(currValue.channelName){
-      this.channels[currValue.channelName] = currValue.payload;
+  willUpdate(changedProps){
+    super.updated(changedProps);
+    if(changedProps.has('inputChannel')){
+      const relatedProp = this.channels[this.inputChannel.channelName];
+      this[relatedProp] = {...this.inputChannel.payload}
     }
-
-    this.requestUpdate('inputChannel', oldValue);
   }
 
   createAccount (e) {

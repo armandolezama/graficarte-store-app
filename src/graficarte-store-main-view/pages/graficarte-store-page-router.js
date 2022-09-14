@@ -2,7 +2,6 @@ import { LitElement, html } from 'lit';
 import './graficarte-store-create-account/graficarte-store-create-account';
 import './graficarte-store-error-page/graficarte-store-error-page';
 import './graficarte-store-home-page/graficarte-store-home-page';
-import './graficarte-store-inventory-page/graficarte-store-inventory-page';
 import './graficarte-store-login-page/graficarte-store-login-page';
 import './graficarte-store-notifications/graficarte-store-notifications';
 import './graficarte-store-payment-methods/graficarte-store-payment-methods';
@@ -10,7 +9,6 @@ import './graficarte-store-profile/graficarte-store-profile';
 import './graficarte-store-profile-configuration/graficarte-store-profile-configuration';
 import './graficarte-store-shopping-cart/graficarte-store-shopping-cart';
 import './graficarte-store-shopping-history/graficarte-store-shopping-history';
-import inventoryMocks from '../../mocks/inventory-mocks';
 import productMocks from '../../mocks/products-mocks';
 
 export class GraficarteStorePageRouter extends LitElement {
@@ -21,11 +19,13 @@ export class GraficarteStorePageRouter extends LitElement {
     */
   constructor () {
     super();
-    this.inventory = inventoryMocks;
     this.storeProducts = productMocks;
     this.mainPage = '';
     this.clientPage = '';
+    this.templateStyle = '';
+    this.templateClass= '';
     this.shownBuyingOptions = false;
+    this.userData = {};
     this.mainViewContent = [
       [
         'create-account',
@@ -46,7 +46,7 @@ export class GraficarteStorePageRouter extends LitElement {
         'public-store',
         html`
           <graficarte-store-home-page 
-          .products=${this.storeProducts}>
+            .products=${this.storeProducts}>
           </graficarte-store-home-page>
         `
       ],
@@ -54,8 +54,8 @@ export class GraficarteStorePageRouter extends LitElement {
         'login',
         html`
           <graficarte-store-login-page
-          @graficarte-login-submit=${this.login}
-          @graficarte-cancel-login=${this.cancelLogin}>
+            @graficarte-login-submit=${this.login}
+            @graficarte-cancel-login=${this.cancelLogin}>
           </graficarte-store-login-page>
         `
       ],
@@ -65,10 +65,10 @@ export class GraficarteStorePageRouter extends LitElement {
         'home',
         html`
           <graficarte-store-home-page 
-          .products=${this.storeProducts}
-          .shownBuyingOptions=${this.shownBuyingOptions}
-          @add-product-to-cart=${this.addProductToCart}
-          @buy-product=${this.buyProduct}>
+            .products=${this.storeProducts}
+            .shownBuyingOptions=${this.shownBuyingOptions}
+            @add-product-to-cart=${this.addProductToCart}
+            @buy-product=${this.buyProduct}>
           </graficarte-store-home-page>
         `
       ],
@@ -76,8 +76,8 @@ export class GraficarteStorePageRouter extends LitElement {
         'profile',
         html`
           <graficarte-store-profile
-          .userData=${this.userData}
-          @graficarte-store-profile-has-changed=${this.updateUserData}>
+            .userData=${this.userData}
+            @graficarte-store-profile-has-changed=${this.updateUserData}>
           </graficarte-store-profile>
         `
       ],
@@ -126,6 +126,19 @@ export class GraficarteStorePageRouter extends LitElement {
     ];
   }
 
+  /**
+    * Declared properties and their corresponding attributes
+    */
+  static get properties() {
+    return {
+      mainPage: { type: String },
+      clientContent: { type: String },
+      templateStyle: { type: String },
+      templateClass: { type: String },
+      shownBuyingOptions: { type: Boolean },
+    };
+  }
+
   login (e){
     const { detail } = e;
     this.dispatchEvent(new CustomEvent('request-registration-for-user', {
@@ -142,7 +155,7 @@ export class GraficarteStorePageRouter extends LitElement {
   }
 
   render () {
-    return html`${this.contentCreator(this.page, this.mainViewContent)}`;
+    return html`${this.contentCreator(this.mainPage, this.mainViewContent)}`;
   }
 }
 customElements.define('graficarte-store-page-router', GraficarteStorePageRouter);

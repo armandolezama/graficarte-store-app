@@ -11,47 +11,19 @@ export class GraficarteStoreHeader extends LitElement {
   constructor () {
     super();
     this.content = '';
-    this.headerContent = [
-      [
-        'client-store',
-        html`
-          <graficarte-header-content
-            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
-            ?isShoppingCartIconEnable=${this.isShoppingCartIconDisplayed}
-            @searching-for-term=${this.searchTerm}
-            @shopping-cart-page=${this.openShoppingCartPage}>
-          </graficarte-header-content>
-        `
-      ],
-      [
-        'inventory',
-        html`
-          <graficarte-header-content
-            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
-            @searching-for-term=${this.searchTerm}>
-          </graficarte-header-content>
-        `
-      ],
-      [
-        'public-store',
-        html`
-          <graficarte-header-content
-            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
-            @navigate=${this.headerNavigate}
-            @searching-for-term=${this.searchTerm}>
-          </graficarte-header-content>
-        `
-      ],
-      [
-        'login',
-        html`
-          <graficarte-header-content
-            ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
-            @searching-for-term=${this.searchTerm}>
-          </graficarte-header-content>
-        `
-      ],
-    ];
+    this.isCreateAccountEnable = false;
+    this.isShoppingCartIconEnable = false;
+  }
+
+  /**
+    * Declared properties and their corresponding attributes
+    */
+  static get properties() {
+    return {
+      content: { type : String },
+      isShoppingCartIconDisplayed: { type: Boolean },
+      isCreateAccountEnable:  { type: Boolean },
+    };
   }
 
   static get styles () {
@@ -77,16 +49,16 @@ export class GraficarteStoreHeader extends LitElement {
     }));
   }
 
-  contentCreator (contentTag = '', templates = [['', html``]]) {
-    const contentArray = templates.map(template => {
-      return contentTag === template[0] && template[1];
-    });
-
-    return contentArray.filter(template => template);
-  }
-
   render () {
-    return html`${this.contentCreator(this.content, this.headerContent)}`;
+    return html`
+          <graficarte-header-content
+            ?isCreateAccountEnable=${this.isCreateAccountEnable}
+            ?isShoppingCartIconEnable=${this.isShoppingCartIconDisplayed}
+            @navigate=${this.headerNavigate}
+            @searching-for-term=${this.searchTerm}
+            @shopping-cart-page=${this.openShoppingCartPage}>
+          </graficarte-header-content>
+      `;
   }
 }
 customElements.define('graficarte-store-header', GraficarteStoreHeader);

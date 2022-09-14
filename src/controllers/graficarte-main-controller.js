@@ -57,18 +57,12 @@ export class GraficarteStoreMainController extends LitElement {
     };
   }
 
-  /**
-   * @param {inputChannel} value
-   */
-  set inputChannel (value) {
-    const currValue = {...value};
-    const oldValue = {...this._inputChannel}
-
-    if(currValue.channelName) {
-      this.channels[currValue.channelName] = currValue.payload
+  willUpdate(changedProps){
+    super.updated(changedProps);
+    if(changedProps.has('inputChannel')){
+      const relatedProp = this.channels[this.inputChannel.channelName];
+      this[relatedProp] = {...this.inputChannel.payload}
     }
-
-    this.requestUpdate('inputChannel', oldValue)
   }
 
   sendViewConfig (e){

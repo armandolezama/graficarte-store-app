@@ -21,6 +21,7 @@ export class GraficarteStoreMainView extends LitElement {
     this.isCreateAccountOptionDisplayed = false;
     this.isShoppingCartIconDisplayed = false;
     this.shownBuyingOptions = false;
+    this.userData = {};
   }
 
   /**
@@ -103,6 +104,7 @@ export class GraficarteStoreMainView extends LitElement {
           .class=${this.templateClass}>
           <div slot="header-content">
             <graficarte-store-header
+            .content=${this.mainPage}
             ?isCreateAccountEnable=${this.isCreateAccountOptionDisplayed}
             ?isShoppingCartIconEnable=${this.isShoppingCartIconDisplayed}
             @searching-for-term=${this.searchTerm}
@@ -112,9 +114,12 @@ export class GraficarteStoreMainView extends LitElement {
           </div>
           <div slot="main-view-content">
             <graficarte-store-page-router
-              .products=${this.inventory}
-              .shownBuyingOptions=${this.shownBuyingOptions}
               .userData=${this.userData}
+              .mainPage =${this.mainPage}
+              .clientPage=${this.clientContent}
+              .templateStyle=${this.templateStyle}
+              .templateClass=${this.templateClass}
+              .shownBuyingOptions=${this.shownBuyingOptions}
               @create-account=${this.createAccount}
               @cancel-create-account=${this.cancelCreateAccount}
               @graficarte-login-submit=${this.login}

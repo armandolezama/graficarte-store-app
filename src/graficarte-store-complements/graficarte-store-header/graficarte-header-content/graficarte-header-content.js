@@ -41,6 +41,13 @@ export class GraficarteHeaderContent extends LitElement {
     return styles;
   }
 
+  updated(changedProps){
+    super.updated(changedProps)
+    console.log(changedProps)
+    console.log(this.isCreateAccountEnable)
+    console.log(this.isShoppingCartIconEnable)
+  }
+
   _navigate (e){
     const page = e.detail.buttonDescription.key;
     this.dispatchEvent(new CustomEvent('navigate', {
