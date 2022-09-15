@@ -129,7 +129,7 @@ export class GraficarteStorePageRouter extends LitElement {
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       mainPage: { type: String },
       clientContent: { type: String },

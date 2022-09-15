@@ -28,7 +28,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     this.missingFields = [];
     this.passwordMessageStyle = '';
     this.emptyMessage = 'Este campo es requerido';
-    this.createAccountActionsHandlers = {};
     this.modalLabelsButtons = [
       {
       label: ''
@@ -38,7 +37,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
       }
     ];
     this.isPasswordValid = false;
-    this.createAccountActionsHandlers = {};
     this.modalButtonsHandlers = {};
   }
 
@@ -47,7 +45,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     */
   static get properties () {
     return {
-      inputsList : { type : Array },
       userData : { type : Object },
       missingFields : { type : Array },
       passwordMessageStyle : { type : String },
@@ -61,17 +58,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   static get styles () {
     return styles;
-  }
-
-  set missingFields (value) {
-    const currValue = value;
-    const oldValue = this._missingFields;
-    this.inputsList = this.inputsList.map(input => {
-      input.missingField = currValue.includes(input.fieldName);
-      return input;
-    });
-    this._missingFields = currValue;
-    this.requestUpdate('missingFields', oldValue);
   }
 
   firstUpdated (){
@@ -136,14 +122,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     this.isModalOpened = false;
   }
 
-  _manageModalButtons (e){
-    const { key } = e.detail.buttonDescription;
-
-    const handler = this.modalButtonsHandlers[key].bind(this);
-
-    handler();
-  }
-
   getEmptyFields (){
     return [
       !this.userData.name && 'name',
@@ -160,24 +138,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
       input.missingField = false;
       return input;
     })
-  }
-
-  showForm (){
-    return this.inputsList.map(inputData => {
-      return html`
-      <sophos-chimera-input
-        field-name=${inputData.fieldName}
-        .styleOfInput=${inputData.styleOfInput}
-        .maxLength=${inputData.maxLength}
-        .label=${inputData.label}
-        .type=${inputData.type}
-        .isRequired=${inputData.isRequired}
-        .showMessage=${inputData.missingField}
-        .inputMessage=${this.emptyMessage}
-        @sophos-input-changed=${this.createAccountActionsHandlers[inputData.handler]}>
-      </sophos-chimera-input>
-      `;
-    });
   }
 
   manageCreateAccountActions (e){
@@ -228,22 +188,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     <div>
       <graficarte-create-account-form>
       </graficarte-create-account-form>
-      <sophos-simple-modal
-        modalStyle="full-screen"
-        ?isModalOpened=${this.isModalOpened}
-        .modalTitle=${this.modalTitle}
-        .modalMessage=${this.modalMessage}
-        .modalFooterMessage=${this.modalFooterMessage}>
-
-          <sophos-chimera-button
-            slot="modal-body"
-            type="simple-multi-button"
-            class="modal-buttons"
-            .buttonsLabels=${this.modalLabelsButtons}
-            @sophos-chimera-button-click=${this._manageModalButtons}>
-          </sophos-chimera-button>
-
-      </sophos-simple-modal>
 
       <div id=password-message-container message-style=${`password-message-${this.passwordMessageStyle}`}>
         <p id=password-message message=${this.passwordMessageStyle}>

@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-store-app-styles';
-import './controllers/graficarte-main-controller';
-import './controllers/graficarte-view-controller';
+import './controllers/graficarte-store-main-controller';
+import './controllers/graficarte-store-view-controller';
 
 export class GraficarteStoreApp extends LitElement {
   /**
@@ -50,14 +50,14 @@ export class GraficarteStoreApp extends LitElement {
       <div id="main-app-container">
 
         <graficarte-store-main-controller
-        .innputChannel=${this.mainControllerInput}
+        .inputChannel=${this.mainControllerInput}
         @output-channel=${this.setMainControllerOutput}>
         </graficarte-store-main-controller>
 
-        <graficarte-view-controller
+        <graficarte-store-view-controller
         .inputChannel=${this.viewControllerInput}
         @output-channel=${this.setViewControllerOutput}>
-        </graficarte-view-controller>
+        </graficarte-store-view-controller>
       
       </div>
     `;

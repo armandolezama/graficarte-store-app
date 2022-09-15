@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
-import '../controllers/graficarte-store-client-controller';
-import '../controllers/graficarte-store-sign-in-controller'
-import '../controllers/graficarte-store-login-controller'
-import '../controllers/graficarte-store-views-configs-controller';
+import './graficarte-store-client-controller';
+import './graficarte-store-sign-in-controller'
+import './graficarte-store-login-controller'
+import './graficarte-store-views-configs-controller';
 
 export class GraficarteStoreMainController extends LitElement {
   
@@ -40,11 +40,11 @@ export class GraficarteStoreMainController extends LitElement {
     this.updatedUserData = {...this.clientData};
     this.viewConfig = '';
     this.channels = {
-      ['graficarte-login-user'] : this.loginControllerData,
-      ['graficarte-client-data'] : this.clientData,
-      ['graficarte-updated-user-data'] : this.updatedUserData,
-      ['graficarte-signin-user'] : this.signinControllerData,
-      ['graficarte-view-config'] : this.viewConfig,
+      ['graficarte-login-user'] : 'loginControllerData',
+      ['graficarte-client-data'] : 'clientData',
+      ['graficarte-updated-user-data'] : 'updatedUserData',
+      ['graficarte-signin-user'] : 'signinControllerData',
+      ['graficarte-view-config'] : 'viewConfig',
     }
   }
 
@@ -57,11 +57,11 @@ export class GraficarteStoreMainController extends LitElement {
     };
   }
 
-  willUpdate(changedProps){
-    super.updated(changedProps);
+  willUpdate (changedProps){
+    super.willUpdate(changedProps);
     if(changedProps.has('inputChannel')){
       const relatedProp = this.channels[this.inputChannel.channelName];
-      this[relatedProp] = {...this.inputChannel.payload}
+      this[relatedProp] = this.inputChannel.payload
     }
   }
 

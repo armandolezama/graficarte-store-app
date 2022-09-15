@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import '../graficarte-store-main-view/graficarte-store-main-view';
 
-export class GraficarteViewController extends LitElement {
+export class GraficarteStoreViewController extends LitElement {
   /**
     * Instance of the element is created/upgraded. Useful for initializing
     * state, set up event listeners, create shadow dom.
@@ -48,8 +48,8 @@ export class GraficarteViewController extends LitElement {
     };
   }
 
-  willUpdate(changedProps){
-    super.updated(changedProps);
+  willUpdate (changedProps){
+    super.willUpdate(changedProps);
     if(changedProps.has('inputChannel')){
       const relatedProp = this.channels[this.inputChannel.channelName];
       this[relatedProp] = {...this.inputChannel.payload}
@@ -84,6 +84,7 @@ export class GraficarteViewController extends LitElement {
   pageNavigation (e){
     const payload = e.detail;
     const channelName = 'graficarte-view-config';
+    console.log('view controller is sending nav event')
     this.sendOutputPayload(channelName, payload);
   }
 
@@ -133,4 +134,4 @@ export class GraficarteViewController extends LitElement {
     `;
   }
 }
-customElements.define('graficarte-view-controller', GraficarteViewController);
+customElements.define('graficarte-store-view-controller', GraficarteStoreViewController);

@@ -34,10 +34,6 @@ export class GraficarteStoreLoginPage extends LitElement {
     ];
     this._email = '';
     this._password = '';
-    this.isModalOpened = false;
-    this.modalTitle = '';
-    this.modalMessage = '';
-    this.modalFooterMessage = '';
     this.modalLabelsButtons = [
       {
       label: ''
@@ -57,9 +53,6 @@ export class GraficarteStoreLoginPage extends LitElement {
     return {
       inputsList : { type : Array },
       isModalOpened : { type : Boolean },
-      modalTitle : { type : String },
-      modalMessage : { type : String },
-      modalFooterMessage : { type : String },
       missingFields : { type : Array }
     };
   }
@@ -78,13 +71,6 @@ export class GraficarteStoreLoginPage extends LitElement {
     this._missingFields = currValue;
     this._closeModal();
     this.requestUpdate('missingFields', oldValue);
-  }
-
-  getEmptyFields (){
-    return [
-      !this._email && 'email',
-      !this._password && 'password'
-    ].filter(field => field);
   }
 
   resetEmptyFields (){
@@ -171,13 +157,7 @@ export class GraficarteStoreLoginPage extends LitElement {
       }];
   }
 
-  _closeModal (){
-    this.modalTitle = '';
-    this.modalMessage = '';
-    this.modalFooterMessage = '';
-    this.modalLabelsButtons = ['', ''];
-    this.isModalOpened = false;
-  }
+  _closeModal (){}
 
   _submit (){
     this._closeModal()
@@ -196,22 +176,6 @@ export class GraficarteStoreLoginPage extends LitElement {
     return html`
       <div id="login-container">
         <div id="login-form-container">
-          <sophos-simple-modal
-          modalStyle="full-screen"
-          ?isModalOpened=${this.isModalOpened}
-          .modalTitle=${this.modalTitle}
-          .modalMessage=${this.modalMessage}
-          .modalFooterMessage=${this.modalFooterMessage}>
-
-            <sophos-chimera-button
-            slot="modal-body"
-            type="simple-multi-button"
-            class="modal-buttons"
-            .buttonsLabels=${this.modalLabelsButtons}
-            @sophos-chimera-button-click=${this._manageModalButtons}>
-            </sophos-chimera-button>
-
-          </sophos-simple-modal>
           
           ${this.createForm()}
           

@@ -18,7 +18,7 @@ export class GraficarteStoreHeader extends LitElement {
   /**
     * Declared properties and their corresponding attributes
     */
-  static get properties() {
+  static get properties () {
     return {
       content: { type : String },
       isShoppingCartIconDisplayed: { type: Boolean },
