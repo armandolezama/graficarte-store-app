@@ -111,6 +111,12 @@ export class GraficarteStoreViewController extends LitElement {
     this.sendOutputPayload(channelName, payload);
   }
 
+  searchProductByTerm(e){
+    const payload = e.detail;
+    const channelName = 'graficarte-search-product-by-term';
+    this.sendOutputPayload(channelName, payload); 
+  }
+
   sendOutputPayload (channelName, payload = {}){
     this.dispatchEvent(new CustomEvent('output-channel', {
       detail: {
@@ -135,7 +141,8 @@ export class GraficarteStoreViewController extends LitElement {
         @request-update-of-user-data=${this.requestUpdateOfUserData}
         @request-access-for-user=${this.requestLogin}
         @cancel-access-for-user=${this.cancelLogin}
-        @request-registration-for-user=${this.requestSignIn}>
+        @request-registration-for-user=${this.requestSignIn}
+        @store-search-by-term=${this.searchProductByTerm}>
       </graficarte-store-main-view>
     `;
   }

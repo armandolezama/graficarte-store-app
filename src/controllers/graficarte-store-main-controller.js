@@ -101,8 +101,7 @@ export class GraficarteStoreMainController extends LitElement {
   render () {
     return html`
       <graficarte-store-login-controller
-        .email=${this.loginControllerData.email}
-        .password=${this.loginControllerData.password}
+        .userData=${this.loginControllerData}
         @request-is-done=${this.manageSucessRequest}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>

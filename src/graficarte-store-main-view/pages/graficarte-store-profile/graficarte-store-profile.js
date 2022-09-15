@@ -88,7 +88,7 @@ export class GraficarteStoreProfile extends LitElement {
         address: this.clientForm[3].value,
         email: this.clientEmail,
       };
-      this.dispatchEvent(new CustomEvent('graficarte-store-profile-has-changed', { 
+      this.dispatchEvent(new CustomEvent('update-user-data', { 
         detail: {...payload} 
       }));
     }

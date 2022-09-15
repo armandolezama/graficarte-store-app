@@ -91,3 +91,7 @@ customElements.define('graficarte-store-app', GraficarteStoreApp);
  * TO-DO: Add models implementation for iterative instances inside controlers e.g. 
  * product controllers, product views, client controllers, client views, and so on.
  */
+
+/**
+ * TO-DO; Update input and button components to use disable prop and disable styles
+ */

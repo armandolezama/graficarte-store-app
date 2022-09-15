@@ -75,7 +75,7 @@ export class GraficarteStorePageRouter extends LitElement {
         html`
           <graficarte-store-profile
             .userData=${this.userData}
-            @graficarte-store-profile-has-changed=${this.updateUserData}>
+            @update-user-data=${this.updateUserData}>
           </graficarte-store-profile>
         `
       ],
@@ -138,14 +138,21 @@ export class GraficarteStorePageRouter extends LitElement {
   }
 
   login (e){
-    const { detail } = e;
+    const { userData } = e.detail;
     this.dispatchEvent(new CustomEvent('request-access-for-user', {
-      detail
+      detail: userData
     }))
   }
 
   cancelLogin (){
     this.dispatchEvent(new CustomEvent('cancel-access-for-user'))
+  }
+
+  updateUserData (e){
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('update-user-data', { 
+      detail
+    }))
   }
 
   contentCreator (contentTag = '', templates = [['', html``]]) {

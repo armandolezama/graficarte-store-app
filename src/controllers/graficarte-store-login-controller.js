@@ -10,8 +10,7 @@ export class GraficarteStoreLoginController extends ServiceController {
     */
   constructor () {
     super();
-    this.email = '';
-    this.password = '';
+    this.userData= {};
     this.method = 'POST';
     this.url = 'public/login';
   }
@@ -21,18 +20,13 @@ export class GraficarteStoreLoginController extends ServiceController {
     */
   static get properties () {
     return {
-      email : { type : String},
-      password : { type : String}
+      userData : { type : Object }
     };
   }
 
-  updated (changedProps) {
-    super.updated( changedProps );
-    const emptyFields = this.getEmptyFields();
-
-    if(emptyFields.length === 0){
-      this._login();
-    }
+  willUpdate(changedProps){
+    super.willUpdate(changedProps)
+    console.log(this.userData)
   }
 
   getEmptyFields (){

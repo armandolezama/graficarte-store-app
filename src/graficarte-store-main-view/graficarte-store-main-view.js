@@ -43,6 +43,44 @@ export class GraficarteStoreMainView extends LitElement {
     return styles;
   }
 
+  searchTerm (e){
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('store-search-by-term', {
+      detail
+    }))
+  }
+
+  openShoppingCartPage () {
+    this.dispatchEvent(new CustomEvent('open-shopping-cart-page',{
+      detail: 'shopping-cart',
+    }));
+  }
+
+  headerNavigation (e){
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('header-navigation', {
+      detail
+    }))
+  }
+
+  signIn (e) {
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('request-registration-for-user', {
+      detail
+    }))
+  }
+
+  login (e) {
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('request-access-for-user', {
+      detail
+    }))
+  }
+
+  cancelLogin () {
+    this.dispatchEvent(new CustomEvent('cancel-access-for-user'))
+  }
+
   setValidCreateAccountPassword () {
     this.isValidCreateAccountPassword = true;
   }
@@ -61,44 +99,11 @@ export class GraficarteStoreMainView extends LitElement {
     console.log(e.detail.productDescription);
   }
 
-  login (e) {
-    const { detail } = e;
-    this.dispatchEvent(new CustomEvent('request-access-for-user', {
-      detail
-    }))
-  }
-
-  cancelLogin () {
-    this.dispatchEvent(new CustomEvent('cancel-access-for-user'))
-  }
-
-  signIn (e) {
-    const { detail } = e;
-    this.dispatchEvent(new CustomEvent('request-registration-for-user', {
-      detail
-    }))
-  }
-
   updateUserData (e){
     const { detail } = e;
     this.dispatchEvent(new CustomEvent('request-update-of-user-data', { 
       detail
     }))
-  }
-
-  headerNavigation (e){
-    const { detail } = e;
-    this.dispatchEvent(new CustomEvent('header-navigation', {
-      detail
-    }))
-  }
-
-  searchTerm (){}
-
-  openShoppingCartPage () {
-    this.dispatchEvent(new CustomEvent('open-shopping-cart-page',{
-      detail: 'shopping-cart-page',
-    }));
   }
 
   render () {
@@ -135,7 +140,7 @@ export class GraficarteStoreMainView extends LitElement {
               @invalid-password=${this.setInvalidCreateAccountPassword}
               @add-product-to-cart=${this.addProductToCart}
               @buy-product=${this.buyProduct}
-              @graficarte-store-profile-has-changed=${this.updateUserData}>
+              @update-user-data=${this.updateUserData}>
             </graficarte-store-page-router>
           </div>
           <div slot="nav-bar-content">
