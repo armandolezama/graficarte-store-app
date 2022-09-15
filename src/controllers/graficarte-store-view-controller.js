@@ -84,7 +84,6 @@ export class GraficarteStoreViewController extends LitElement {
   pageNavigation (e){
     const payload = e.detail;
     const channelName = 'graficarte-view-config';
-    console.log('view controller is sending nav event')
     this.sendOutputPayload(channelName, payload);
   }
 
@@ -97,6 +96,12 @@ export class GraficarteStoreViewController extends LitElement {
   requestLogin (e){
     const payload = e.detail;
     const channelName = 'graficarte-login-user';
+    this.sendOutputPayload(channelName, payload);
+  }
+
+  cancelLogin (){
+    const payload = 'public-store';
+    const channelName = 'graficarte-view-config';
     this.sendOutputPayload(channelName, payload);
   }
 
@@ -129,6 +134,7 @@ export class GraficarteStoreViewController extends LitElement {
         @open-shopping-cart-page=${this.pageNavigation}
         @request-update-of-user-data=${this.requestUpdateOfUserData}
         @request-access-for-user=${this.requestLogin}
+        @cancel-access-for-user=${this.cancelLogin}
         @request-registration-for-user=${this.requestSignIn}>
       </graficarte-store-main-view>
     `;

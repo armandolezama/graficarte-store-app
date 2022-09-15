@@ -32,16 +32,18 @@ export class GraficarteStoreLoginPage extends LitElement {
         missingField: false
       }
     ];
-    this._email = '';
-    this._password = '';
-    this.modalLabelsButtons = [
+    this.buttonsLabels = [
       {
-      label: ''
+        label: 'Entrar',
+        key: 'login-action'
       }, 
       {
-        label: 'Cancelar'
+        label: 'Cancelar',
+        key: 'cancel-login'
       }
-    ];
+      ]
+    this._email = '';
+    this._password = '';
     this.missingFields = [];
     this.emptyMessage = 'Este campo es requerido';
   }
@@ -69,15 +71,7 @@ export class GraficarteStoreLoginPage extends LitElement {
       return input;
     });
     this._missingFields = currValue;
-    this._closeModal();
     this.requestUpdate('missingFields', oldValue);
-  }
-
-  resetEmptyFields (){
-    this.inputsList = this.inputsList.map(input => {
-      input.missingField = false;
-      return input;
-    })
   }
 
   createForm (){
@@ -111,13 +105,16 @@ export class GraficarteStoreLoginPage extends LitElement {
   }
 
   manageLoginActions (e){
-    const payload = e.detail.buttonDescription;
-    const emptyFields = this.getEmptyFields();
-    if(emptyFields.length > 0 && payload.key !== 'cancel' ) {
-      this.missingFields = emptyFields
-    } else {
-      payload.option === 0 ? this._openLoginModal() : payload.option === 1 ? this._openCancelModal() : payload;
-    }
+    const payload = {
+      buttonKey: e.detail.buttonDescription.key,
+      userData: {
+        email: this._email,
+        password: this._password,
+      },
+    };
+    this.dispatchEvent(new CustomEvent(`graficarte-${payload.buttonKey}`, {
+      detail: payload,
+    }))
   }
 
   _manageModalButtons (e){
@@ -141,36 +138,7 @@ export class GraficarteStoreLoginPage extends LitElement {
       }];
   }
 
-  _openCancelModal (){
-    this.modalTitle = 'Salir';
-    this.modalMessage = '¿Desea regresar a la tienda?';
-    this.modalFooterMessage = 'Graficarte';
-    this.isModalOpened = true;
-    this.modalLabelsButtons = [
-      {
-        label: 'Salir',
-        key: 'store',
-      }, 
-      {
-        label: 'Quedarse',
-        key: 'edit-login',
-      }];
-  }
-
-  _closeModal (){}
-
-  _submit (){
-    this._closeModal()
-    const userCredentials = {
-      email: this._email,
-      password: this._password
-    };
-    this.dispatchEvent(new CustomEvent('graficarte-login-submit', { detail: {userCredentials}}));
-  }
-
-  _cancel () {
-    this.dispatchEvent(new CustomEvent('graficarte-cancel-login'));
-  }
+  _openCancelModal (){}
 
   render () {
     return html`
@@ -181,16 +149,7 @@ export class GraficarteStoreLoginPage extends LitElement {
           
           <sophos-chimera-button 
           type="simple-multi-button"
-          .buttonsLabels=${[
-            {
-              label: 'Entrar',
-              key: 'login-modal'
-            }, 
-            {
-              label: 'Cancelar',
-              key: 'cancel'
-            }
-            ]}
+          .buttonsLabels=${this.buttonsLabels}
           @sophos-chimera-button-click=${this.manageLoginActions} id="login-submit">Entrar</sophos-chimera-button>
         </div>
       </div>

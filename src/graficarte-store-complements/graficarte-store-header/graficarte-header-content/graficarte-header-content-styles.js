@@ -4,7 +4,6 @@ export default css`
 #search-bar {
   background-color: black;
   height: 130px;
-  width: 70vw;
   display: flex;
   margin: 20px;
   padding: 0 20px;

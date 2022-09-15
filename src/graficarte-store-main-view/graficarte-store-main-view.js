@@ -51,11 +51,6 @@ export class GraficarteStoreMainView extends LitElement {
     this.isValidCreateAccountPassword = false;
   }
 
-  cancelLogin () {
-    this._loginData = {};
-    this.showPublicStore();
-  }
-
   addProductToCart (e){
     console.log('im adding to cart this product:');
     console.log(e.detail.productDescription);
@@ -69,6 +64,17 @@ export class GraficarteStoreMainView extends LitElement {
   login (e) {
     const { detail } = e;
     this.dispatchEvent(new CustomEvent('request-access-for-user', {
+      detail
+    }))
+  }
+
+  cancelLogin () {
+    this.dispatchEvent(new CustomEvent('cancel-access-for-user'))
+  }
+
+  signIn (e) {
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('request-registration-for-user', {
       detail
     }))
   }
@@ -122,8 +128,9 @@ export class GraficarteStoreMainView extends LitElement {
               .shownBuyingOptions=${this.shownBuyingOptions}
               @create-account=${this.createAccount}
               @cancel-create-account=${this.cancelCreateAccount}
-              @graficarte-login-submit=${this.login}
-              @graficarte-cancel-login=${this.cancelLogin}
+              @request-registration-for-user=${this.signIn}
+              @request-access-for-user=${this.login}
+              @cancel-access-for-user=${this.cancelLogin}
               @valid-password=${this.setValidCreateAccountPassword}
               @invalid-password=${this.setInvalidCreateAccountPassword}
               @add-product-to-cart=${this.addProductToCart}

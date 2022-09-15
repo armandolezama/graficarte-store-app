@@ -1,6 +1,10 @@
 import { css } from 'lit';
 
 export default css`
+:host {
+  justify-content: center;
+  display: flex;
+}
 
 #password-message-container[message-style="password-message-success"] {
   background-color: #73db46;
@@ -32,5 +36,9 @@ export default css`
 
 #password-message[message="error"] {
   color: #fff;
+}
+
+sophos-chimera-button{
+  --sophos-chimera-button-width: 130px;
 }
 `;

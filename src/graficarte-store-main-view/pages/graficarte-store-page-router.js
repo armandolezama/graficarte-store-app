@@ -32,9 +32,7 @@ export class GraficarteStorePageRouter extends LitElement {
         html`
           <graficarte-store-create-account
             @create-account=${this.createAccount}
-            @cancel-create-account=${this.cancelCreateAccount}
-            @valid-password=${this.setValidCreateAccountPassword}
-            @invalid-password=${this.setInvalidCreateAccountPassword}>
+            @cancel-create-account=${this.cancelCreateAccount}>
           </graficarte-store-create-account>
         `
       ],
@@ -54,7 +52,7 @@ export class GraficarteStorePageRouter extends LitElement {
         'login',
         html`
           <graficarte-store-login-page
-            @graficarte-login-submit=${this.login}
+            @graficarte-login-action=${this.login}
             @graficarte-cancel-login=${this.cancelLogin}>
           </graficarte-store-login-page>
         `
@@ -141,9 +139,13 @@ export class GraficarteStorePageRouter extends LitElement {
 
   login (e){
     const { detail } = e;
-    this.dispatchEvent(new CustomEvent('request-registration-for-user', {
+    this.dispatchEvent(new CustomEvent('request-access-for-user', {
       detail
     }))
+  }
+
+  cancelLogin (){
+    this.dispatchEvent(new CustomEvent('cancel-access-for-user'))
   }
 
   contentCreator (contentTag = '', templates = [['', html``]]) {

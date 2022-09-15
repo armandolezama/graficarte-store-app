@@ -5,6 +5,8 @@ export default css`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  height: 82.5vh;
+  overflow-y: scroll;
 }
 
 .product-container {

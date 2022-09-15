@@ -185,7 +185,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
 
   render () {
     return html`
-    <div>
+    <div id="main-container">
       <graficarte-create-account-form>
       </graficarte-create-account-form>
 

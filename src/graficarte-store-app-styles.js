@@ -9,5 +9,6 @@ export default css`
   background: gray;
   overflow: hidden;
   box-sizing: border-box;
+  height: 100vh;
 }
 `;
