@@ -44,7 +44,11 @@ export class GraficarteStoreMainController extends LitElement {
       ['graficarte-client-data'] : 'clientData',
       ['graficarte-updated-user-data'] : 'updatedUserData',
       ['graficarte-signin-user'] : 'signinControllerData',
-    }
+    };
+    this.temporaryStorage = [{
+      channelName: '',
+      temporaryPayolad: {},
+    }];
   }
 
   /**

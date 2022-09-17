@@ -150,13 +150,13 @@ export class GraficarteStorePageRouter extends LitElement {
 
   signin (e){
     const { userData } = e.detail;
-    this.dispatchEvent(new CustomEvent('request-registry-for-user', {
+    this.dispatchEvent(new CustomEvent('request-registration-for-user', {
       detail: userData
     }));
   }
 
-  cancelSignin(){
-    this.dispatchEvent(new CustomEvent('cancel-registry-for-user'))
+  cancelSignin (){
+    this.dispatchEvent(new CustomEvent('cancel-registration-for-user'))
   }
 
   updateUserData (e){

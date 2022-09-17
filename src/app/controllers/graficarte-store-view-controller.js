@@ -41,6 +41,10 @@ export class GraficarteStoreViewController extends LitElement {
       'client-store' : () => {},
       'public-store' : () => {},
     }
+    this.temporaryStorage = [{
+      channelName: '',
+      temporaryPayolad: {},
+    }];
   }
 
   /**
@@ -54,7 +58,7 @@ export class GraficarteStoreViewController extends LitElement {
     };
   }
 
-  firstUpdated(){
+  firstUpdated (){
     const { viewState } = this.graficarteState;
     this.viewSettings = {
       'login' : viewState.setLoginPage.bind(viewState),
@@ -62,7 +66,7 @@ export class GraficarteStoreViewController extends LitElement {
       'client-store' : viewState.setClientStorePage.bind(viewState),
       'public-store' : viewState.setPublicStorePage.bind(viewState),
     };
-    
+    this.temporaryStorage = {};
     this.setPageConfig('public-store')
   }
 
@@ -80,23 +84,6 @@ export class GraficarteStoreViewController extends LitElement {
     this._signinData = e.detail.userData;
   }
 
-  cancelCreateAccount () {
-    this._signinData = {};
-    this.showPublicStore();
-  }
-
-  successLogin (userData) {
-    this.userData = { ...userData };
-  }
-
-  successSignin (userData) {
-    this.userData = { ...userData };
-  }
-
-  successUpdatingClientData (e){
-    this.userData = {...this.userData, ...e.detail.userData};
-  }
-
   setProgressState () {
     console.log('this shit is in progress');
   }
@@ -106,7 +93,7 @@ export class GraficarteStoreViewController extends LitElement {
     this.setPageConfig(pageName);
   }
 
-  setPageConfig(config = ''){
+  setPageConfig (config = ''){
     this.viewSettings[config]();
     this.viewConfig = this.graficarteState.viewState.getState();    
   }
@@ -136,7 +123,11 @@ export class GraficarteStoreViewController extends LitElement {
       channelName: 'graficarte-signin-user',
       payload: e.detail,
     }];
-    this.sendOutputPayload(channelPayload);
+    this.saveTemporaryPayload(channelPayload);
+  }
+
+  cancelSignin (){
+    this.setPageConfig('public-store');
   }
 
   searchProductByTerm (e){
@@ -145,6 +136,23 @@ export class GraficarteStoreViewController extends LitElement {
       payload: e.detail,
     }];
     this.sendOutputPayload(channelPayload); 
+  }
+
+  saveTemporaryPayload (channelPayload) {
+    const suspendedRequest = {
+      channelName : channelPayload.channelName,
+      temporaryPayolad : channelPayload.payload,
+    };
+    this.temporaryStorage = [...this.temporaryStorage, suspendedRequest];
+  }
+
+  sendSavedPayload (){
+    this.sendOutputPayload(this.temporaryStorage);
+    this.temporaryStorage = [];
+  }
+
+  cancelTemporaryStorage (){
+    this.temporaryStorage = [];
   }
 
   sendOutputPayload (payload = [{}]){
@@ -170,6 +178,7 @@ export class GraficarteStoreViewController extends LitElement {
         @request-access-for-user=${this.requestLogin}
         @cancel-access-for-user=${this.cancelLogin}
         @request-registration-for-user=${this.requestSignIn}
+        @cancel-registration-for-user=${this.cancelSignin}
         @store-search-by-term=${this.searchProductByTerm}>
       </graficarte-store-main-view>
     `;

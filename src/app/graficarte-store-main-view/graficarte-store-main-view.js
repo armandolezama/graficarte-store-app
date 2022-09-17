@@ -21,6 +21,8 @@ export class GraficarteStoreMainView extends LitElement {
     this.isCreateAccountOptionDisplayed = false;
     this.isShoppingCartIconDisplayed = false;
     this.shownBuyingOptions = false;
+    this.modalConfig = '';
+    this.isModalOpened = false;
     this.userData = {};
   }
 
@@ -63,11 +65,15 @@ export class GraficarteStoreMainView extends LitElement {
     }))
   }
 
-  signIn (e) {
+  signIn (e){
     const { detail } = e;
     this.dispatchEvent(new CustomEvent('request-registration-for-user', {
       detail
     }))
+  }
+
+  cancelSignIn (){
+    this.dispatchEvent(new CustomEvent('cancel-registration-for-user'))
   }
 
   login (e) {
@@ -134,6 +140,7 @@ export class GraficarteStoreMainView extends LitElement {
               @create-account=${this.createAccount}
               @cancel-create-account=${this.cancelCreateAccount}
               @request-registration-for-user=${this.signIn}
+              @cancel-registration-for-user=${this.cancelSignIn}
               @request-access-for-user=${this.login}
               @cancel-access-for-user=${this.cancelLogin}
               @valid-password=${this.setValidCreateAccountPassword}
@@ -153,7 +160,10 @@ export class GraficarteStoreMainView extends LitElement {
           </div>
         </sophos-simple-template>
 
-        <graficarte-store-modal>
+        <graficarte-store-modal
+        ?isModalOpened=${true}
+        .configCommand=${this.modalConfig}
+        >
         </graficarte-store-modal>
     `;
   }

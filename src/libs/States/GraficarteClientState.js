@@ -1,5 +1,5 @@
 export default class GraficarteClientState {
-  constructor(){
+  constructor (){
     this.name = '';
     this.lastName = '';
     this.email = '';
@@ -10,7 +10,7 @@ export default class GraficarteClientState {
     this.comments = []
   }
 
-  getClientState(){
+  getClientState (){
     const {
       name, 
       lastName, 

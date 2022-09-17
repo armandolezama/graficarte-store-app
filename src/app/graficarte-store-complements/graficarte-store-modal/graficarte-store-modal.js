@@ -1,5 +1,6 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-store-modal-styles';
+import 'sophos-simple-modal/sophos-simple-modal'
 
 export class GraficarteStoreModal extends LitElement {
   
@@ -20,6 +21,13 @@ export class GraficarteStoreModal extends LitElement {
         key: '',
       }
     ];
+    this.modalConfig = {
+      'request-for-login' : this.openLoginModal,
+      'request-for-signin' : this.openSigninModal,
+      // 'request-for-client-update' : this,
+      'cancel-request' : this.closeModal,
+    };
+    this.configCommand = '';
   }
 
   /**
@@ -38,27 +46,19 @@ export class GraficarteStoreModal extends LitElement {
     return styles;
   }
 
-  openModal () {
-    this.isModalOpened = true;
+  willUpdate (changedProps){
+    super.willUpdate(changedProps);
+    if(changedProps.has('configCommand')){
+      this.modalConfig[this.configCommand]();
+    }
   }
 
-  closeModal () {
+  closeModal (){
+    this.modalTitle = '';
+    this.modalMessage = '';
+    this.modalFooterMessage = '';
+    this.modalLabelsButtons = ['', ''];
     this.isModalOpened = false;
-  }
-  
-  manageModalOptions (e) {
-    const option = e.detail.buttonDescription.key;
-    if (option === 'close-modal') {
-      this.closeModal();
-    } else if (option === 'back-to-login') {
-      this.closeModal();
-    } else if(option === 'close-api-error-modal'){
-      this._loginData = {};
-      this.closeModal();
-    } else {
-      this.showPublicStore();
-      this.closeModal();
-    }
   }
 
   setApiServerErrorModal () {
@@ -90,6 +90,54 @@ export class GraficarteStoreModal extends LitElement {
     this.modalFooterMessage = 'Graficarte';
   }
 
+  openLoginModal (){
+    this.modalTitle = 'Ingresar';
+    this.modalMessage = '¿Desea continuar?';
+    this.modalFooterMessage = "Graficarte";
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Entrar',
+        key: 'login'
+      }, 
+      {
+        label: 'Volver',
+        key: 'edit-login'
+      }];
+  }
+
+  openSigninModal (){
+    this.modalTitle = 'Ingresar';
+    this.modalMessage = '¿Desea continuar?';
+    this.modalFooterMessage = "Graficarte";
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Entrar',
+        key: 'login'
+      }, 
+      {
+        label: 'Volver',
+        key: 'edit-login'
+      }];
+  }
+
+  openCancelModal (){
+    this.modalTitle = 'Salir';
+    this.modalMessage = '¿Desea regresar a la tienda?';
+    this.modalFooterMessage = 'Graficarte';
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Salir',
+        key: 'store',
+      }, 
+      {
+        label: 'Quedarse',
+        key: 'edit-login',
+      }];
+  }
+
   setLoginErrorModal (error) {
 
     this.modalTitle = `${error.info}`;
@@ -114,6 +162,21 @@ export class GraficarteStoreModal extends LitElement {
       },
     ];
     this.modalFooterMessage = 'Graficarte';
+  }
+
+  manageModalOptions (e) {
+    const option = e.detail.buttonDescription.key;
+    if (option === 'close-modal') {
+      this.closeModal();
+    } else if (option === 'back-to-login') {
+      this.closeModal();
+    } else if(option === 'close-api-error-modal'){
+      this._loginData = {};
+      this.closeModal();
+    } else {
+      this.showPublicStore();
+      this.closeModal();
+    }
   }
 
   render () {

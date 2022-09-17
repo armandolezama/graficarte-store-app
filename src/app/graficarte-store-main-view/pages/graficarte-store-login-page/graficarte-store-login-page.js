@@ -117,24 +117,6 @@ export class GraficarteStoreLoginPage extends LitElement {
     }))
   }
 
-  _openLoginModal (){
-    this.modalTitle = 'Ingresar';
-    this.modalMessage = '¿Desea continuar?';
-    this.modalFooterMessage = "Graficarte";
-    this.isModalOpened = true;
-    this.modalLabelsButtons = [
-      {
-        label: 'Entrar',
-        key: 'login'
-      }, 
-      {
-        label: 'Volver',
-        key: 'edit-login'
-      }];
-  }
-
-  _openCancelModal (){}
-
   render () {
     return html`
       <div id="login-container">

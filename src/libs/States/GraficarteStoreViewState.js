@@ -1,5 +1,5 @@
 export default class GraficarteStoreViewState {
-  constructor(){
+  constructor (){
     this.mainPage = '';
     this.clientContent = '';
     this.templateStyle = '';
@@ -9,7 +9,7 @@ export default class GraficarteStoreViewState {
     this.shownBuyingOptions = false;
   }
 
-  setPublicStorePage(){
+  setPublicStorePage (){
     this.mainPage = 'public-store';
     this.clientContent = '';
     this.templateStyle = 'full-header';
@@ -19,7 +19,7 @@ export default class GraficarteStoreViewState {
     this.shownBuyingOptions = false;
   }
 
-  setClientStorePage(){
+  setClientStorePage (){
     this.mainPage = 'client-store';
     this.clientContent = 'home';
     this.templateStyle = 'full-nav';
@@ -29,7 +29,7 @@ export default class GraficarteStoreViewState {
     this.shownBuyingOptions = true;
   }
 
-  setAdminStorePage(){
+  setAdminStorePage (){
     //TO-DO Refactor this data
     this.mainPage = 'admin-store';
     this.clientContent = 'home';
@@ -40,7 +40,7 @@ export default class GraficarteStoreViewState {
     this.shownBuyingOptions = true;
   }
 
-  setAccountPage(){
+  setAccountPage (){
     this.mainPage = 'create-account';
     this.clientContent = '';
     this.templateStyle = 'full-header';
@@ -50,7 +50,7 @@ export default class GraficarteStoreViewState {
     this.shownBuyingOptions = false;
   }
 
-  setLoginPage(){
+  setLoginPage (){
     this.mainPage = 'login';
     this.clientContent = '';
     this.templateStyle = 'full-header';
@@ -60,7 +60,7 @@ export default class GraficarteStoreViewState {
     this.shownBuyingOptions = false;
   }
 
-  setShoppingCartPage(){
+  setShoppingCartPage (){
     this.mainPage = 'client-store';
     this.clientContent = 'shopping-cart';
     this.templateStyle = 'full-header';
@@ -70,7 +70,7 @@ export default class GraficarteStoreViewState {
     this.shownBuyingOptions = false;
   }
 
-  getState(){
+  getState (){
     const {
     mainPage,
     clientContent,
