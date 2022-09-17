@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-header-content-styles'
-import getLocal from '../../../locales';
+import getLocal from '../../../../utils/locales';
 import 'sophos-chimera-button/sophos-chimera-button';
 import 'sophos-icon/sophos-icon';
 

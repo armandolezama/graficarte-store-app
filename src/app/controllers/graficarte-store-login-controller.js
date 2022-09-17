@@ -24,34 +24,35 @@ export class GraficarteStoreLoginController extends ServiceController {
     };
   }
 
-  willUpdate(changedProps){
+  willUpdate (changedProps){
     super.willUpdate(changedProps)
-    console.log(this.userData)
+    const missingFields = this.getEmptyFields(this.userData);
+    if (missingFields.length > 0) {
+      this.dispatchEvent(new CustomEvent('missing-fields', {
+        detail: missingFields,
+      }));
+    } else {
+      this._login()
+    }
   }
 
-  getEmptyFields (){
+  getEmptyFields (data){
     return [
-      !this.email && 'email',
-      !this.password && 'password'
+      !data.email && 'email',
+      !data.password && 'password'
     ].filter(field => field);
   }
 
   _login (){
     
     this.body = {
-      email: this.email,
-      password: this.password
+      email: this.userData.email,
+      password: this.userData.password
     }
     this.setService();
     this.setListeners();
     this.doRequest();
-    this.flushData();
-  
-  }
-
-  flushData () {
-    this.email = '';
-    this.password = '';
+    this.userData = {};
   }
 }
 

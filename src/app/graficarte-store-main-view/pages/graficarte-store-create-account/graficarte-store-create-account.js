@@ -4,7 +4,7 @@ import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
 import 'sophos-simple-modal/sophos-simple-modal';
 import './graficarte-create-account-form/graficarte-create-account-form';
-import getLocal from '../../../locales';
+import getLocal from '../../../../utils/locales';
 
 export class GraficarteStoreCreateAccount extends LitElement {
   /**
@@ -21,23 +21,14 @@ export class GraficarteStoreCreateAccount extends LitElement {
       },
       {
         label: getLocal('graficarte-store-create-account-form-cancel'),
-        key: 'cancel',
+        key: 'cancel-create-account',
       },
     ];
     this.userData = {};
     this.missingFields = [];
     this.passwordMessageStyle = '';
     this.emptyMessage = 'Este campo es requerido';
-    this.modalLabelsButtons = [
-      {
-      label: ''
-      }, 
-      {
-        label: 'Cancelar'
-      }
-    ];
     this.isPasswordValid = false;
-    this.modalButtonsHandlers = {};
   }
 
   /**
@@ -70,50 +61,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     }
   }
 
-  _openLoginModal (){
-    this.modalTitle = 'Ingresar';
-    this.modalMessage = '¿Desea continuar?';
-    this.modalFooterMessage = "Graficarte";
-    this.isModalOpened = true;
-    this.modalLabelsButtons = [
-      {
-        label: 'Entrar',
-        key: 'login'
-      }, 
-      {
-        label: 'Volver',
-        key: 'close-modal'
-      }];
-  }
-
-  _openCancelModal (){
-    this.modalTitle = 'Salir';
-    this.modalMessage = '¿Desea regresar a la tienda?';
-    this.modalFooterMessage = 'Graficarte';
-    this.isModalOpened = true;
-    this.modalLabelsButtons = [
-      {
-        label: 'Salir',
-        key: 'back-to-store',
-      }, 
-      {
-        label: 'Quedarse',
-        key: 'close-modal',
-      }];
-  }
-
-  _openPasswordConfirmationErrorModal (){
-    this.modalTitle = 'Las contraseñas no coinciden';
-    this.modalMessage = 'Por favor, asegúrese que la contraseña corresponda con su confirmación';
-    this.modalFooterMessage = 'Graficarte';
-    this.isModalOpened = true;
-    this.modalLabelsButtons = [
-      {
-        label: 'Aceptar',
-        key: 'close-modal',
-      }];
-  }
-
   _closeModal (){
     this.modalTitle = '';
     this.modalMessage = '';
@@ -133,30 +80,22 @@ export class GraficarteStoreCreateAccount extends LitElement {
     ].filter(field => field);
   }
 
-  resetEmptyFields (){
-    this.inputsList = this.inputsList.map(input => {
-      input.missingField = false;
-      return input;
-    })
-  }
-
   manageCreateAccountActions (e){
     const { key } = e.detail.buttonDescription;
-    const emptyFields = this.getEmptyFields();
-    if(emptyFields.length > 0 && key !== 'cancel'){
-      this.missingFields = emptyFields;
-    } else {
-      this.resetEmptyFields();
-      if(key === 'create-account') {
-        if(this.isPasswordValid) {
-          this._openLoginModal();
-        } else {
-          this._openPasswordConfirmationErrorModal();
-        }
-      } else {
-        this._openCancelModal();
-      }
-    }
+    const payload = {
+      buttonKey: key,
+      userData: {
+        name: this.name,
+        lastName: this.lastName,
+        phoneNumber: this.phoneNumber,
+        email: this.email,
+        address: this.address,
+        password: this.password
+      },
+    };
+    this.dispatchEvent(new CustomEvent(`graficarte-${payload.buttonKey}`, {
+      detail: payload,
+    }))
   }
 
   createAccount () {

@@ -1,8 +1,7 @@
 import { LitElement, html } from 'lit';
 import './graficarte-store-client-controller';
 import './graficarte-store-sign-in-controller'
-import './graficarte-store-login-controller'
-import './graficarte-store-views-configs-controller';
+import './graficarte-store-login-controller';
 
 export class GraficarteStoreMainController extends LitElement {
   
@@ -13,11 +12,11 @@ export class GraficarteStoreMainController extends LitElement {
     */
   constructor () {
     super();
-    this.inputChannel = {
+    this.inputChannels = [{
       channelName: '',
       //Payload: Standard to declare variable objects
       payload: () => {},
-    };
+    }];
     this.loginControllerData = {
       email: '',
       password: '',
@@ -39,12 +38,12 @@ export class GraficarteStoreMainController extends LitElement {
     };
     this.updatedUserData = {...this.clientData};
     this.viewConfig = '';
+    this.graficarteState = () => {};
     this.channels = {
       ['graficarte-login-user'] : 'loginControllerData',
       ['graficarte-client-data'] : 'clientData',
       ['graficarte-updated-user-data'] : 'updatedUserData',
       ['graficarte-signin-user'] : 'signinControllerData',
-      ['graficarte-view-config'] : 'viewConfig',
     }
   }
 
@@ -53,48 +52,60 @@ export class GraficarteStoreMainController extends LitElement {
     */
   static get properties () {
     return {
-      inputChannel: { type: Object},
+      inputChannels: { type: Object},
     };
   }
 
   willUpdate (changedProps){
     super.willUpdate(changedProps);
-    if(changedProps.has('inputChannel')){
-      const relatedProp = this.channels[this.inputChannel.channelName];
-      this[relatedProp] = this.inputChannel.payload
+    if(changedProps.has('inputChannels')){
+      for(const channelInfo of this.inputChannels){
+        const relatedProp = this.channels[channelInfo.channelName];
+        this[relatedProp] = channelInfo.payload;
+      }
     }
   }
 
-  sendViewConfig (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-view-config';
-    this.sendOutputPayload(channelName, payload);
+  manageSucessRequest (e){
+    const channelPayload = [
+      {
+        channelName: 'request-success',
+        payload: e.detail
+      }
+    ]
+    this.sendOutputPayload(channelPayload)
   }
 
-  manageSucessRequest (e){
-    const payload = e.detail;
-    const channelName = 'request-success';
-    this.sendOutputPayload(channelName, payload)
+  manageLoginSuccess (e){
+    const channelPayload = [
+      {
+        channelName: 'graficarte-user-data', 
+        payload: e.detail.payload.data.registry,
+      }
+    ];
+    this.sendOutputPayload(channelPayload);
   }
 
   manageErrorRequest (e){
-    const payload = e.detail;
-    const channelName = 'request-error'
-    this.sendOutputPayload(channelName, payload)
+    const channelPayload = [
+      {
+        channelName: 'request-error',
+        payload: e.detail
+      }
+    ]
+    this.sendOutputPayload(channelPayload)
   }
   
-  manageInProgressRequest (e){
-    const payload = e.detail;
-    const channelName = 'request-in-progress';
-    this.sendOutputPayload(channelName, payload)
+  manageInProgressRequest (){
+    this.sendOutputPayload({
+      channelName: 'request-in-progress',
+      payload: () => {}
+    })
   }
 
-  sendOutputPayload (channelName, payload = {}){
+  sendOutputPayload (payload = [{}]){
     this.dispatchEvent(new CustomEvent('output-channel', {
-      detail: {
-        channelName,
-        payload
-      }
+      detail: payload
     }));
   }
 
@@ -102,14 +113,14 @@ export class GraficarteStoreMainController extends LitElement {
     return html`
       <graficarte-store-login-controller
         .userData=${this.loginControllerData}
-        @request-is-done=${this.manageSucessRequest}
+        @request-is-done=${this.manageLoginSuccess}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-login-controller>
 
       <graficarte-store-client-controller
-      .userData=${this.clientData}
-      .updatedUserData=${this.updatedUserData}
+        .userData=${this.clientData}
+        .updatedUserData=${this.updatedUserData}
         @request-is-done=${this.manageSucessRequest}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
@@ -126,11 +137,6 @@ export class GraficarteStoreMainController extends LitElement {
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-sign-in-controller>
-
-      <graficarte-store-views-configs-controller
-      .viewConfig=${this.viewConfig}
-      @view-config-setted=${this.sendViewConfig}>
-      </graficarte-store-views-configs-controller>
     `;
   }
 

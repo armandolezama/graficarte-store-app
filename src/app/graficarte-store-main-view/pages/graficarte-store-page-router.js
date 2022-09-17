@@ -9,7 +9,7 @@ import './graficarte-store-profile/graficarte-store-profile';
 import './graficarte-store-profile-configuration/graficarte-store-profile-configuration';
 import './graficarte-store-shopping-cart/graficarte-store-shopping-cart';
 import './graficarte-store-shopping-history/graficarte-store-shopping-history';
-import productMocks from '../../mocks/products-mocks';
+import productMocks from '../../../mocks/products-mocks';
 
 export class GraficarteStorePageRouter extends LitElement {
   /**
@@ -31,8 +31,8 @@ export class GraficarteStorePageRouter extends LitElement {
         'create-account',
         html`
           <graficarte-store-create-account
-            @create-account=${this.createAccount}
-            @cancel-create-account=${this.cancelCreateAccount}>
+            @graficarte-create-account=${this.signin}
+            @graficarte-cancel-create-account=${this.cancelSignin}>
           </graficarte-store-create-account>
         `
       ],
@@ -145,7 +145,18 @@ export class GraficarteStorePageRouter extends LitElement {
   }
 
   cancelLogin (){
-    this.dispatchEvent(new CustomEvent('cancel-access-for-user'))
+    this.dispatchEvent(new CustomEvent('cancel-access-for-user'));
+  }
+
+  signin (e){
+    const { userData } = e.detail;
+    this.dispatchEvent(new CustomEvent('request-registry-for-user', {
+      detail: userData
+    }));
+  }
+
+  cancelSignin(){
+    this.dispatchEvent(new CustomEvent('cancel-registry-for-user'))
   }
 
   updateUserData (e){

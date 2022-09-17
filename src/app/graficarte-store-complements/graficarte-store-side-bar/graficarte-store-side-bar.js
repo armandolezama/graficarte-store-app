@@ -23,7 +23,7 @@ export class GraficarteStoreSideBar extends LitElement {
         `
       ],
       [
-        'inventory',
+        'admin-store',
         html`
           <graficarte-store-admin-nav-bar
             @finish-sesion=${this.openLogoutModal}>

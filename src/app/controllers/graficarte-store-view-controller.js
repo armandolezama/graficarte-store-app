@@ -9,11 +9,11 @@ export class GraficarteStoreViewController extends LitElement {
     */
   constructor () {
     super();
-    this.inputChannel = {
+    this.inputChannels = [{
       channelName: '',
       //Payload: Standard to declare variable objects
       payload: () => {},
-    };
+    }];
     this.userData = {
       name: '',
       lastName: '',
@@ -30,10 +30,16 @@ export class GraficarteStoreViewController extends LitElement {
       isCreateAccountOptionDisplayed: false,
       isShoppingCartIconDisplayed: false,
       shownBuyingOptions: false,
-    }
+    };
+    this.graficarteState = () => {};
     this.channels = {
-      ['graficarte-user-data'] : 'userData',
-      ['graficarte-view-config'] : 'viewConfig',
+      ['graficarte-user-data'] : 'userData'
+    };
+    this.viewSettings = {
+      'login' : () => {},
+      'create-accoun' : () => {},
+      'client-store' : () => {},
+      'public-store' : () => {},
     }
   }
 
@@ -42,17 +48,31 @@ export class GraficarteStoreViewController extends LitElement {
     */
   static get properties () {
     return {
-      inputChannel: { type: Object },
+      inputChannels: { type: Object },
       viewConfig: { type: Object },
       userData: { type: Object },
     };
   }
 
+  firstUpdated(){
+    const { viewState } = this.graficarteState;
+    this.viewSettings = {
+      'login' : viewState.setLoginPage.bind(viewState),
+      'create-account' : viewState.setAccountPage.bind(viewState),
+      'client-store' : viewState.setClientStorePage.bind(viewState),
+      'public-store' : viewState.setPublicStorePage.bind(viewState),
+    };
+    
+    this.setPageConfig('public-store')
+  }
+
   willUpdate (changedProps){
     super.willUpdate(changedProps);
-    if(changedProps.has('inputChannel')){
-      const relatedProp = this.channels[this.inputChannel.channelName];
-      this[relatedProp] = {...this.inputChannel.payload}
+    if(changedProps.has('inputChannels')){
+      for(const channelInfo of this.inputChannels){
+        const relatedProp = this.channels[channelInfo.channelName];
+        this[relatedProp] = channelInfo.payload;
+      }
     }
   }
 
@@ -82,47 +102,55 @@ export class GraficarteStoreViewController extends LitElement {
   }
 
   pageNavigation (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-view-config';
-    this.sendOutputPayload(channelName, payload);
+    const pageName = e.detail;
+    this.setPageConfig(pageName);
+  }
+
+  setPageConfig(config = ''){
+    this.viewSettings[config]();
+    this.viewConfig = this.graficarteState.viewState.getState();    
   }
 
   requestUpdateOfUserData (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-updated-user-data';
-    this.sendOutputPayload(channelName, payload);
+    const channelPayload = [{
+      channelName: 'graficarte-updated-user-data',
+      payload: e.detail,
+    }];
+    this.sendOutputPayload(channelPayload);
   }
 
   requestLogin (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-login-user';
-    this.sendOutputPayload(channelName, payload);
+    const channelPayload = [{
+      channelName: 'graficarte-login-user',
+      payload: e.detail,
+    }];
+    this.sendOutputPayload(channelPayload);
   }
 
   cancelLogin (){
-    const payload = 'public-store';
-    const channelName = 'graficarte-view-config';
-    this.sendOutputPayload(channelName, payload);
+    this.setPageConfig('public-store');
   }
 
   requestSignIn (e){
-    const payload = e.detail;
-    const channelName = 'graficarte-signin-user';
-    this.sendOutputPayload(channelName, payload);
+    const channelPayload = [{
+      channelName: 'graficarte-signin-user',
+      payload: e.detail,
+    }];
+    this.sendOutputPayload(channelPayload);
   }
 
-  searchProductByTerm(e){
-    const payload = e.detail;
-    const channelName = 'graficarte-search-product-by-term';
-    this.sendOutputPayload(channelName, payload); 
+  searchProductByTerm (e){
+    const channelPayload = [{
+      channelName: 'graficarte-search-product-by-term',
+      payload: e.detail,
+    }];
+    this.sendOutputPayload(channelPayload); 
   }
 
-  sendOutputPayload (channelName, payload = {}){
+  sendOutputPayload (payload = [{}]){
+    console.log(payload)
     this.dispatchEvent(new CustomEvent('output-channel', {
-      detail: {
-        channelName,
-        payload,
-      }
+      detail: payload
     }));
   }
 

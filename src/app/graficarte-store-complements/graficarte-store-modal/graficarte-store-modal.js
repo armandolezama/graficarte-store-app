@@ -45,7 +45,7 @@ export class GraficarteStoreModal extends LitElement {
   closeModal () {
     this.isModalOpened = false;
   }
-
+  
   manageModalOptions (e) {
     const option = e.detail.buttonDescription.key;
     if (option === 'close-modal') {

@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-create-account-form-styles';
-import getLocal from '../../../../locales';
+import getLocal from '../../../../../utils/locales';
 
 export class GraficarteCreateAccountForm extends LitElement {
 

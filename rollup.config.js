@@ -14,7 +14,7 @@ const copyConfig = {
 // The main JavaScript bundle for modern browsers that support
 // JavaScript modules and other ES2015+ features.
 const config = {
-  input: 'src/graficarte-store-app.js',
+  input: 'src/app/graficarte-store-app.js',
   output: {
     dir: 'public/src/components',
     format: 'es',

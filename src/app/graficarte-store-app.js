@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import styles from './graficarte-store-app-styles';
 import './controllers/graficarte-store-main-controller';
 import './controllers/graficarte-store-view-controller';
+import GraficarteRootState from '../libs/GraficarteRootState';
 
 export class GraficarteStoreApp extends LitElement {
   /**
@@ -11,14 +12,15 @@ export class GraficarteStoreApp extends LitElement {
     */
   constructor () {
     super();
-    this.viewControllerInput = {
+    this.viewControllerInput = [{
       channelName: '',
       payload: () => {},
-    }
-    this.mainControllerInput = {
+    }];
+    this.mainControllerInput = [{
       channelName: '',
       payload: () => {},
-    }
+    }];
+    this.graficarteState = new GraficarteRootState();
   }
 
   /**
@@ -50,13 +52,15 @@ export class GraficarteStoreApp extends LitElement {
       <div id="main-app-container">
 
         <graficarte-store-main-controller
-        .inputChannel=${this.mainControllerInput}
-        @output-channel=${this.setMainControllerOutput}>
+        .inputChannels=${this.mainControllerInput}
+        @output-channel=${this.setMainControllerOutput}
+        .graficarteState=${this.graficarteState}>
         </graficarte-store-main-controller>
 
         <graficarte-store-view-controller
-        .inputChannel=${this.viewControllerInput}
-        @output-channel=${this.setViewControllerOutput}>
+        .inputChannels=${this.viewControllerInput}
+        @output-channel=${this.setViewControllerOutput}
+        .graficarteState=${this.graficarteState}>
         </graficarte-store-view-controller>
       
       </div>

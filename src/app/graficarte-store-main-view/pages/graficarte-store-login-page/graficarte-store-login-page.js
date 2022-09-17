@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import styles from './graficarte-store-login-page-styles';
 import 'sophos-chimera-button/sophos-chimera-button';
 import 'sophos-simple-modal/sophos-simple-modal';
-import getLocal from '../../../locales'
+import getLocal from '../../../../utils/locales'
 
 export class GraficarteStoreLoginPage extends LitElement {
   /**
@@ -115,11 +115,6 @@ export class GraficarteStoreLoginPage extends LitElement {
     this.dispatchEvent(new CustomEvent(`graficarte-${payload.buttonKey}`, {
       detail: payload,
     }))
-  }
-
-  _manageModalButtons (e){
-    const payload = e.detail.buttonDescription;
-    payload.option === 0 ? payload.key === 'store' ? this._cancel() : this._submit() : this._closeModal();
   }
 
   _openLoginModal (){
