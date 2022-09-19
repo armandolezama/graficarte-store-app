@@ -31,6 +31,7 @@ export class GraficarteStoreViewController extends LitElement {
       isShoppingCartIconDisplayed: false,
       shownBuyingOptions: false,
     };
+    this.modalConfig = '';
     this.graficarteState = () => {};
     this.channels = {
       ['graficarte-user-data'] : 'userData'
@@ -43,7 +44,7 @@ export class GraficarteStoreViewController extends LitElement {
     }
     this.temporaryStorage = [{
       channelName: '',
-      temporaryPayolad: {},
+      payload: {},
     }];
   }
 
@@ -55,6 +56,7 @@ export class GraficarteStoreViewController extends LitElement {
       inputChannels: { type: Object },
       viewConfig: { type: Object },
       userData: { type: Object },
+      modalConfig: { type: String },
     };
   }
 
@@ -66,7 +68,8 @@ export class GraficarteStoreViewController extends LitElement {
       'client-store' : viewState.setClientStorePage.bind(viewState),
       'public-store' : viewState.setPublicStorePage.bind(viewState),
     };
-    this.temporaryStorage = {};
+    this.temporaryStorage = [];
+    this.inputChannels = [];
     this.setPageConfig('public-store')
   }
 
@@ -78,10 +81,6 @@ export class GraficarteStoreViewController extends LitElement {
         this[relatedProp] = channelInfo.payload;
       }
     }
-  }
-
-  createAccount (e) {
-    this._signinData = e.detail.userData;
   }
 
   setProgressState () {
@@ -111,11 +110,13 @@ export class GraficarteStoreViewController extends LitElement {
       channelName: 'graficarte-login-user',
       payload: e.detail,
     }];
-    this.sendOutputPayload(channelPayload);
+    this.saveTemporaryPayload(channelPayload);
+    this.modalConfig = 'request-for-login';
   }
 
   cancelLogin (){
-    this.setPageConfig('public-store');
+    this.nextPageAfterModal = 'public-store';
+    this.modalConfig = 'exit-from-login'
   }
 
   requestSignIn (e){
@@ -124,10 +125,12 @@ export class GraficarteStoreViewController extends LitElement {
       payload: e.detail,
     }];
     this.saveTemporaryPayload(channelPayload);
+    this.modalConfig = 'request-for-signin';
   }
 
   cancelSignin (){
-    this.setPageConfig('public-store');
+    this.nextPageAfterModal = 'public-store';
+    this.modalConfig = 'exit-from-signin';
   }
 
   searchProductByTerm (e){
@@ -138,10 +141,32 @@ export class GraficarteStoreViewController extends LitElement {
     this.sendOutputPayload(channelPayload); 
   }
 
+  continueRequest (){
+    this.sendOutputPayload(this.temporaryStorage);
+  }
+
+  closeModal(){
+    this.modalConfig = 'close-modal';
+  }
+
+  cancelRequest (){
+    this.modalConfig = 'close-modal';
+    if(this.nextPageAfterModal){
+      this.setPageConfig(this.nextPageAfterModal);
+      this.nextPageAfterModal = '';
+    };
+  }
+
+  sendOutputPayload (payload = [{}]){
+    this.dispatchEvent(new CustomEvent('output-channel', {
+      detail: payload
+    }));
+  }
+
   saveTemporaryPayload (channelPayload) {
     const suspendedRequest = {
-      channelName : channelPayload.channelName,
-      temporaryPayolad : channelPayload.payload,
+      channelName : channelPayload[0].channelName,
+      payload : channelPayload[0].payload,
     };
     this.temporaryStorage = [...this.temporaryStorage, suspendedRequest];
   }
@@ -151,15 +176,8 @@ export class GraficarteStoreViewController extends LitElement {
     this.temporaryStorage = [];
   }
 
-  cancelTemporaryStorage (){
+  cleanTemporaryStorage (){
     this.temporaryStorage = [];
-  }
-
-  sendOutputPayload (payload = [{}]){
-    console.log(payload)
-    this.dispatchEvent(new CustomEvent('output-channel', {
-      detail: payload
-    }));
   }
 
   render () {
@@ -172,14 +190,19 @@ export class GraficarteStoreViewController extends LitElement {
         .isCreateAccountOptionDisplayed = ${this.viewConfig.isCreateAccountOptionDisplayed}
         .isShoppingCartIconDisplayed = ${this.viewConfig.isShoppingCartIconDisplayed}
         .shownBuyingOptions = ${this.viewConfig.shownBuyingOptions}
+        .modalConfig=${this.modalConfig}
         @header-navigation=${this.pageNavigation}
+        @store-search-by-term=${this.searchProductByTerm}
         @open-shopping-cart-page=${this.pageNavigation}
         @request-update-of-user-data=${this.requestUpdateOfUserData}
         @request-access-for-user=${this.requestLogin}
         @cancel-access-for-user=${this.cancelLogin}
         @request-registration-for-user=${this.requestSignIn}
         @cancel-registration-for-user=${this.cancelSignin}
-        @store-search-by-term=${this.searchProductByTerm}>
+        @continue-request=${this.continueRequest}
+        @cancel-request=${this.cancelRequest}
+        @close-modal=${this.closeModal}
+        >
       </graficarte-store-main-view>
     `;
   }

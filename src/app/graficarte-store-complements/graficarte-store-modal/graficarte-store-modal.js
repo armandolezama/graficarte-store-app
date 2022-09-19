@@ -22,12 +22,19 @@ export class GraficarteStoreModal extends LitElement {
       }
     ];
     this.modalConfig = {
-      'request-for-login' : this.openLoginModal,
-      'request-for-signin' : this.openSigninModal,
-      // 'request-for-client-update' : this,
-      'cancel-request' : this.closeModal,
+      'request-for-login' : this.openLoginModal.bind(this),
+      'exit-from-login' : this.openCancelModal.bind(this),
+      'exit-from-signin' : this.openCancelModal.bind(this),
+      'request-for-signin' : this.openSigninModal.bind(this),
+      'request-for-client-update' : this.openUpdateUserDataModal.bind(this),
+      'cancel-request' : this.closeModal.bind(this),
+      'close-modal' : this.closeModal.bind(this),
     };
     this.configCommand = '';
+    this.serviceMessage = {
+      info: '',
+      message: '',
+    };
   }
 
   /**
@@ -39,6 +46,7 @@ export class GraficarteStoreModal extends LitElement {
       modalTitle: { type: String },
       modalMessage: { type: String },
       modalFooterMessage: { type: String },
+      configCommand: { type: String },
     };
   }
 
@@ -48,9 +56,9 @@ export class GraficarteStoreModal extends LitElement {
 
   willUpdate (changedProps){
     super.willUpdate(changedProps);
-    if(changedProps.has('configCommand')){
+    if(changedProps.has('configCommand') && this.configCommand !== ''){
       this.modalConfig[this.configCommand]();
-    }
+    };
   }
 
   closeModal (){
@@ -67,7 +75,7 @@ export class GraficarteStoreModal extends LitElement {
     this.modalLabelsButtons = [
       {
         label: 'Continuar',
-        key: 'close-api-error-modal',
+        key: 'close-modal',
       }
     ];
     this.modalFooterMessage = 'Graficarte';
@@ -79,12 +87,12 @@ export class GraficarteStoreModal extends LitElement {
     this.modalMessage = 'Presione "Continuar si desea quedarse, o presione "Salir" para terminar su sesión"';
     this.modalLabelsButtons = [
       {
-        label: 'Continuar',
+        label: 'Continuar en la tienda',
         key: 'close-modal',
       },
       {
-        label: 'Salir',
-        key: 'close-session',
+        label: 'Terminar sesion',
+        key: 'continue-request',
       },
     ];
     this.modalFooterMessage = 'Graficarte';
@@ -98,11 +106,11 @@ export class GraficarteStoreModal extends LitElement {
     this.modalLabelsButtons = [
       {
         label: 'Entrar',
-        key: 'login'
+        key: 'continue-request'
       }, 
       {
         label: 'Volver',
-        key: 'edit-login'
+        key: 'cancel-request'
       }];
   }
 
@@ -114,11 +122,27 @@ export class GraficarteStoreModal extends LitElement {
     this.modalLabelsButtons = [
       {
         label: 'Entrar',
-        key: 'login'
+        key: 'continue-request'
       }, 
       {
         label: 'Volver',
-        key: 'edit-login'
+        key: 'cancel-request'
+      }];
+  }
+
+  openUpdateUserDataModal () {
+    this.modalTitle = 'Actualizar perfil';
+    this.modalMessage = 'Se van a actualizar sus datos ¿Desea continuar?';
+    this.modalFooterMessage = "Graficarte";
+    this.isModalOpened = true;
+    this.modalLabelsButtons = [
+      {
+        label: 'Entrar',
+        key: 'continue-request'
+      }, 
+      {
+        label: 'Volver',
+        key: 'cancel-request'
       }];
   }
 
@@ -130,18 +154,18 @@ export class GraficarteStoreModal extends LitElement {
     this.modalLabelsButtons = [
       {
         label: 'Salir',
-        key: 'store',
+        key: 'cancel-request',
       }, 
       {
         label: 'Quedarse',
-        key: 'edit-login',
+        key: 'close-modal',
       }];
   }
 
-  setLoginErrorModal (error) {
+  setLoginErrorModal () {
 
-    this.modalTitle = `${error.info}`;
-    this.modalMessage = `${error.message}`;
+    this.modalTitle = `${this.serviceMessage.info}`;
+    this.modalMessage = `${this.serviceMessage.message}`;
     this.modalLabelsButtons = [
       {
         label: 'Aceptar',
@@ -151,10 +175,10 @@ export class GraficarteStoreModal extends LitElement {
     this.modalFooterMessage = 'Graficarte';
   }
 
-  setSigninErrorModal (error) {
+  setSigninErrorModal () {
 
-    this.modalTitle = `${error.info}`;
-    this.modalMessage = `${error.message}`;
+    this.modalTitle = `${this.serviceMessage.info}`;
+    this.modalMessage = `${this.serviceMessage.message}`;
     this.modalLabelsButtons = [
       {
         label: 'Aceptar',
@@ -166,17 +190,7 @@ export class GraficarteStoreModal extends LitElement {
 
   manageModalOptions (e) {
     const option = e.detail.buttonDescription.key;
-    if (option === 'close-modal') {
-      this.closeModal();
-    } else if (option === 'back-to-login') {
-      this.closeModal();
-    } else if(option === 'close-api-error-modal'){
-      this._loginData = {};
-      this.closeModal();
-    } else {
-      this.showPublicStore();
-      this.closeModal();
-    }
+    this.dispatchEvent(new CustomEvent(`graficarte-${option}`));
   }
 
   render () {

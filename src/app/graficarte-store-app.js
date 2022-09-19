@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import styles from './graficarte-store-app-styles';
 import './controllers/graficarte-store-main-controller';
 import './controllers/graficarte-store-view-controller';
-import GraficarteRootState from '../libs/GraficarteRootState';
+import GraficarteRootState from '../libs/States/GraficarteRootState';
 
 export class GraficarteStoreApp extends LitElement {
   /**

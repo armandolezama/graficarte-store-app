@@ -22,8 +22,8 @@ export class GraficarteStoreMainView extends LitElement {
     this.isShoppingCartIconDisplayed = false;
     this.shownBuyingOptions = false;
     this.modalConfig = '';
-    this.isModalOpened = false;
     this.userData = {};
+    this.serviceMessage = {};
   }
 
   /**
@@ -38,6 +38,7 @@ export class GraficarteStoreMainView extends LitElement {
       isCreateAccountOptionDisplayed: { type: Boolean },
       isShoppingCartIconDisplayed: { type: Boolean },
       shownBuyingOptions: { type: Boolean },
+      modalConfig: { type: String },
     };
   }
 
@@ -85,6 +86,18 @@ export class GraficarteStoreMainView extends LitElement {
 
   cancelLogin () {
     this.dispatchEvent(new CustomEvent('cancel-access-for-user'))
+  }
+
+  continuerequest (){
+    this.dispatchEvent(new CustomEvent('continue-request'))
+  }
+
+  cancelRequest (){
+    this.dispatchEvent(new CustomEvent('cancel-request'))
+  }
+
+  closeModal (){
+    this.dispatchEvent(new CustomEvent('close-modal'))
   }
 
   setValidCreateAccountPassword () {
@@ -161,8 +174,11 @@ export class GraficarteStoreMainView extends LitElement {
         </sophos-simple-template>
 
         <graficarte-store-modal
-        ?isModalOpened=${true}
         .configCommand=${this.modalConfig}
+        .serviceMessage=${this.serviceMessage}
+        @graficarte-continue-request=${this.continuerequest}
+        @graficarte-cancel-request=${this.cancelRequest}
+        @graficarte-close-modal=${this.closeModal}
         >
         </graficarte-store-modal>
     `;

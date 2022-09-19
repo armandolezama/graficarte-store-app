@@ -60,6 +60,11 @@ export class GraficarteStoreMainController extends LitElement {
     };
   }
 
+  firstUpdated() {
+    this.temporaryStorage = [];
+    this.inputChannels = [];
+  }
+
   willUpdate (changedProps){
     super.willUpdate(changedProps);
     if(changedProps.has('inputChannels')){

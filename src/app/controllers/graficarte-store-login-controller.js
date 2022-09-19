@@ -39,7 +39,7 @@ export class GraficarteStoreLoginController extends ServiceController {
   getEmptyFields (data){
     return [
       !data.email && 'email',
-      !data.password && 'password'
+      !data.password && 'password',
     ].filter(field => field);
   }
 

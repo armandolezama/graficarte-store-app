@@ -1,5 +1,5 @@
-import GraficarteStoreViewState from "./States/GraficarteStoreViewState";
-import GraficarteClientState from "./States/GraficarteClientState";
+import GraficarteStoreViewState from "./GraficarteStoreViewState";
+import GraficarteClientState from "./GraficarteClientState";
 
 export default class GraficarteRootState {
   constructor (){

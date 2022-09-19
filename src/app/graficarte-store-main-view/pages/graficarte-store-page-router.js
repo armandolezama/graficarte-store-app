@@ -9,7 +9,7 @@ import './graficarte-store-profile/graficarte-store-profile';
 import './graficarte-store-profile-configuration/graficarte-store-profile-configuration';
 import './graficarte-store-shopping-cart/graficarte-store-shopping-cart';
 import './graficarte-store-shopping-history/graficarte-store-shopping-history';
-import productMocks from '../../../mocks/products-mocks';
+import productMocks from '../../../utils/mocks/products-mocks';
 
 export class GraficarteStorePageRouter extends LitElement {
   /**
