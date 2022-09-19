@@ -60,7 +60,7 @@ export class GraficarteStoreMainController extends LitElement {
     };
   }
 
-  firstUpdated() {
+  firstUpdated () {
     this.temporaryStorage = [];
     this.inputChannels = [];
   }

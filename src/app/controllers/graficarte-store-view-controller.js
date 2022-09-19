@@ -145,7 +145,7 @@ export class GraficarteStoreViewController extends LitElement {
     this.sendOutputPayload(this.temporaryStorage);
   }
 
-  closeModal(){
+  closeModal (){
     this.modalConfig = 'close-modal';
   }
 
@@ -154,7 +154,7 @@ export class GraficarteStoreViewController extends LitElement {
     if(this.nextPageAfterModal){
       this.setPageConfig(this.nextPageAfterModal);
       this.nextPageAfterModal = '';
-    };
+    }
   }
 
   sendOutputPayload (payload = [{}]){

@@ -58,7 +58,7 @@ export class GraficarteStoreModal extends LitElement {
     super.willUpdate(changedProps);
     if(changedProps.has('configCommand') && this.configCommand !== ''){
       this.modalConfig[this.configCommand]();
-    };
+    }
   }
 
   closeModal (){
