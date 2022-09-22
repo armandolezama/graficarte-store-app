@@ -79,11 +79,12 @@ export class GraficarteStoreMainController extends LitElement {
     this.sendOutputPayload([e.detail]);
   }
 
-  manageErrorRequest (e){
+  manageErrorRequest (){
+    const errorMessage = 'Error en el servidor, intente de nuevo más tarde';
     const channelPayload = [
       {
-        channelName: 'request-error',
-        payload: e.detail
+        channelName: 'graficarte-request-error',
+        payload: {error: errorMessage},
       }
     ]
     this.sendOutputPayload(channelPayload)
@@ -91,7 +92,7 @@ export class GraficarteStoreMainController extends LitElement {
   
   manageInProgressRequest (){
     this.sendOutputPayload({
-      channelName: 'request-in-progress',
+      channelName: 'graficarte-request-in-progress',
       payload: () => {}
     })
   }

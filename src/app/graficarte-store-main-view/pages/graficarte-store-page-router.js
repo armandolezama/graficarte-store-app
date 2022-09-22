@@ -75,7 +75,11 @@ export class GraficarteStorePageRouter extends LitElement {
     }))
   }
 
-  clientContentCreator (contentTag = ''){
+  acceptError(){
+    this.dispatchEvent(new CustomEvent('accept-error'))
+  }
+
+  clientContentCreator (){
     const contentArray = [
       [
         'home',
@@ -128,7 +132,8 @@ export class GraficarteStorePageRouter extends LitElement {
       [
         'error',
         html`
-          <graficarte-store-error-page>
+          <graficarte-store-error-page
+          @accept-error=${this.acceptError}>
           </graficarte-store-error-page>
         `,
       ],
@@ -140,13 +145,13 @@ export class GraficarteStorePageRouter extends LitElement {
         `
       ],
     ].find(template => {
-      return template[0] === contentTag;
+      return template[0] === this.clientPage;
     });
 
     if(contentArray && contentArray[1]) return contentArray[1];
   }
 
-  mainContentCreator (contentTag = '') {
+  mainContentCreator () {
     const contentArray = [
       [
         'create-account',
@@ -180,16 +185,23 @@ export class GraficarteStorePageRouter extends LitElement {
           </graficarte-store-login-page>
         `
       ],
+      [
+        'error',
+        html`
+          <graficarte-store-error-page
+          @accept-error=${this.acceptError}>
+          </graficarte-store-error-page>
+        `,
+      ],
     ].find(template => {
-      return template[0] === contentTag;
+      return template[0] === this.mainPage;
     });
 
-    
     if(contentArray && contentArray[1]) return contentArray[1];
   }
 
   render () {
-    return this.mainContentCreator(this.mainPage);
+    return this.mainContentCreator();
   }
 }
 customElements.define('graficarte-store-page-router', GraficarteStorePageRouter);

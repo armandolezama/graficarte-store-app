@@ -104,6 +104,10 @@ export class GraficarteStoreMainView extends LitElement {
     this.dispatchEvent(new CustomEvent('close-modal'))
   }
 
+  acceptError(){
+    this.dispatchEvent(new CustomEvent('accept-error'))
+  }
+
   setValidCreateAccountPassword () {
     this.isValidCreateAccountPassword = true;
   }
@@ -166,7 +170,8 @@ export class GraficarteStoreMainView extends LitElement {
               @invalid-password=${this.setInvalidCreateAccountPassword}
               @add-product-to-cart=${this.addProductToCart}
               @buy-product=${this.buyProduct}
-              @update-user-data=${this.updateUserData}>
+              @update-user-data=${this.updateUserData}
+              @accept-error=${this.acceptError}>
             </graficarte-store-page-router>
           </div>
           <div slot="nav-bar-content">

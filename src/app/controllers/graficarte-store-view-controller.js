@@ -31,21 +31,26 @@ export class GraficarteStoreViewController extends LitElement {
       isShoppingCartIconDisplayed: false,
       shownBuyingOptions: false,
     };
+    this.requestErrorData = {};
+    this.requestInProgress = {};
     this.loginMissingFields = [];
     this.signinMissingFields = [];
     this.showMissingfields = false;
     this.modalConfig = '';
     this.graficarteState = () => {};
     this.channels = {
-      ['graficarte-user-data'] : 'userData',
-      ['graficarte-login-missing-fields'] : 'loginMissingFields',
-      ['graficarte-signin-missing-fields'] : 'signinMissingFields',
+      'graficarte-user-data' : 'userData',
+      'graficarte-login-missing-fields' : 'loginMissingFields',
+      'graficarte-signin-missing-fields' : 'signinMissingFields',
+      'graficarte-request-error' : 'requestErrorData',
+      'graficarte-request-in-progress' : 'requestInProgress',
     };
     this.viewSettings = {
       'login' : () => {},
       'create-accoun' : () => {},
       'client-store' : () => {},
       'public-store' : () => {},
+      'error-page' : () => {},
     }
     this.temporaryStorage = [{
       channelName: '',
@@ -61,6 +66,8 @@ export class GraficarteStoreViewController extends LitElement {
       inputChannels: { type: Object },
       viewConfig: { type: Object },
       userData: { type: Object },
+      requestErrorData: { type: Object },
+      requestInProgress: { type: Object },
       modalConfig: { type: String },
       loginMissingFields: { type: Array },
       signinMissingFields: { type: Array },
@@ -105,6 +112,18 @@ export class GraficarteStoreViewController extends LitElement {
     return this._loginMissingFields;
   }
 
+  set requestErrorData(value){
+    const currValue = value;
+    const oldValue = this._requestErrorData;
+
+    if(value.error){
+      this.setPageConfig('error-page');
+    }
+
+    this._requestErrorData = currValue;
+    this.requestUpdate('requestErrorData', oldValue);
+  }
+
   set signinMissingFields (value){
     const currValue = value;
     const oldValue = this._signinMissingFields;
@@ -129,6 +148,7 @@ export class GraficarteStoreViewController extends LitElement {
       'create-account' : viewState.setAccountPage.bind(viewState),
       'client-store' : viewState.setClientStorePage.bind(viewState),
       'public-store' : viewState.setPublicStorePage.bind(viewState),
+      'error-page' : viewState.setErrorPage.bind(viewState),
     };
     this.temporaryStorage = [];
     this.inputChannels = [];
@@ -179,7 +199,9 @@ export class GraficarteStoreViewController extends LitElement {
 
   cancelLogin (){
     this.nextPageAfterModal = 'public-store';
-    this.modalConfig = 'exit-from-login'
+    this.modalConfig = 'exit-from-login';
+    this.showMissingfields = false;
+    this.loginMissingFields = [];
   }
 
   requestSignIn (e){
@@ -195,6 +217,8 @@ export class GraficarteStoreViewController extends LitElement {
   cancelSignin (){
     this.nextPageAfterModal = 'public-store';
     this.modalConfig = 'exit-from-signin';
+    this.showMissingfields = false;
+    this.signinMissingFields = [];
   }
 
   searchProductByTerm (e){
@@ -220,6 +244,10 @@ export class GraficarteStoreViewController extends LitElement {
       this.setPageConfig(this.nextPageAfterModal);
       this.nextPageAfterModal = '';
     }
+  }
+
+  acceptError(){
+    this.setPageConfig('client-store');
   }
 
   sendOutputPayload (payload = [{}]){
@@ -265,6 +293,7 @@ export class GraficarteStoreViewController extends LitElement {
         @continue-request=${this.continueRequest}
         @cancel-request=${this.cancelRequest}
         @close-modal=${this.closeModal}
+        @accept-error=${this.acceptError}
         >
       </graficarte-store-main-view>
     `;

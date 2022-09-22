@@ -70,6 +70,10 @@ export default class GraficarteStoreViewState {
     this.shownBuyingOptions = false;
   }
 
+  setErrorPage(){
+    this.mainPage = 'error';
+  }
+
   getState (){
     const {
     mainPage,

@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit';
+import 'sophos-chimera-button/sophos-chimera-button';
 
 export class GraficarteStoreErrorPage extends LitElement {
     /**
@@ -20,9 +21,28 @@ export class GraficarteStoreErrorPage extends LitElement {
     static get styles () {
       return css``;
     }
+
+    acceptError(){
+      this.dispatchEvent(new CustomEvent('accept-error'))
+    }
   
     render () {
-      return html``;
+      return html`
+        <div>
+          <div>
+            Algo salió mal, inente más tarde
+          </div>
+          <sophos-chimera-button
+          .buttonsLabels=${[
+            {
+              label: 'Aceptar',
+              key: 'accep-error',
+            }
+          ]}
+          @sophos-chimera-button-click=${this.acceptError}>
+          </sophos-chimera-button>
+        </div>
+      `;
     }
 }
 
