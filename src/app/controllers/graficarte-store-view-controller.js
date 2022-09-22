@@ -31,10 +31,15 @@ export class GraficarteStoreViewController extends LitElement {
       isShoppingCartIconDisplayed: false,
       shownBuyingOptions: false,
     };
+    this.loginMissingFields = [];
+    this.signinMissingFields = [];
+    this.showMissingfields = false;
     this.modalConfig = '';
     this.graficarteState = () => {};
     this.channels = {
-      ['graficarte-user-data'] : 'userData'
+      ['graficarte-user-data'] : 'userData',
+      ['graficarte-login-missing-fields'] : 'loginMissingFields',
+      ['graficarte-signin-missing-fields'] : 'signinMissingFields',
     };
     this.viewSettings = {
       'login' : () => {},
@@ -60,6 +65,61 @@ export class GraficarteStoreViewController extends LitElement {
     };
   }
 
+  set userData (value) {
+    const currValue = value;
+    const oldValue = this._userData;
+
+    this.showMissingfields = false;
+
+    if(this.graficarteState?.clientState){
+
+      this.graficarteState.clientState.setClientData(currValue);
+  
+      this.setPageConfig('client-store');
+    }
+
+    this._userData = currValue;
+    this.requestUpdate('userData', oldValue);
+  }
+
+  get userData () {
+    return this._userData;
+  }
+
+  set loginMissingFields(value){
+    const currValue = value;
+    const oldValue = this._loginMissingFields;
+
+    if(this.showMissingfields) {
+      this._loginMissingFields = currValue;
+    } else {
+      this._loginMissingFields = [];
+    }
+
+    this.requestUpdate('loginMissingFields', oldValue);
+  }
+
+  get loginMissingFields(){
+    return this._loginMissingFields;
+  }
+
+  set signinMissingFields(value){
+    const currValue = value;
+    const oldValue = this._signinMissingFields;
+
+    if(this.showMissingfields) {
+      this._signinMissingFields = currValue;
+    } else {
+      this._signinMissingFields = [];
+    }
+
+    this.requestUpdate('signinMissingFields', oldValue);
+  }
+
+  get signinMissingFields(){
+    return this._signinMissingFields;
+  }
+
   firstUpdated (){
     const { viewState } = this.graficarteState;
     this.viewSettings = {
@@ -70,16 +130,16 @@ export class GraficarteStoreViewController extends LitElement {
     };
     this.temporaryStorage = [];
     this.inputChannels = [];
-    this.setPageConfig('public-store')
+    this.setPageConfig('public-store');
   }
 
   willUpdate (changedProps){
     super.willUpdate(changedProps);
-    if(changedProps.has('inputChannels')){
+    if(changedProps.has('inputChannels') && this.inputChannels.length > 0){
       for(const channelInfo of this.inputChannels){
         const relatedProp = this.channels[channelInfo.channelName];
         this[relatedProp] = channelInfo.payload;
-      }
+      };
     }
   }
 
@@ -94,7 +154,7 @@ export class GraficarteStoreViewController extends LitElement {
 
   setPageConfig (config = ''){
     this.viewSettings[config]();
-    this.viewConfig = this.graficarteState.viewState.getState();    
+    this.viewConfig = this.graficarteState.viewState.getState();
   }
 
   requestUpdateOfUserData (e){
@@ -112,6 +172,7 @@ export class GraficarteStoreViewController extends LitElement {
     }];
     this.saveTemporaryPayload(channelPayload);
     this.modalConfig = 'request-for-login';
+    this.showMissingfields = true;
   }
 
   cancelLogin (){
@@ -126,6 +187,7 @@ export class GraficarteStoreViewController extends LitElement {
     }];
     this.saveTemporaryPayload(channelPayload);
     this.modalConfig = 'request-for-signin';
+    this.showMissingfields = true;
   }
 
   cancelSignin (){
@@ -142,6 +204,7 @@ export class GraficarteStoreViewController extends LitElement {
   }
 
   continueRequest (){
+    this.closeModal();
     this.sendOutputPayload(this.temporaryStorage);
   }
 
@@ -164,16 +227,12 @@ export class GraficarteStoreViewController extends LitElement {
   }
 
   saveTemporaryPayload (channelPayload) {
-    const suspendedRequest = {
-      channelName : channelPayload[0].channelName,
-      payload : channelPayload[0].payload,
-    };
-    this.temporaryStorage = [...this.temporaryStorage, suspendedRequest];
+    this.temporaryStorage = [...this.temporaryStorage, ...channelPayload];
   }
 
   sendSavedPayload (){
     this.sendOutputPayload(this.temporaryStorage);
-    this.temporaryStorage = [];
+    this.cleanTemporaryStorage();
   }
 
   cleanTemporaryStorage (){
@@ -191,6 +250,8 @@ export class GraficarteStoreViewController extends LitElement {
         .isShoppingCartIconDisplayed = ${this.viewConfig.isShoppingCartIconDisplayed}
         .shownBuyingOptions = ${this.viewConfig.shownBuyingOptions}
         .modalConfig=${this.modalConfig}
+        .loginMissingFields=${this.loginMissingFields}
+        .signinMissingFields=${this.signinMissingFields}
         @header-navigation=${this.pageNavigation}
         @store-search-by-term=${this.searchProductByTerm}
         @open-shopping-cart-page=${this.pageNavigation}

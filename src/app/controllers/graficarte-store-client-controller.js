@@ -30,13 +30,14 @@ export class GraficarteStoreClientController extends ServiceController {
 
     if(this.isCurrValueValid(currValue)){
       this.body = {...currValue};
-      this.url = `${this.baseURL}/updateUserData`
+      this.url = `${this.baseURL}/updateUserData`;
+      this.channelName = 'graficarte-updated-user-data';
       this.setService();
       this.setListeners();
       this.doRequest;
     }
     this._updatedUserData = currValue;
-    
+    this.requestUpdate('updatedUserData', {});
   }
 
   get updatedUserData (){

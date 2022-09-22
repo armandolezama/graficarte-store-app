@@ -2,7 +2,6 @@ import { LitElement, html } from 'lit';
 import styles from './graficarte-store-create-account-styles';
 import 'sophos-chimera-input/sophos-chimera-input';
 import 'sophos-chimera-button/sophos-chimera-button';
-import 'sophos-simple-modal/sophos-simple-modal';
 import './graficarte-create-account-form/graficarte-create-account-form';
 import getLocal from '../../../../utils/locales';
 
@@ -27,7 +26,7 @@ export class GraficarteStoreCreateAccount extends LitElement {
     this.userData = {};
     this.missingFields = [];
     this.passwordMessageStyle = '';
-    this.emptyMessage = 'Este campo es requerido';
+    this.passwordMessageText = '';
     this.isPasswordValid = false;
   }
 
@@ -40,44 +39,11 @@ export class GraficarteStoreCreateAccount extends LitElement {
       missingFields : { type : Array },
       passwordMessageStyle : { type : String },
       passwordMessageText : { type : String },
-      isModalOpened : { type : Boolean },
-      modalTitle : { type : String },
-      modalMessage : { type : String },
-      modalFooterMessage : { type : String },
     };
   }
 
   static get styles () {
     return styles;
-  }
-
-  firstUpdated (){
-    super.firstUpdated();
-
-    this.modalButtonsHandlers = {
-      'login' : this.createAccount,
-      'back-to-store' : this.cancel,
-      'close-modal' : this._closeModal,
-    }
-  }
-
-  _closeModal (){
-    this.modalTitle = '';
-    this.modalMessage = '';
-    this.modalFooterMessage = '';
-    this.modalLabelsButtons = ['', ''];
-    this.isModalOpened = false;
-  }
-
-  getEmptyFields (){
-    return [
-      !this.userData.name && 'name',
-      !this.userData.lastName && 'lastName',
-      !this.userData.phoneNumber && 'phoneNumber',
-      !this.userData.email && 'email',
-      !this.userData.address && 'address',
-      !this.userData.password && 'password'
-    ].filter(field => field);
   }
 
   manageCreateAccountActions (e){
@@ -98,18 +64,6 @@ export class GraficarteStoreCreateAccount extends LitElement {
     }))
   }
 
-  createAccount () {
-    this._closeModal();
-    this.dispatchEvent(new CustomEvent('create-account', {
-      detail : { userData: {...this.userData} }
-    }));
-  }
-
-  cancel () {
-    this.resetEmptyFields();
-    this.dispatchEvent(new CustomEvent('cancel-create-account'));
-  }
-
   _showPasswordErrorMessage () {
     this.passwordMessageStyle = 'error';
     this.passwordMessageText = 'Las contraseñas no coinciden'
@@ -125,7 +79,8 @@ export class GraficarteStoreCreateAccount extends LitElement {
   render () {
     return html`
     <div id="main-container">
-      <graficarte-create-account-form>
+      <graficarte-create-account-form
+      .missingFields=${this.missingFields}>
       </graficarte-create-account-form>
 
       <div id=password-message-container message-style=${`password-message-${this.passwordMessageStyle}`}>

@@ -67,32 +67,16 @@ export class GraficarteStoreMainController extends LitElement {
 
   willUpdate (changedProps){
     super.willUpdate(changedProps);
-    if(changedProps.has('inputChannels')){
+    if(changedProps.has('inputChannels') && this.inputChannels.length > 0){
       for(const channelInfo of this.inputChannels){
         const relatedProp = this.channels[channelInfo.channelName];
         this[relatedProp] = channelInfo.payload;
-      }
+      };
     }
   }
 
-  manageSucessRequest (e){
-    const channelPayload = [
-      {
-        channelName: 'request-success',
-        payload: e.detail
-      }
-    ]
-    this.sendOutputPayload(channelPayload)
-  }
-
-  manageLoginSuccess (e){
-    const channelPayload = [
-      {
-        channelName: 'graficarte-user-data', 
-        payload: e.detail.payload.data.registry,
-      }
-    ];
-    this.sendOutputPayload(channelPayload);
+  manageControllerResponse (e){
+    this.sendOutputPayload([e.detail]);
   }
 
   manageErrorRequest (e){
@@ -122,7 +106,8 @@ export class GraficarteStoreMainController extends LitElement {
     return html`
       <graficarte-store-login-controller
         .userData=${this.loginControllerData}
-        @request-is-done=${this.manageLoginSuccess}
+        @missing-fields=${this.manageControllerResponse}
+        @request-is-done=${this.manageControllerResponse}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-login-controller>
@@ -130,19 +115,15 @@ export class GraficarteStoreMainController extends LitElement {
       <graficarte-store-client-controller
         .userData=${this.clientData}
         .updatedUserData=${this.updatedUserData}
-        @request-is-done=${this.manageSucessRequest}
+        @request-is-done=${this.manageControllerResponse}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-client-controller>
 
       <graficarte-store-sign-in-controller
-        .name = ${this.signinControllerData.name}
-        .lastName = ${this.signinControllerData.lastName}
-        .phoneNumber = ${this.signinControllerData.phoneNumber}
-        .email = ${this.signinControllerData.email}
-        .address = ${this.signinControllerData.address}
-        .password = ${this.signinControllerData.password}
-        @request-is-done=${this.manageSucessRequest}
+        .userData = ${this.signinControllerData}
+        @missing-fields=${this.manageControllerResponse}
+        @request-is-done=${this.manageControllerResponse}
         @request-failed=${this.manageErrorRequest} 
         @request-in-progress=${this.manageInProgressRequest}>
       </graficarte-store-sign-in-controller>

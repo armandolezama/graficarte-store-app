@@ -29,7 +29,10 @@ export class GraficarteStoreLoginController extends ServiceController {
     const missingFields = this.getEmptyFields(this.userData);
     if (missingFields.length > 0) {
       this.dispatchEvent(new CustomEvent('missing-fields', {
-        detail: missingFields,
+        detail: {
+          channelName: 'graficarte-login-missing-fields',
+          missingFields
+        },
       }));
     } else {
       this._login()
@@ -49,6 +52,7 @@ export class GraficarteStoreLoginController extends ServiceController {
       email: this.userData.email,
       password: this.userData.password
     }
+    this.channelName = 'graficarte-user-data';
     this.setService();
     this.setListeners();
     this.doRequest();

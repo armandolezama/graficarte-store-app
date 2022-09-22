@@ -78,6 +78,7 @@ export class GraficarteCreateAccountForm extends LitElement {
         missingField: false
       },
     ];
+    this.missingField = [];
     this.createAccountActionsHandlers = {};
   }
 

@@ -5,9 +5,29 @@ export default class GraficarteClientState {
     this.email = '';
     this.address = '';
     this.phoneNumber= '';
-    this.paymmentMethods = {};
+    this.paymentMethods = {};
     this.userConfigurations = {};
     this.comments = []
+  }
+
+  setClientData (clientData){
+    this.name = clientData.name;
+    this.lastName = clientData.lastName;
+    this.email = clientData.email;
+    this.address = clientData.address;
+    this.phoneNumber = clientData.phoneNumber;
+  }
+
+  setPaymentMethods(methods){
+    this.paymentMethods = methods;
+  }
+
+  setClientUserConfigurations(userConfigurations){
+    this.userConfigurations = userConfigurations;
+  }
+
+  saveComent(comment){
+    this.comments = [...this.comments, comment];
   }
 
   getClientState (){

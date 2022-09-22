@@ -13,7 +13,9 @@ export class ServiceController extends LitElement {
     this.method = '';
     this.url = '';
     this.body = {};
-    this.service = () => {} //GraficarteStoreAPI type
+    this.service = () => {}; //GraficarteStoreAPI type
+    this.successEventName = 'request-is-done';
+    this.channelName = ''
   }
 
   setService (url = this.url, method = this.method, body = this.body){
@@ -28,9 +30,10 @@ export class ServiceController extends LitElement {
     });
     
     this.service.addEventListener('request-is-done', e => {
-      const payload =e.detail.response;
-      this.dispatchEvent(new CustomEvent('request-is-done', {
-        detail: JSON.parse(payload)
+      const payload =JSON.parse(e.detail.response);
+      const { channelName } = this.channelName;
+      this.dispatchEvent(new CustomEvent(this.successEventName, {
+        detail: { channelName, payload }
       }));
     });
 

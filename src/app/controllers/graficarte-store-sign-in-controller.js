@@ -1,6 +1,3 @@
-/**
- * TO-DO: turn this controller modal into gneneral controllers model (Super class maybe);
- */
 import { ServiceController } from "./controller-class/ServiceController";
 
 export class GraficarteStoreSignInController extends ServiceController {
@@ -11,12 +8,7 @@ export class GraficarteStoreSignInController extends ServiceController {
     */
   constructor () {
     super();
-    this.name = '';
-    this.lastName = '';
-    this.phoneNumber = '';
-    this.email = '';
-    this.address = '';
-    this.password = '';
+    this.userData= {};
     this.method = 'POST';
     this.url = 'public/signin';
   }
@@ -35,23 +27,29 @@ export class GraficarteStoreSignInController extends ServiceController {
     };
   }
 
-  updated (changedProps) {
-    super.updated( changedProps );
-    const emptyFields = this.getEmptyFields();
-
-    if(emptyFields.length === 0){
-      this._signIn();
+  willUpdate (changedProps){
+    super.willUpdate(changedProps)
+    const missingFields = this.getEmptyFields(this.userData);
+    if (missingFields.length > 0) {
+      this.dispatchEvent(new CustomEvent('missing-fields', {
+        detail: {
+          channelName: 'graficarte-signin-missing-fields',
+          missingFields
+        },
+      }));
+    } else {
+      this._signIn()
     }
   }
 
-  getEmptyFields (){
+  getEmptyFields (data){
     return [
-      !this.name && 'name',
-      !this.lastName && 'lastName',
-      !this.phoneNumber && 'phoneNumber',
-      !this.email && 'email',
-      !this.address && 'address',
-      !this.password && 'password'
+      !data.name && 'name',
+      !data.lastName && 'lastName',
+      !data.phoneNumber && 'phoneNumber',
+      !data.email && 'email',
+      !data.address && 'address',
+      !data.password && 'password'
     ].filter(field => field);
   }
 

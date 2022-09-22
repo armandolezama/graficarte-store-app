@@ -24,6 +24,8 @@ export class GraficarteStoreMainView extends LitElement {
     this.modalConfig = '';
     this.userData = {};
     this.serviceMessage = {};
+    this.loginMissingFields = [];
+    this.signinMissingFields = [];
   }
 
   /**
@@ -150,6 +152,8 @@ export class GraficarteStoreMainView extends LitElement {
               .templateStyle=${this.templateStyle}
               .templateClass=${this.templateClass}
               .shownBuyingOptions=${this.shownBuyingOptions}
+              .loginMissingFields=${this.loginMissingFields}
+              .signinMissingFields=${this.signinMissingFields}
               @create-account=${this.createAccount}
               @cancel-create-account=${this.cancelCreateAccount}
               @request-registration-for-user=${this.signIn}

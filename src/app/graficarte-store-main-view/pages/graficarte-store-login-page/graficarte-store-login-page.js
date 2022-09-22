@@ -1,7 +1,6 @@
 import { LitElement, html } from 'lit';
 import styles from './graficarte-store-login-page-styles';
 import 'sophos-chimera-button/sophos-chimera-button';
-import 'sophos-simple-modal/sophos-simple-modal';
 import getLocal from '../../../../utils/locales'
 
 export class GraficarteStoreLoginPage extends LitElement {
@@ -54,8 +53,7 @@ export class GraficarteStoreLoginPage extends LitElement {
   static get properties () {
     return {
       inputsList : { type : Array },
-      isModalOpened : { type : Boolean },
-      missingFields : { type : Array }
+      missingFields : { type : Array },
     };
   }
 

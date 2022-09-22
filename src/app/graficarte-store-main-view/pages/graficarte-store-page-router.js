@@ -26,11 +26,14 @@ export class GraficarteStorePageRouter extends LitElement {
     this.templateClass= '';
     this.shownBuyingOptions = false;
     this.userData = {};
+    this.loginMissingFields = [];
+    this.signinMissingFields = [];
     this.mainViewContent = [
       [
         'create-account',
         html`
           <graficarte-store-create-account
+          .missingFields=${this.signinMissingFields}
             @graficarte-create-account=${this.signin}
             @graficarte-cancel-create-account=${this.cancelSignin}>
           </graficarte-store-create-account>
@@ -43,7 +46,7 @@ export class GraficarteStorePageRouter extends LitElement {
       [
         'public-store',
         html`
-          <graficarte-store-home-page 
+          <graficarte-store-home-page
             .products=${this.storeProducts}>
           </graficarte-store-home-page>
         `
@@ -52,6 +55,7 @@ export class GraficarteStorePageRouter extends LitElement {
         'login',
         html`
           <graficarte-store-login-page
+          .missingFields=${this.loginMissingFields}
             @graficarte-login-action=${this.login}
             @graficarte-cancel-login=${this.cancelLogin}>
           </graficarte-store-login-page>
