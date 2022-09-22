@@ -62,6 +62,8 @@ export class GraficarteStoreViewController extends LitElement {
       viewConfig: { type: Object },
       userData: { type: Object },
       modalConfig: { type: String },
+      loginMissingFields: { type: Array },
+      signinMissingFields: { type: Array },
     };
   }
 
@@ -86,7 +88,7 @@ export class GraficarteStoreViewController extends LitElement {
     return this._userData;
   }
 
-  set loginMissingFields(value){
+  set loginMissingFields (value){
     const currValue = value;
     const oldValue = this._loginMissingFields;
 
@@ -99,11 +101,11 @@ export class GraficarteStoreViewController extends LitElement {
     this.requestUpdate('loginMissingFields', oldValue);
   }
 
-  get loginMissingFields(){
+  get loginMissingFields (){
     return this._loginMissingFields;
   }
 
-  set signinMissingFields(value){
+  set signinMissingFields (value){
     const currValue = value;
     const oldValue = this._signinMissingFields;
 
@@ -116,7 +118,7 @@ export class GraficarteStoreViewController extends LitElement {
     this.requestUpdate('signinMissingFields', oldValue);
   }
 
-  get signinMissingFields(){
+  get signinMissingFields (){
     return this._signinMissingFields;
   }
 
@@ -139,7 +141,7 @@ export class GraficarteStoreViewController extends LitElement {
       for(const channelInfo of this.inputChannels){
         const relatedProp = this.channels[channelInfo.channelName];
         this[relatedProp] = channelInfo.payload;
-      };
+      }
     }
   }
 

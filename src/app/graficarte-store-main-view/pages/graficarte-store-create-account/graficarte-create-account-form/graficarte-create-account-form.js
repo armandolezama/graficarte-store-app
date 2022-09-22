@@ -80,10 +80,35 @@ export class GraficarteCreateAccountForm extends LitElement {
     ];
     this.missingField = [];
     this.createAccountActionsHandlers = {};
+    this.emptyMessage = 'Este campo es requerido';
+  }
+
+  /**
+    * Declared properties and their corresponding attributes
+    */
+  static get properties () {
+    return {
+      missingField : { type : Array }
+    };
   }
 
   static get styles () {
     return styles;
+  }
+
+  set missingFields (value){
+    const currValue = value;
+    const oldValue = this._missingFields;
+
+    if(currValue.length > 0){
+      this.inputsList = this.inputsList.map(input => {
+        input.missingField = currValue.includes(input.fieldName);
+        return input;
+      });
+    }
+
+    this._missingFields = currValue;
+    this.requestUpdate('missingFields', oldValue);
   }
 
   firstUpdated (){

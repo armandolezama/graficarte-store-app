@@ -28,41 +28,55 @@ export class GraficarteStorePageRouter extends LitElement {
     this.userData = {};
     this.loginMissingFields = [];
     this.signinMissingFields = [];
-    this.mainViewContent = [
-      [
-        'create-account',
-        html`
-          <graficarte-store-create-account
-          .missingFields=${this.signinMissingFields}
-            @graficarte-create-account=${this.signin}
-            @graficarte-cancel-create-account=${this.cancelSignin}>
-          </graficarte-store-create-account>
-        `
-      ],
-      [
-        'client-store',
-        this.contentCreator(this.clientPage, this.clientContent)
-      ],
-      [
-        'public-store',
-        html`
-          <graficarte-store-home-page
-            .products=${this.storeProducts}>
-          </graficarte-store-home-page>
-        `
-      ],
-      [
-        'login',
-        html`
-          <graficarte-store-login-page
-          .missingFields=${this.loginMissingFields}
-            @graficarte-login-action=${this.login}
-            @graficarte-cancel-login=${this.cancelLogin}>
-          </graficarte-store-login-page>
-        `
-      ],
-    ];
-    this.clientContent = [
+  }
+
+  /**
+    * Declared properties and their corresponding attributes
+    */
+  static get properties () {
+    return {
+      mainPage : { type: String },
+      clientContent : { type: String },
+      templateStyle : { type: String },
+      templateClass : { type: String },
+      shownBuyingOptions : { type: Boolean },
+      loginMissingFields : { type: Array },
+      signinMissingFields : { type: Array },
+      mainViewContent : { type: Array },
+    };
+  }
+
+  login (e){
+    const { userData } = e.detail;
+    this.dispatchEvent(new CustomEvent('request-access-for-user', {
+      detail: userData
+    }))
+  }
+
+  cancelLogin (){
+    this.dispatchEvent(new CustomEvent('cancel-access-for-user'));
+  }
+
+  signin (e){
+    const { userData } = e.detail;
+    this.dispatchEvent(new CustomEvent('request-registration-for-user', {
+      detail: userData
+    }));
+  }
+
+  cancelSignin (){
+    this.dispatchEvent(new CustomEvent('cancel-registration-for-user'))
+  }
+
+  updateUserData (e){
+    const { detail } = e;
+    this.dispatchEvent(new CustomEvent('update-user-data', { 
+      detail
+    }))
+  }
+
+  clientContentCreator (contentTag = ''){
+    const contentArray = [
       [
         'home',
         html`
@@ -125,61 +139,57 @@ export class GraficarteStorePageRouter extends LitElement {
           </graficarte-store-shopping-cart>
         `
       ],
-    ];
-  }
-
-  /**
-    * Declared properties and their corresponding attributes
-    */
-  static get properties () {
-    return {
-      mainPage: { type: String },
-      clientContent: { type: String },
-      templateStyle: { type: String },
-      templateClass: { type: String },
-      shownBuyingOptions: { type: Boolean },
-    };
-  }
-
-  login (e){
-    const { userData } = e.detail;
-    this.dispatchEvent(new CustomEvent('request-access-for-user', {
-      detail: userData
-    }))
-  }
-
-  cancelLogin (){
-    this.dispatchEvent(new CustomEvent('cancel-access-for-user'));
-  }
-
-  signin (e){
-    const { userData } = e.detail;
-    this.dispatchEvent(new CustomEvent('request-registration-for-user', {
-      detail: userData
-    }));
-  }
-
-  cancelSignin (){
-    this.dispatchEvent(new CustomEvent('cancel-registration-for-user'))
-  }
-
-  updateUserData (e){
-    const { detail } = e;
-    this.dispatchEvent(new CustomEvent('update-user-data', { 
-      detail
-    }))
-  }
-
-  contentCreator (contentTag = '', templates = [['', html``]]) {
-    const contentArray = templates.find(template => {
+    ].find(template => {
       return template[0] === contentTag;
     });
 
     if(contentArray && contentArray[1]) return contentArray[1];
   }
 
+  mainContentCreator (contentTag = '') {
+    const contentArray = [
+      [
+        'create-account',
+        html`
+          <graficarte-store-create-account
+          .missingFields=${this.signinMissingFields}
+            @graficarte-create-account=${this.signin}
+            @graficarte-cancel-create-account=${this.cancelSignin}>
+          </graficarte-store-create-account>
+        `
+      ],
+      [
+        'client-store',
+        this.clientContentCreator(this.clientPage)
+      ],
+      [
+        'public-store',
+        html`
+          <graficarte-store-home-page
+            .products=${this.storeProducts}>
+          </graficarte-store-home-page>
+        `
+      ],
+      [
+        'login',
+        html`
+          <graficarte-store-login-page
+          .missingFields=${this.loginMissingFields}
+            @graficarte-login-action=${this.login}
+            @graficarte-cancel-login=${this.cancelLogin}>
+          </graficarte-store-login-page>
+        `
+      ],
+    ].find(template => {
+      return template[0] === contentTag;
+    });
+
+    
+    if(contentArray && contentArray[1]) return contentArray[1];
+  }
+
   render () {
-    return html`${this.contentCreator(this.mainPage, this.mainViewContent)}`;
+    return this.mainContentCreator(this.mainPage);
   }
 }
 customElements.define('graficarte-store-page-router', GraficarteStorePageRouter);

@@ -18,15 +18,15 @@ export default class GraficarteClientState {
     this.phoneNumber = clientData.phoneNumber;
   }
 
-  setPaymentMethods(methods){
+  setPaymentMethods (methods){
     this.paymentMethods = methods;
   }
 
-  setClientUserConfigurations(userConfigurations){
+  setClientUserConfigurations (userConfigurations){
     this.userConfigurations = userConfigurations;
   }
 
-  saveComent(comment){
+  saveComent (comment){
     this.comments = [...this.comments, comment];
   }
 

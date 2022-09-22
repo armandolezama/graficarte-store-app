@@ -41,6 +41,8 @@ export class GraficarteStoreMainView extends LitElement {
       isShoppingCartIconDisplayed: { type: Boolean },
       shownBuyingOptions: { type: Boolean },
       modalConfig: { type: String },
+      loginMissingFields: { type: Array },
+      signinMissingFields: { type: Array },
     };
   }
 

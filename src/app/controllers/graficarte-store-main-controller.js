@@ -71,7 +71,7 @@ export class GraficarteStoreMainController extends LitElement {
       for(const channelInfo of this.inputChannels){
         const relatedProp = this.channels[channelInfo.channelName];
         this[relatedProp] = channelInfo.payload;
-      };
+      }
     }
   }
 

@@ -20,7 +20,7 @@ export class GraficarteStoreLoginController extends ServiceController {
     */
   static get properties () {
     return {
-      userData : { type : Object }
+      userData : { type : Object },
     };
   }
 
@@ -31,7 +31,7 @@ export class GraficarteStoreLoginController extends ServiceController {
       this.dispatchEvent(new CustomEvent('missing-fields', {
         detail: {
           channelName: 'graficarte-login-missing-fields',
-          missingFields
+          payload: missingFields,
         },
       }));
     } else {

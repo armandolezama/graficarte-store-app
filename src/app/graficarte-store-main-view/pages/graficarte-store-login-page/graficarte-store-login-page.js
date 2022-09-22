@@ -64,10 +64,12 @@ export class GraficarteStoreLoginPage extends LitElement {
   set missingFields (value) {
     const currValue = value;
     const oldValue = this._missingFields;
-    this.inputsList = this.inputsList.map(input => {
-      input.missingField = currValue.includes(input.fieldName);
-      return input;
-    });
+    if(currValue?.length > 0){
+      this.inputsList = this.inputsList.map(input => {
+        input.missingField = currValue.includes(input.fieldName);
+        return input;
+      });
+    }
     this._missingFields = currValue;
     this.requestUpdate('missingFields', oldValue);
   }

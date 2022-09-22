@@ -18,23 +18,18 @@ export class GraficarteStoreSignInController extends ServiceController {
     */
   static get properties () {
     return {
-      name : { type : String },
-      lastName: { type : String },
-      phoneNumber: { type : String},
-      email : { type : String },
-      address : { type : String },
-      password : { type : String },
+      userData : { type : Object },
     };
   }
 
   willUpdate (changedProps){
-    super.willUpdate(changedProps)
+    super.willUpdate(changedProps);
     const missingFields = this.getEmptyFields(this.userData);
     if (missingFields.length > 0) {
       this.dispatchEvent(new CustomEvent('missing-fields', {
         detail: {
           channelName: 'graficarte-signin-missing-fields',
-          missingFields
+          payload: missingFields,
         },
       }));
     } else {
@@ -66,14 +61,6 @@ export class GraficarteStoreSignInController extends ServiceController {
     this.setListeners();
     this.doRequest();
     this.flushData();
-  }
-
-  missingFieldsMessage (emptyFields){
-    this.dispatchEvent(new CustomEvent('missing-fields', {
-      detail: {
-        emptyFields
-      }
-    }));
   }
 
   flushData () {
