@@ -9,20 +9,25 @@ export class GraficarteStoreErrorPage extends LitElement {
     */
      constructor () {
       super();
+      this.requestErrorData = {
+        error: '',
+      };
     }
   
     /**
       * Declared properties and their corresponding attributes
       */
     static get properties () {
-      return {};
+      return {
+        requestErrorData: { type: Object },
+      };
     }
   
     static get styles () {
       return css``;
     }
 
-    acceptError(){
+    acceptError (){
       this.dispatchEvent(new CustomEvent('accept-error'))
     }
   
@@ -30,9 +35,10 @@ export class GraficarteStoreErrorPage extends LitElement {
       return html`
         <div>
           <div>
-            Algo salió mal, inente más tarde
+            ${this.requestErrorData.error}
           </div>
           <sophos-chimera-button
+          type="simple-multi-button"
           .buttonsLabels=${[
             {
               label: 'Aceptar',

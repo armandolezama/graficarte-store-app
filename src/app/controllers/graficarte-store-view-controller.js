@@ -31,7 +31,9 @@ export class GraficarteStoreViewController extends LitElement {
       isShoppingCartIconDisplayed: false,
       shownBuyingOptions: false,
     };
-    this.requestErrorData = {};
+    this.requestErrorData = {
+      error: '',
+    };
     this.requestInProgress = {};
     this.loginMissingFields = [];
     this.signinMissingFields = [];
@@ -112,7 +114,7 @@ export class GraficarteStoreViewController extends LitElement {
     return this._loginMissingFields;
   }
 
-  set requestErrorData(value){
+  set requestErrorData (value){
     const currValue = value;
     const oldValue = this._requestErrorData;
 
@@ -122,6 +124,10 @@ export class GraficarteStoreViewController extends LitElement {
 
     this._requestErrorData = currValue;
     this.requestUpdate('requestErrorData', oldValue);
+  }
+
+  get requestErrorData (){
+    return this._requestErrorData;
   }
 
   set signinMissingFields (value){
@@ -246,8 +252,8 @@ export class GraficarteStoreViewController extends LitElement {
     }
   }
 
-  acceptError(){
-    this.setPageConfig('client-store');
+  acceptError (){
+    this.setPageConfig('public-store');
   }
 
   sendOutputPayload (payload = [{}]){
@@ -282,6 +288,7 @@ export class GraficarteStoreViewController extends LitElement {
         .modalConfig=${this.modalConfig}
         .loginMissingFields=${this.loginMissingFields}
         .signinMissingFields=${this.signinMissingFields}
+        .requestErrorData=${this.requestErrorData}
         @header-navigation=${this.pageNavigation}
         @store-search-by-term=${this.searchProductByTerm}
         @open-shopping-cart-page=${this.pageNavigation}

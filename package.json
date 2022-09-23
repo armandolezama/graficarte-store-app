@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "js-cookie": "^3.0.1",
     "lit": "^2.0.2",
     "sophos-card": "github:armandolezama/sophos-card#2.0.0",
     "sophos-chimera-button": "github:armandolezama/sophos-chimera-button",

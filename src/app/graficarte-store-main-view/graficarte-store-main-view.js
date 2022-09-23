@@ -26,6 +26,9 @@ export class GraficarteStoreMainView extends LitElement {
     this.serviceMessage = {};
     this.loginMissingFields = [];
     this.signinMissingFields = [];
+    this.requestErrorData = {
+      error: '',
+    };
   }
 
   /**
@@ -43,6 +46,7 @@ export class GraficarteStoreMainView extends LitElement {
       modalConfig: { type: String },
       loginMissingFields: { type: Array },
       signinMissingFields: { type: Array },
+      requestErrorData: { type: Object },
     };
   }
 
@@ -104,7 +108,7 @@ export class GraficarteStoreMainView extends LitElement {
     this.dispatchEvent(new CustomEvent('close-modal'))
   }
 
-  acceptError(){
+  acceptError (){
     this.dispatchEvent(new CustomEvent('accept-error'))
   }
 
@@ -160,6 +164,7 @@ export class GraficarteStoreMainView extends LitElement {
               .shownBuyingOptions=${this.shownBuyingOptions}
               .loginMissingFields=${this.loginMissingFields}
               .signinMissingFields=${this.signinMissingFields}
+              .requestErrorData=${this.requestErrorData}
               @create-account=${this.createAccount}
               @cancel-create-account=${this.cancelCreateAccount}
               @request-registration-for-user=${this.signIn}

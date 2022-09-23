@@ -1,4 +1,6 @@
 import { ServiceController } from "./controller-class/ServiceController";
+import Cookies from 'js-cookie';
+//https://www.npmjs.com/package/js-cookie;
 
 export class GraficarteStoreLoginController extends ServiceController {
   //component to manage error or success response from login service
@@ -46,6 +48,12 @@ export class GraficarteStoreLoginController extends ServiceController {
     ].filter(field => field);
   }
 
+  payloadProcessor (payload){
+    const token = payload.token;
+    Cookies.set('client-token', token);
+    super.payloadProcessor(payload);
+  }
+
   _login (){
     
     this.body = {
@@ -61,3 +69,7 @@ export class GraficarteStoreLoginController extends ServiceController {
 }
 
 customElements.define('graficarte-store-login-controller', GraficarteStoreLoginController);
+
+/**
+ * TO-DO: Enhance coocke management. Run security testing for this implementation and report all vulnerabilities.
+ */

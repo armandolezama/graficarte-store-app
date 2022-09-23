@@ -28,6 +28,9 @@ export class GraficarteStorePageRouter extends LitElement {
     this.userData = {};
     this.loginMissingFields = [];
     this.signinMissingFields = [];
+    this.requestErrorData = {
+      error: '',
+    }
   }
 
   /**
@@ -43,6 +46,7 @@ export class GraficarteStorePageRouter extends LitElement {
       loginMissingFields : { type: Array },
       signinMissingFields : { type: Array },
       mainViewContent : { type: Array },
+      requestErrorData: { type: Object },
     };
   }
 
@@ -75,7 +79,7 @@ export class GraficarteStorePageRouter extends LitElement {
     }))
   }
 
-  acceptError(){
+  acceptError (){
     this.dispatchEvent(new CustomEvent('accept-error'))
   }
 
@@ -133,6 +137,7 @@ export class GraficarteStorePageRouter extends LitElement {
         'error',
         html`
           <graficarte-store-error-page
+          .requestErrorData=${this.requestErrorData}
           @accept-error=${this.acceptError}>
           </graficarte-store-error-page>
         `,
@@ -189,6 +194,7 @@ export class GraficarteStorePageRouter extends LitElement {
         'error',
         html`
           <graficarte-store-error-page
+          .requestErrorData=${this.requestErrorData}
           @accept-error=${this.acceptError}>
           </graficarte-store-error-page>
         `,

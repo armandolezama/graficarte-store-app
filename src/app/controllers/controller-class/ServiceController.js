@@ -31,9 +31,8 @@ export class ServiceController extends LitElement {
     
     this.service.addEventListener('request-is-done', e => {
       const payload =JSON.parse(e.detail.response);
-      const { channelName } = this.channelName;
       this.dispatchEvent(new CustomEvent(this.successEventName, {
-        detail: { channelName, payload }
+        detail: this.payloadProcessor(payload),
       }));
     });
 
@@ -42,6 +41,13 @@ export class ServiceController extends LitElement {
         detail: {}
       });
     });
+  }
+
+  payloadProcessor (payload){
+    return {
+      channelName: this.channelName,
+      payload
+    }
   }
 
   doRequest (){
